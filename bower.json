@@ -1,0 +1,13 @@
+{
+  "name": "angular-audio-player",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "devDependencies": {
+    "angular-unstable": "latest",
+    "angular-mocks": "latest"
+  }
+}
