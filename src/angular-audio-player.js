@@ -43,7 +43,7 @@ angular.module('angular-audio-player', [])
           },
           next: function () {
             var self = this;
-            if (self.playingTrack && self.playingTrack - 1 < self.tracks) {
+            if (self.playingTrack && self.playingTrack < self.tracks) {
               self.pause();
               $timeout(function () {
                 self._clearAudioList();
