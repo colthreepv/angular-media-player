@@ -12,7 +12,7 @@
     <h1>angular-audio-player</h1>
     <p><a href="javascript:history.back()">go back</a></p>
     <p>
-      The idea is to progressively add tracks to the playlist (thru your application events), and <strong>*hope*</strong> the playlist stay consistant.
+      Suddenly changing the playlist while the player is going on, simply makes it pause, and load the new tracks at once.
     </p>
   </div>
   <audio data-player-control="audio1" data-playlist="playlist1" audio-player></audio>
@@ -39,9 +39,8 @@
   angular.module('myApp', ['angular-audio-player'])
   .controller('MyCtrl', function ($scope, $timeout) {
     $scope.playlist1 = [];
-    $scope.playlist1.push({ src: 'http://upload.wikimedia.org/wikipedia/en/7/79/Korn_-_Predictable_%28demo%29.ogg', type: 'audio/ogg' });
-    $timeout(function () { $scope.playlist1.unshift({ src: 'http://www.metadecks.org/software/sweep/audio/demos/vocal2.ogg', type: 'audio/ogg'}); }, 5500);
-    $timeout(function () { $scope.playlist1.push({ src: 'http://demos.w3avenue.com/html5-unleashed-tips-tricks-and-techniques/demo-audio.ogg', type: 'audio/ogg'}); }, 9500);
+    $timeout(function () { $scope.playlist1.push({ src: 'http://upload.wikimedia.org/wikipedia/en/7/79/Korn_-_Predictable_%28demo%29.ogg', type: 'audio/ogg'}); }, 5000);
+    $timeout(function () { $scope.playlist1[0] = { src: 'http://demos.w3avenue.com/html5-unleashed-tips-tricks-and-techniques/demo-audio.ogg', type: 'audio/ogg'}; }, 10000);
   });
 </script>
 </html>
