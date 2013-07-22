@@ -47,13 +47,48 @@ sourceObject mimics ```<source>``` HTML draft
 ```javascript
 { src: 'http://some.where.com', type: 'mime/type', media: '.css.media.query' }
 ```
+> **or alternatively**
+```javascript
+[
+  { src: 'http://some.where.com', type: 'audio/ogg' },
+  { src: 'http://some.where.com/lowquality', type: 'audio/ogg' },
+  { src: 'http://some.where.com/crapquality', type: 'audio/ogg' },
+  { src: 'http://some.where.com', type: 'audio/mp3' },
+]
+```
+
 
 *For whoever wondering what ```media``` is*: it's just a [css media query][cssmediaquery], so the browser can pick which ```<source>``` tag to load.
 
 ## player-control methods and properties
 
+### `player.play()`
+
+### `player.playPause()`
+
+### `player.pause()`
+
+### `player.next()`
+Goes to next audioElement if there is one in the playlist, otherwise does **nothing**.
+
+### `player.prev()`
+Goes to previous audioElement if there is one in the playlist, otherwise does **nothing**.
+
+### `player.playing`
+```true``` or ```false```
+
+### `player.currentTrack`
+Tracks the position of the playing track, it **might** change during playing the same track due to pushing elements into ```playlistArray```
+
+### `player.tracks`
+Number of tracks in the playlist
+
 ## Functionality
 
+You can add/remove tracks on-fly from/to the playlist.  
+If the current track gets removed, the player goes on **pause()**. (And starts loading the first track of the new playlist)
+
+**TBD**
 
 ### Credits
 A lot of guidelines to realize a simple re-usable project like this have come mainly from:

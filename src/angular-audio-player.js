@@ -25,10 +25,10 @@ angular.module('angular-audio-player', [])
 
         scope.exposedPlayer = {
           playing: false,
-          playingTrack: 0,
+          currentTrack: 0,
           tracks: playlist.length,
           play: function () {
-            if (!this.playingTrack && audioTag.readyState) { this.playingTrack++; }
+            if (!this.currentTrack && audioTag.readyState) { this.currentTrack++; }
             audioTag.play();
           },
           playPause: function () {
@@ -43,25 +43,25 @@ angular.module('angular-audio-player', [])
           },
           next: function () {
             var self = this;
-            if (self.playingTrack && self.playingTrack < self.tracks) {
+            if (self.currentTrack && self.currentTrack < self.tracks) {
               self.pause();
               $timeout(function () {
                 self._clearAudioList();
-                self._addAudioList(playlist[self.playingTrack]);
+                self._addAudioList(playlist[self.currentTrack]);
                 audioTag.load(); // setup autoplay here.
-                self.playingTrack++;
+                self.currentTrack++;
               });
             }
           },
           prev: function () {
             var self = this;
-            if (self.playingTrack && self.playingTrack - 1) {
+            if (self.currentTrack && self.currentTrack - 1) {
               self.pause();
               $timeout(function () {
                 self._clearAudioList();
-                self._addAudioList(playlist[self.playingTrack - 2]);
+                self._addAudioList(playlist[self.currentTrack - 2]);
                 audioTag.load(); // setup autoplay here.
-                self.playingTrack--;
+                self.currentTrack--;
               });
             }
           },
@@ -118,13 +118,13 @@ angular.module('angular-audio-player', [])
            */
 
           // If the player has been started
-          if (player.playingTrack) {
-            currentTrack = playlistOld[player.playingTrack - 1];
+          if (player.currentTrack) {
+            currentTrack = playlistOld[player.currentTrack - 1];
             for (var i = 0; i < playlistNew.length; i++) {
               if (angular.equals(playlistNew[i], currentTrack)) { newTrackNum = i; break; }
             }
             if (newTrackNum) { // currentTrack it's still in the new playlist, update trackNumber
-              player.playingTrack = newTrackNum + 1;
+              player.currentTrack = newTrackNum + 1;
               player.tracks = playlistNew.length;
             } else { // currentTrack has been removed.
               audioTag.pause();
