@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Example Index</title>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="src/angular-audio-player.js" type="text/javascript" charset="utf-8"></script>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body ng-app="myApp" ng-controller="MyCtrl">
+  <div class="hero-unit">
+    <h1>angular-audio-player</h1>
+    <p>List of examples</p>
+    <p>
+      <a class="btn btn-primary btn-large" href="examples/example1.html">
+        Example #1 - adding playlist elements at runtime
+      </a>
+    </p>
+    <p>
+      <a class="btn btn-primary btn-large" href="examples/example2.html">
+        Example #2 - Emptying playlist while playing
+      </a>
+    </p>
+    <p>
+      <a class="btn btn-primary btn-large" href="examples/example3.html">
+        Example #3 - Pre-existing &lt;source&gt; tags
+      </a>
+    </p>
+</div>
+</body>
+
+<script type="text/javascript">
+  angular.module('myApp', ['angular-audio-player'])
+  .controller('MyCtrl', function ($scope, $timeout) {
+
+  });
+</script>
+</html>
