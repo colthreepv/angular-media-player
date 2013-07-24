@@ -57,7 +57,6 @@ sourceObject mimics ```<source>``` HTML draft
 ]
 ```
 
-
 *For whoever wondering what ```media``` is*: it's just a [css media query][cssmediaquery], so the browser can pick which ```<source>``` tag to load.
 
 ## player-control methods and properties
@@ -89,6 +88,18 @@ You can add/remove tracks on-fly from/to the playlist.
 If the current track gets removed, the player goes on **pause()**. (And starts loading the first track of the new playlist)
 
 **TBD**
+
+## Examples
+
+```bash
+$ git clone https://github.com/mrgamer/angular-audio-player.git
+$ cd angular-audio-player
+$ npm install
+# -- WORK WORK HERE --
+$ node webserver.js
+```
+
+Now open up [localhost:8080](http://localhost:8080/) and you will find the demo index page with other examples.
 
 ### Credits
 A lot of guidelines to realize a simple re-usable project like this have come mainly from:
