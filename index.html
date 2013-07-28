@@ -1,203 +1,166 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Angular-audio-player by mrgamer</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-  </head>
-  <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/mrgamer/angular-audio-player">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/mrgamer/angular-audio-player/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/mrgamer/angular-audio-player/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
-
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
-          <h1>Angular-audio-player</h1>
-          <p>AngularJS Directive that wraps an &lt;audio&gt; tag exposing handy events and selectors to customize your audio player.</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/mrgamer">mrgamer</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
-        <h1>
-<a name="angular-audio-player" class="anchor" href="#angular-audio-player"><span class="octicon octicon-link"></span></a>angular-audio-player</h1>
-
-<p>AngularJS Directive that wraps an <code>&lt;audio&gt;</code> tag exposing handy events and selectors to customize your audio player.</p>
-
-<h2>
-<a name="abstract--idea" class="anchor" href="#abstract--idea"><span class="octicon octicon-link"></span></a>Abstract / Idea</h2>
-
-<p>I've come across a lot of <code>&lt;audio&gt;</code> players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.<br>
-What i really was looking for was a simple audio wrapper <strong>without</strong> the need to support browser which don't have audio tag support!<br>
-Means support for this project is the same as: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#Browser_compatibility">HTML5 audio draft</a>, jQuery is not necessary, and DOM manipulation is done with 'modern' browsers in mind (IE9 not really being a top player here)<br><a href="http://github.com/mrgamer/angular-audio-player">angular-audio-player</a> is html/css <strong>agnostic</strong>, meaning you can use it with your browser controls and default style, or bind the methods and properties in your own View</p>
-
-<h2>
-<a name="dude-i-imported-the-library-now-what" class="anchor" href="#dude-i-imported-the-library-now-what"><span class="octicon octicon-link"></span></a>Dude i imported the library, now what?</h2>
-
-<p>Well read below some basic how to :p<br>
-This directive it's just a way to expose <code>&lt;audio&gt;</code> tag property and methods to an AngularJS application, so you have to use custom html <strong>and</strong> css in order to interface with the audio directive.  </p>
-
-<h2>
-<a name="simple-how-to" class="anchor" href="#simple-how-to"><span class="octicon octicon-link"></span></a>Simple How-To</h2>
-
-<p>In your AngularJS application include in dependency injection <code>angular-audio-player</code></p>
-
-<div class="highlight"><pre><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'myApp'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'angular-audio-player'</span><span class="p">])</span>
-</pre></div>
-
-<p>Then in the html:</p>
-
-<div class="highlight"><pre><span class="nt">&lt;audio</span> <span class="na">data-player-control=</span><span class="s">"audio1"</span> <span class="na">data-playlist=</span><span class="s">"playlist1"</span> <span class="na">audio-player</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;source</span> <span class="na">src=</span><span class="s">"http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg"</span> <span class="na">type=</span><span class="s">"audio/ogg"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;/audio&gt;</span>
-<span class="nt">&lt;span</span> <span class="na">ng-show=</span><span class="s">"audio1.playing"</span><span class="nt">&gt;</span>Player status: Playing<span class="nt">&lt;/span&gt;</span>
-<span class="nt">&lt;span</span> <span class="na">ng-show=</span><span class="s">"!audio1.playing"</span><span class="nt">&gt;</span>Player status: Paused<span class="nt">&lt;/span&gt;</span>
-</pre></div>
-
-<h2>
-<a name="directive-attributes" class="anchor" href="#directive-attributes"><span class="octicon octicon-link"></span></a>Directive Attributes</h2>
-
-<ul>
-<li>
-<strong>playlist</strong>: An Array containing audioElements(s)</li>
-<li>
-<strong>player-control</strong>: Exposed properties and methods of the <code>&lt;audio&gt;</code> tag</li>
-</ul><h2>
-<a name="playlist-structure" class="anchor" href="#playlist-structure"><span class="octicon octicon-link"></span></a>playlist structure</h2>
-
-<p>Playlist is an Array containing <code>audioElement(s)</code>.<br>
-An <code>audioElement</code> could be an Array of sourceObjects, or a single sourceObject.  </p>
-
-<p>sourceObject mimics <code>&lt;source&gt;</code> HTML draft  </p>
-
-<blockquote>
-<p><strong>sourceObject structure</strong>:</p>
-
-<div class="highlight"><pre><span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="s1">'http://some.where.com'</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">'mime/type'</span><span class="p">,</span> <span class="nx">media</span><span class="o">:</span> <span class="s1">'.css.media.query'</span> <span class="p">}</span>
-</pre></div>
-
-<p><strong>or alternatively</strong></p>
-
-<div class="highlight"><pre><span class="p">[</span>
-  <span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="s1">'http://some.where.com'</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">'audio/ogg'</span> <span class="p">},</span>
-  <span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="s1">'http://some.where.com/lowquality'</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">'audio/ogg'</span> <span class="p">},</span>
-  <span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="s1">'http://some.where.com/crapquality'</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">'audio/ogg'</span> <span class="p">},</span>
-  <span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="s1">'http://some.where.com'</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">'audio/mp3'</span> <span class="p">},</span>
-<span class="p">]</span>
-</pre></div>
-</blockquote>
-
-<p><em>For whoever wondering what <code>media</code> is</em>: it's just a <a href="http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/#media0">css media query</a>, so the browser can pick which <code>&lt;source&gt;</code> tag to load.</p>
-
-<h2>
-<a name="player-control-methods-and-properties" class="anchor" href="#player-control-methods-and-properties"><span class="octicon octicon-link"></span></a>player-control methods and properties</h2>
-
-<h3>
-<a name="playerplay" class="anchor" href="#playerplay"><span class="octicon octicon-link"></span></a><code>player.play()</code>
-</h3>
-
-<h3>
-<a name="playerplaypause" class="anchor" href="#playerplaypause"><span class="octicon octicon-link"></span></a><code>player.playPause()</code>
-</h3>
-
-<h3>
-<a name="playerpause" class="anchor" href="#playerpause"><span class="octicon octicon-link"></span></a><code>player.pause()</code>
-</h3>
-
-<h3>
-<a name="playernext" class="anchor" href="#playernext"><span class="octicon octicon-link"></span></a><code>player.next()</code>
-</h3>
-
-<p>Goes to next audioElement if there is one in the playlist, otherwise does <strong>nothing</strong>.</p>
-
-<h3>
-<a name="playerprev" class="anchor" href="#playerprev"><span class="octicon octicon-link"></span></a><code>player.prev()</code>
-</h3>
-
-<p>Goes to previous audioElement if there is one in the playlist, otherwise does <strong>nothing</strong>.</p>
-
-<h3>
-<a name="playerplaying" class="anchor" href="#playerplaying"><span class="octicon octicon-link"></span></a><code>player.playing</code>
-</h3>
-
-<p><code>true</code> or <code>false</code></p>
-
-<h3>
-<a name="playercurrenttrack" class="anchor" href="#playercurrenttrack"><span class="octicon octicon-link"></span></a><code>player.currentTrack</code>
-</h3>
-
-<p>Tracks the position of the playing track, it <strong>might</strong> change during playing the same track due to pushing elements into <code>playlistArray</code></p>
-
-<h3>
-<a name="playertracks" class="anchor" href="#playertracks"><span class="octicon octicon-link"></span></a><code>player.tracks</code>
-</h3>
-
-<p>Number of tracks in the playlist</p>
-
-<h2>
-<a name="functionality" class="anchor" href="#functionality"><span class="octicon octicon-link"></span></a>Functionality</h2>
-
-<p>You can add/remove tracks on-fly from/to the playlist.<br>
-If the current track gets removed, the player goes on <strong>pause()</strong>. (And starts loading the first track of the new playlist)</p>
-
-<p><strong>TBD</strong></p>
-
-<h2>
-<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
-
-<div class="highlight"><pre><span class="nv">$ </span>git clone https://github.com/mrgamer/angular-audio-player.git
-<span class="nv">$ </span><span class="nb">cd </span>angular-audio-player
-<span class="nv">$ </span>npm install
-<span class="c"># -- WORK WORK HERE --</span>
-<span class="nv">$ </span>node webserver.js
-</pre></div>
-
-<p>Now open up <a href="http://localhost:8080/">localhost:8080</a> and you will find the demo index page with other examples.</p>
-
-<h3>
-<a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>Credits</h3>
-
-<p>A lot of guidelines to realize a simple re-usable project like this have come mainly from:</p>
-
-<ul>
-<li>
-<a href="https://github.com/tombatossals/angular-leaflet-directive">angular-leaflet-directive</a> work of <a href="https://github.com/tombatossals">tombatossals</a>, i think is a good example of a standalone project. (other than being useful :) )</li>
-<li>
-<a href="https://github.com/btford/angular-socket-io">angular-socket-io</a> I think most of AngularJS developers know <a href="https://github.com/btford">Brian Ford</a>, I'm out of count how many times i found his posts or works an enlightenment! </li>
-</ul>
-      </section>
-
+<head>
+  <meta charset="utf-8">
+  <title>angular-audio-player docs</title>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="angular-audio-player.min.js" type="text/javascript" charset="utf-8"></script>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body ng-app="myApp" ng-controller="MyCtrl">
+  <div class="container">
+    <div class="hero-unit">
+      <h1>angular-audio-player</h1>
+      <p>AngularJS Directive that wraps an &lt;audio&gt; tag exposing handy events and selectors to customize your audio player.</p>
+      <p>List of examples</p>
+      <p>
+        <a class="btn btn-primary btn-large" href="example1.html">
+          Example #1 - adding playlist elements at runtime
+        </a>
+      </p>
+      <p>
+        <a class="btn btn-primary btn-large" href="example2.html">
+          Example #2 - Emptying playlist while playing
+        </a>
+      </p>
+      <p>
+        <a class="btn btn-primary btn-large" href="example3.html">
+          Example #3 - Pre-existing &lt;source&gt; tags
+        </a>
+      </p>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-42785441-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
+  </div>
+</body>
 
-  </body>
+<xmp style="display:none;">
+## Abstract / Idea
+I've come across a lot of ```<audio>``` players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.  
+What i really was looking for was a simple audio wrapper **without** the need to support browser which don't have audio tag support!  
+Means support for this project is the same as: [HTML5 audio draft][html5audiocompatibility], jQuery is not necessary, and DOM manipulation is done with 'modern' browsers in mind (IE9 not really being a top player here)  
+[angular-audio-player][self] is html/css **agnostic**, meaning you can use it with your browser controls and default style, or bind the methods and properties in your own View
+
+## Dude i imported the library, where i can see it work? 
+### [Examples here][examples]  
+This directive it's just a way to expose ```<audio>``` tag property and methods to an AngularJS application, so you have to use custom html **and** css in order to interface with the audio directive.  
+
+## Simple How-To
+In your AngularJS application include in dependency injection ```angular-audio-player```
+
+```javascript
+angular.module('myApp', ['angular-audio-player'])
+```
+
+Then in the html:
+
+```html
+<audio data-player-control="audio1" data-playlist="playlist1" audio-player>
+  <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
+</audio>
+<span ng-show="audio1.playing">Player status: Playing</span>
+<span ng-show="!audio1.playing">Player status: Paused</span>
+```
+
+## Directive Attributes
+
+* **playlist**: An Array containing audioElements(s)
+* **player-control**: Exposed properties and methods of the ```<audio>``` tag
+
+## playlist structure
+
+Playlist is an Array containing ```audioElement(s)```.  
+An ```audioElement``` could be an Array of sourceObjects, or a single sourceObject.  
+
+sourceObject mimics ```<source>``` HTML draft  
+
+> **sourceObject structure**:
+```javascript
+{ src: 'http://some.where.com', type: 'mime/type', media: '.css.media.query' }
+```
+> **or alternatively**
+```javascript
+[
+  { src: 'http://some.where.com', type: 'audio/ogg' },
+  { src: 'http://some.where.com/lowquality', type: 'audio/ogg' },
+  { src: 'http://some.where.com/crapquality', type: 'audio/ogg' },
+  { src: 'http://some.where.com', type: 'audio/mp3' },
+]
+```
+
+*For whoever wondering what ```media``` is*: it's just a [css media query][cssmediaquery], so the browser can pick which ```<source>``` tag to load.
+
+## player-control methods and properties
+
+### `player.play()`
+
+### `player.playPause()`
+
+### `player.pause()`
+
+### `player.next()`
+Goes to next audioElement if there is one in the playlist, otherwise does **nothing**.
+
+### `player.prev()`
+Goes to previous audioElement if there is one in the playlist, otherwise does **nothing**.
+
+### `player.playing`
+```true``` or ```false```
+
+### `player.currentTrack`
+Tracks the position of the playing track, it **might** change during playing the same track due to pushing elements into ```playlistArray```
+
+### `player.tracks`
+Number of tracks in the playlist
+
+## Functionality
+
+You can add/remove tracks on-fly from/to the playlist.  
+If the current track gets removed, the player goes on **pause()**. (And starts loading the first track of the new playlist)
+
+**TBD**
+
+## Examples
+
+```bash
+$ git clone https://github.com/mrgamer/angular-audio-player.git
+$ cd angular-audio-player
+$ npm install
+# -- WORK WORK HERE --
+$ node webserver.js
+```
+
+Now open up [localhost:8080](http://localhost:8080/) and you will find the demo index page with other examples.
+
+### Credits
+A lot of guidelines to realize a simple re-usable project like this have come mainly from:
+
+* [angular-leaflet-directive][leafletdir] work of [tombatossals][leafletauth], i think is a good example of a standalone project. (other than being useful :) )
+* [angular-socket-io][socketbf] I think most of AngularJS developers know [Brian Ford][brianf], I'm out of count how many times i found his posts or works an enlightenment! 
+
+[leafletdir]: https://github.com/tombatossals/angular-leaflet-directive
+[leafletauth]: https://github.com/tombatossals
+[socketbf]: https://github.com/btford/angular-socket-io
+[brianf]: https://github.com/btford
+[self]: http://github.com/mrgamer/angular-audio-player
+[examples]: http://mrgamer.github.com/angular-audio-player/
+
+
+[html5audiocompatibility]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#Browser_compatibility
+[cssmediaquery]: http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/#media0
+</xmp>
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+
+<script type="text/javascript">
+  angular.module('myApp', ['angular-audio-player'])
+  .controller('MyCtrl', function ($scope, $timeout) {});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42785441-1', 'mrgamer.github.io');
+  ga('send', 'pageview');
+
+</script>
 </html>
