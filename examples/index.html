@@ -1,9 +1,38 @@
-angular-audio-player
-====================
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>angular-audio-player docs</title>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="angular-audio-player.min.js" type="text/javascript" charset="utf-8"></script>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body ng-app="myApp" ng-controller="MyCtrl">
+  <div class="container">
+    <div class="hero-unit">
+      <h1>angular-audio-player</h1>
+      <p>AngularJS Directive that wraps an &lt;audio&gt; tag exposing handy events and selectors to customize your audio player.</p>
+      <p>List of examples</p>
+      <p>
+        <a class="btn btn-primary btn-large" href="example1.html">
+          Example #1 - adding playlist elements at runtime
+        </a>
+      </p>
+      <p>
+        <a class="btn btn-primary btn-large" href="example2.html">
+          Example #2 - Emptying playlist while playing
+        </a>
+      </p>
+      <p>
+        <a class="btn btn-primary btn-large" href="example3.html">
+          Example #3 - Pre-existing &lt;source&gt; tags
+        </a>
+      </p>
+    </div>
+  </div>
+</body>
 
-AngularJS Directive that wraps an ```<audio>``` tag exposing handy events and selectors to customize your audio player.
-
-
+<xmp style="display:none;">
 ## Abstract / Idea
 I've come across a lot of ```<audio>``` players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.  
 What i really was looking for was a simple audio wrapper **without** the need to support browser which don't have audio tag support!  
@@ -117,3 +146,21 @@ A lot of guidelines to realize a simple re-usable project like this have come ma
 
 [html5audiocompatibility]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#Browser_compatibility
 [cssmediaquery]: http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/#media0
+</xmp>
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+
+<script type="text/javascript">
+  angular.module('myApp', ['angular-audio-player'])
+  .controller('MyCtrl', function ($scope, $timeout) {});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42785441-1', 'mrgamer.github.io');
+  ga('send', 'pageview');
+
+</script>
+</html>

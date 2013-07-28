@@ -14,9 +14,6 @@
     "player"
   ],
   "license": "MIT",
-  "dependencies": {
-    "connect": "latest"
-  },
   "devDependencies": {
     "grunt-cli": "latest",
     "grunt": "latest",
