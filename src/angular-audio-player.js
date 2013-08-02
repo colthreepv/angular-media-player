@@ -158,6 +158,13 @@ angular.module('angular-audio-player', ['helperFunctions'])
           },
           playNext = function (evt) {
             self.next(true);
+          },
+          updateProgress = function (evt) {
+            if (self._audioTag.buffered.length) {
+              scope.$apply(function () {
+                self.loadPercent = parseInt((self._audioTag.buffered.end(self._audioTag.buffered.length - 1) / self.duration) * 100, 10);
+              });
+            }
           };
 
         element.bind('playing', updatePlaying(true));
@@ -165,6 +172,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
         element.bind('ended', playNext);
         element.bind('timeupdate', updateTime);
         element.bind('loadedmetadata', setDuration);
+        element.bind('progress', updateProgress);
       }
     };
 
