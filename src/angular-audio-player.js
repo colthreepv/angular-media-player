@@ -37,8 +37,18 @@ angular.module('angular-audio-player', ['helperFunctions'])
       this.tracks = playlist.length;
       // just exposing <audio> properties.
       this.volume = this._audioTag.volume;
-      this.currentTime = this._audioTag.currentTime;
       this.duration = this._audioTag.duration;
+      this.formatDuration = '';
+      this.currentTime = this._audioTag.currentTime;
+      this.formatTime = '';
+      this.loadPercent = 0;
+      // Alias
+      this.position = this.currentTime;
+      /**
+       * TODO:
+       * buffered - from audioTag
+       * seekable - from audioTag
+       */
     };
 
     AudioPlayer.prototype = {
@@ -67,10 +77,10 @@ angular.module('angular-audio-player', ['helperFunctions'])
       pause: function () {
         this._audioTag.pause();
       },
-      next: function () {
+      next: function (autoplay) {
         var self = this;
         if (self.currentTrack && self.currentTrack < self.tracks) {
-          var wasPlaying = self.playing;
+          var wasPlaying = autoplay || self.playing;
           self.pause();
           $timeout(function () {
             self._clearAudioList();
@@ -108,39 +118,53 @@ angular.module('angular-audio-player', ['helperFunctions'])
       _clearAudioList: function () {
         this._element.contents().remove();
       },
+      _formatTime: function (seconds) {
+        var hours = parseInt(seconds / 3600, 10) % 24
+          , minutes = parseInt(seconds / 60, 10) % 60
+          , secs = parseInt(seconds % 60, 10)
+          , result
+          , fragment = (minutes < 10 ? "0" + minutes : minutes) + ":" + (secs  < 10 ? "0" + secs : secs);
+        if (hours > 0) {
+          result = (hours < 10 ? "0" + hours : hours) + ":" + fragment;
+        } else {
+          result = fragment;
+        }
+        return result;
+      },
       _bindListeners: function (scope) {
-        var self = this
-          , element = this._element
-          , updateTime = throttle(1000, false, function (evt) {
+        var self = this,
+          element = this._element,
+          updateTime = throttle(1000, false, function (evt) {
             $log.info('count how many times.');
             scope.$apply(function () {
-              if (!self.currentTrack) { // This is triggered *ONLY* in case the first <source> has done loading.
-                self.currentTrack++;
-                self.duration = self._audioTag.duration;
-              }
-              self.currentTime = self._audioTag.currentTime;
+              self.currentTime = self.position = self._audioTag.currentTime;
+              self.formatTime = self._formatTime(self.currentTime);
             });
-          })
-          , updatePlaying = function (isPlaying) {
+          }),
+          updatePlaying = function (isPlaying) {
             return function (evt) {
               scope.$apply(function () {
                 self.playing = isPlaying;
               });
             };
+          },
+          setDuration = function (evt) {
+            scope.$apply(function () {
+              if (!self.currentTrack) { self.currentTrack++; } // This is triggered *ONLY* the first time a <source> gets loaded.
+              self.duration = self._audioTag.duration;
+              self.formatDuration = self._formatTime(self.duration);
+              self.loadPercent = parseInt((self._audioTag.buffered.end(self._audioTag.buffered.length - 1) / self.duration) * 100, 10);
+            });
+          },
+          playNext = function (evt) {
+            self.next(true);
           };
 
         element.bind('playing', updatePlaying(true));
         element.bind('pause', updatePlaying(false));
-        element.bind('ended', function (evt) {
-          // Go to next();
-          $log.info('ended!');
-        });
-        /**
-         * Event useful to understand when audioTag properties are *correctly* populated,
-         * since it gets dispatched ALSO when 'loadedmetadata' event is fired.
-         */
+        element.bind('ended', playNext);
         element.bind('timeupdate', updateTime);
-        element.bind('loadstart', updateTime);
+        element.bind('loadedmetadata', setDuration);
       }
     };
 

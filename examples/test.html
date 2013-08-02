@@ -36,7 +36,7 @@
       <i class="icon-step-backward"></i>
       <span>Prev</span>
     </div>
-    <span>audio1.currentTrack = {{ audio1.currentTrack }}</span>
+    <span>audio1.currentTrack: {{ audio1.currentTrack }}</span>
     <h3>playlist1</h3>
     <span>
         {{ playlist1 }}
@@ -44,11 +44,16 @@
     <pre>
       <code>
         audio1 = {
-          playing = {{ audio1.playing }};
-          currentTrack = {{ audio1.currentTrack }};
-          tracks = {{ audio1.tracks }};
-          volume = {{ audio1.volume }};
-          currentTime = {{ audio1.currentTime }};
+          playing: {{ audio1.playing }}
+          currentTrack: {{ audio1.currentTrack }}
+          tracks: {{ audio1.tracks }}
+          volume: {{ audio1.volume }}
+          formatDuration: {{ audio1.formatDuration }}
+          duration: {{ audio1.duration }}
+          currentTime: {{ audio1.currentTime }}
+          formatTime: {{ audio1.formatTime }}
+          position: {{ audio1.position }}
+          loadPercent: {{ audio1.loadPercent }}
         };
       </code>
     </pre>
@@ -59,6 +64,7 @@
   angular.module('myApp', ['angular-audio-player'])
   .controller('MyCtrl', function ($scope, $timeout) {
     $scope.playlist1 = [];
+    $scope.playlist1.push({ src: 'http://upload.wikimedia.org/wikipedia/en/f/fe/Aerosmith_-_Dream_On.ogg' });
     $scope.playlist1.push({ src: 'http://upload.wikimedia.org/wikipedia/en/4/45/ACDC_-_Back_In_Black-sample.ogg' });
   });
 </script>
