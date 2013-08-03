@@ -25,10 +25,13 @@ angular.module('angular-audio-player', ['helperFunctions'])
     var AudioPlayer = function (element, scope, playlist, options) {
       if (!(this instanceof AudioPlayer)) { return new AudioPlayer(playlist, options); }
 
+      options = options || {};
       playlist = playlist || [];
 
       this._element = element;
       this._audioTag = element[0];
+      this._name = options.name || 'audioplayer';
+      this._scope = scope; // useless for now
       this._bindListeners(scope);
       this._playlist = playlist;
 
@@ -48,11 +51,28 @@ angular.module('angular-audio-player', ['helperFunctions'])
        * TODO:
        * buffered - from audioTag
        * seekable - from audioTag
+       *
+       * Events:
+       * audioplayer:next - when issued a next()
+       * audioplayer:prev - when issued a prev()
        */
     };
 
     AudioPlayer.prototype = {
-      load: function (autoplayNext) {
+      /**
+       * @usage load([audioElement], [autoplayNext]);
+       * 
+       * @param  {audioElement Obj} audioElement [a single audioElement, may contain multiple <source>(s)]
+       * @param  {boolean} autoplayNext [flag to autostart loaded element]
+       */
+      load: function (audioElement, autoplayNext) {
+        if (typeof audioElement === 'boolean') {
+          autoplayNext = audioElement;
+          audioElement = null;
+        } else if (typeof audioElement === 'object') {
+          this._clearAudioList();
+          this._addAudioList(audioElement);
+        }
         this._audioTag.load();
         if (autoplayNext) {
           var self = this;
@@ -62,16 +82,23 @@ angular.module('angular-audio-player', ['helperFunctions'])
           });
         }
       },
-      play: function () {
+      /**
+       * @usage play([index])
+       * @param  {integer} index [playlist index (0...n), to start playing from]
+       */
+      play: function (index) {
+        if (this._playlist.length > index) {
+          this.load(this._playlist[index]);
+        }
         // readyState = HAVE_NOTHING (0) means there's nothing into the <audio> tag
         if (!this.currentTrack && this._audioTag.readyState) { this.currentTrack++; }
         this._audioTag.play();
       },
-      playPause: function () {
+      playPause: function (index) {
         if (this.playing) {
           this.pause();
         } else {
-          this.play();
+          this.play(index);
         }
       },
       pause: function () {
@@ -146,6 +173,11 @@ angular.module('angular-audio-player', ['helperFunctions'])
               scope.$apply(function () {
                 self.playing = isPlaying;
               });
+              if (isPlaying) {
+                scope.$emit('audioplayer:play', self.currentTrack - 1);
+              } else {
+                scope.$emit('audioplayer:pause');
+              }
             };
           },
           setDuration = function (evt) {
@@ -206,6 +238,10 @@ angular.module('angular-audio-player', ['helperFunctions'])
           var player = scope.exposedPlayer
             , currentTrack
             , newTrackNum = null;
+
+          if (playlistNew === undefined) {
+            return $log.error('if you use playlist attribute, you need to $scope.playlistVariable = []; in your code');
+          }
           
           /**
            * Playlist update logic:
@@ -230,7 +266,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
             for (var i = 0; i < playlistNew.length; i++) {
               if (angular.equals(playlistNew[i], currentTrack)) { newTrackNum = i; break; }
             }
-            if (newTrackNum) { // currentTrack it's still in the new playlist, update trackNumber
+            if (newTrackNum !== null) { // currentTrack it's still in the new playlist, update trackNumber
               player.currentTrack = newTrackNum + 1;
               player.tracks = playlistNew.length;
             } else { // currentTrack has been removed.
