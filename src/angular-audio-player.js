@@ -88,7 +88,8 @@ angular.module('angular-audio-player', ['helperFunctions'])
        */
       play: function (index) {
         if (this._playlist.length > index) {
-          this.load(this._playlist[index]);
+          this.currentTrack = index + 1;
+          return this.load(this._playlist[index], true);
         }
         // readyState = HAVE_NOTHING (0) means there's nothing into the <audio> tag
         if (!this.currentTrack && this._audioTag.readyState) { this.currentTrack++; }
@@ -174,9 +175,9 @@ angular.module('angular-audio-player', ['helperFunctions'])
                 self.playing = isPlaying;
               });
               if (isPlaying) {
-                scope.$emit('audioplayer:play', self.currentTrack - 1);
+                scope.$emit(self._name + ':play', self.currentTrack - 1);
               } else {
-                scope.$emit('audioplayer:pause');
+                scope.$emit(self._name + ':pause');
               }
             };
           },
