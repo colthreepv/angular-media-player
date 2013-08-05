@@ -30,7 +30,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
 
       this._element = element;
       this._audioTag = element[0];
-      this._name = options.name || 'audioplayer';
+      this.name = options.name || 'audioplayer';
       this._scope = scope; // useless for now
       this._bindListeners(scope);
       this._playlist = playlist;
@@ -73,6 +73,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
           this._clearAudioList();
           this._addAudioList(audioElement);
         }
+        this._scope.$emit(this.name + ':load', autoplayNext);
         this._audioTag.load();
         if (autoplayNext) {
           var self = this;
@@ -177,9 +178,9 @@ angular.module('angular-audio-player', ['helperFunctions'])
                 self.playing = isPlaying;
               });
               if (isPlaying) {
-                scope.$emit(self._name + ':play', self.currentTrack - 1);
+                scope.$emit(self.name + ':play', self.currentTrack - 1);
               } else {
-                scope.$emit(self._name + ':pause');
+                scope.$emit(self.name + ':pause');
               }
             };
           },
