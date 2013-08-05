@@ -96,7 +96,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
         this._audioTag.play();
       },
       playPause: function (index) {
-        if (typeof index === 'number') {
+        if (typeof index === 'number' && index + 1 !== this.currentTrack) {
           this.play(index);
         } else if (this.playing) {
           this.pause();
