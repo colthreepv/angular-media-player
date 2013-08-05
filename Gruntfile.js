@@ -4,12 +4,13 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-git-describe');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+        banner: '/*! <%= pkg.name %> v<%=git %> | date: <%= grunt.template.today("dd-mm-yyyy") %> */\n'
       },
       dist: {
         files: {
@@ -93,10 +94,17 @@ module.exports = function (grunt) {
         configFile: './karma.config.js',
         autoWatch: true
       }
+    },
+    "git-describe": {
+      version: {
+        options: {
+          prop: 'git'
+        }
+      }
     }
   });
 
   grunt.registerTask('test', ['jshint']);
-  grunt.registerTask('default', ['jshint', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'git-describe', 'uglify']);
 
 };
