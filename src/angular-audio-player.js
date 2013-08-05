@@ -96,10 +96,12 @@ angular.module('angular-audio-player', ['helperFunctions'])
         this._audioTag.play();
       },
       playPause: function (index) {
-        if (this.playing) {
+        if (index) {
+          this.play(index);
+        } else if (this.playing) {
           this.pause();
         } else {
-          this.play(index);
+          this.play();
         }
       },
       pause: function () {
