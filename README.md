@@ -10,6 +10,16 @@ What i really was looking for was a simple audio wrapper **without** the need to
 Means support for this project is the same as: [HTML5 audio draft][html5audiocompatibility], jQuery is not necessary, and DOM manipulation is done with 'modern' browsers in mind (IE9 not really being a top player here)  
 [angular-audio-player][self] is html/css **agnostic**, meaning you can use it with your browser controls and default style, or bind the methods and properties in your own View
 
+## Roadmap
+
+  * better way to expose current time and buffered data (?!?)
+  * song preload:
+    * preload N songs before and after the current song.
+    * multiple parallel preload connections
+  * to achieve preload i need to use multiple `audio` tags
+    * create only 2N `audio` tags
+    * memorize/paginate `audio` properties even when the tag is removed from the DOM, so if it gets added back it haves the same progress. 
+
 ## Dude i imported the library, where i can see it work? 
 ### [Examples here][examples]  
 This directive it's just a way to expose ```<audio>``` tag property and methods to an AngularJS application, so you have to use custom html **and** css in order to interface with the audio directive.  
