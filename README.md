@@ -20,6 +20,10 @@ Means support for this project is the same as: [HTML5 audio draft][html5audiocom
     * create only 2N `audio` tags
     * memorize/paginate `audio` properties even when the tag is removed from the DOM, so if it gets added back it haves the same progress. 
 
+  * Documentation
+    * playPause(index) documentation
+    * example4, displaying playlist with `ng-repeat` and using `playPause($index)` on it.
+
 ## Dude i imported the library, where i can see it work? 
 ### [Examples here][examples]  
 This directive it's just a way to expose ```<audio>``` tag property and methods to an AngularJS application, so you have to use custom html **and** css in order to interface with the audio directive.  
