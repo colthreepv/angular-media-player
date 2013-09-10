@@ -21,7 +21,7 @@ Means support for this project is the same as: [HTML5 audio draft][html5audiocom
     * memorize/paginate `audio` properties even when the tag is removed from the DOM, so if it gets added back it haves the same progress. 
 
   * Documentation
-    * playPause(index) documentation
+    * ~~playPause(index) documentation~~
     * example4, displaying playlist with `ng-repeat` and using `playPause($index)` on it.
 
 ## Dude i imported the library, where i can see it work? 
@@ -75,17 +75,23 @@ sourceObject mimics ```<source>``` HTML draft
 
 ## player-control methods and properties
 
-### `player.play()`
+### `player.play([index])`
+`index` is an _optional_ parameter, referring to the playlist index (0...playlist.length-1)
 
-### `player.playPause()`
+### `player.playPause([index])`
+`index` is an _optional_ parameter, referring to the playlist index (0...playlist.length-1)
 
 ### `player.pause()`
 
-### `player.next()`
-Goes to next audioElement if there is one in the playlist, otherwise does **nothing**.
+### `player.next([autoplay])`
+Goes to next audioElement if there is one in the playlist, otherwise does **nothing**.  
+Autoplay behaviour is the following:
+If a song is _already_ playing, it will change to the next audioElement, and start playing ASAP.  
+You can force the autoplay on/off using the `autoplay` Boolean parameter.
 
-### `player.prev()`
-Goes to previous audioElement if there is one in the playlist, otherwise does **nothing**.
+### `player.prev([autoplay])`
+Goes to previous audioElement if there is one in the playlist, otherwise does **nothing**.  
+Refer to `.next()` about `autoplay` parameter.
 
 ### `player.playing`
 ```true``` or ```false```
