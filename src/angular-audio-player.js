@@ -23,7 +23,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
      * @param {Array} [playlist] [an Array made of audioElements (refer to README.md)]
      */
     var AudioPlayer = function (element, scope, playlist, options) {
-      if (!(this instanceof AudioPlayer)) { return new AudioPlayer(playlist, options); }
+      if (!(this instanceof AudioPlayer)) { return new AudioPlayer(element, scope, playlist, options); }
 
       options = options || {};
       playlist = playlist || [];
@@ -121,10 +121,10 @@ angular.module('angular-audio-player', ['helperFunctions'])
           });
         }
       },
-      prev: function () {
+      prev: function (autoplay) {
         var self = this;
         if (self.currentTrack && self.currentTrack - 1) {
-          var wasPlaying = self.playing;
+          var wasPlaying = autoplay || self.playing;
           self.pause();
           $timeout(function () {
             self._clearAudioList();
@@ -150,11 +150,11 @@ angular.module('angular-audio-player', ['helperFunctions'])
         this._element.contents().remove();
       },
       _formatTime: function (seconds) {
-        var hours = parseInt(seconds / 3600, 10) % 24
-          , minutes = parseInt(seconds / 60, 10) % 60
-          , secs = parseInt(seconds % 60, 10)
-          , result
-          , fragment = (minutes < 10 ? "0" + minutes : minutes) + ":" + (secs  < 10 ? "0" + secs : secs);
+        var hours = parseInt(seconds / 3600, 10) % 24,
+            minutes = parseInt(seconds / 60, 10) % 60,
+            secs = parseInt(seconds % 60, 10),
+            result,
+            fragment = (minutes < 10 ? "0" + minutes : minutes) + ":" + (secs  < 10 ? "0" + secs : secs);
         if (hours > 0) {
           result = (hours < 10 ? "0" + hours : hours) + ":" + fragment;
         } else {
@@ -166,7 +166,6 @@ angular.module('angular-audio-player', ['helperFunctions'])
         var self = this,
           element = this._element,
           updateTime = throttle(1000, false, function (evt) {
-            $log.info('count how many times.');
             scope.$apply(function () {
               self.currentTime = self.position = self._audioTag.currentTime;
               self.formatTime = self._formatTime(self.currentTime);
@@ -237,11 +236,9 @@ angular.module('angular-audio-player', ['helperFunctions'])
 
 
         scope.$watch('playlist', function (playlistNew, playlistOld, watchScope) {
-          $log.warn('playlist changed');
-
-          var player = scope.exposedPlayer
-            , currentTrack
-            , newTrackNum = null;
+          var player = scope.exposedPlayer,
+              currentTrack,
+              newTrackNum = null;
 
           if (playlistNew === undefined) {
             return $log.error('if you use playlist attribute, you need to $scope.playlistVariable = []; in your code');
