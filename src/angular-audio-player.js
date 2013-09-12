@@ -263,7 +263,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
            * 
            */
           if (player.currentTrack) {
-            currentTrack = playlistOld[player.currentTrack - 1];
+            currentTrack = playlistOld ? playlistOld[player.currentTrack - 1] : -1;
             for (var i = 0; i < playlistNew.length; i++) {
               if (angular.equals(playlistNew[i], currentTrack)) { newTrackNum = i; break; }
             }
