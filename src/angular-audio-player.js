@@ -40,6 +40,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
       this.tracks = playlist.length;
       // just exposing <audio> properties.
       this.volume = this._audioTag.volume;
+      this.muted = this._audioTag.muted;
       this.duration = this._audioTag.duration;
       this.formatDuration = '';
       this.currentTime = this._audioTag.currentTime;
@@ -107,6 +108,9 @@ angular.module('angular-audio-player', ['helperFunctions'])
       },
       pause: function () {
         this._audioTag.pause();
+      },
+      toggleMute: function () {
+        this.muted = this._audioTag.muted = !this._audioTag.muted;
       },
       next: function (autoplay) {
         var self = this;
