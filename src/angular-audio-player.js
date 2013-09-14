@@ -40,6 +40,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
       this.tracks = playlist.length;
       // just exposing <audio> properties.
       this.volume = this._audioTag.volume;
+      this.muted = this._audioTag.muted;
       this.duration = this._audioTag.duration;
       this.formatDuration = '';
       this.currentTime = this._audioTag.currentTime;
@@ -107,6 +108,9 @@ angular.module('angular-audio-player', ['helperFunctions'])
       },
       pause: function () {
         this._audioTag.pause();
+      },
+      toggleMute: function () {
+        this.muted = this._audioTag.muted = !this._audioTag.muted;
       },
       next: function (autoplay) {
         var self = this;
@@ -241,7 +245,12 @@ angular.module('angular-audio-player', ['helperFunctions'])
               newTrackNum = null;
 
           if (playlistNew === undefined) {
-            return $log.error('if you use playlist attribute, you need to $scope.playlistVariable = []; in your code');
+            if (playlistOld !== undefined) {
+              player.pause();
+              return $log.debug('playlist was deleted from scope, pausing and returning');
+            } else {
+              return $log.error('if you use playlist attribute, you need to $scope.playlistVariable = []; in your code');
+            }
           }
           
           /**
@@ -263,7 +272,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
            * 
            */
           if (player.currentTrack) {
-            currentTrack = playlistOld[player.currentTrack - 1];
+            currentTrack = playlistOld ? playlistOld[player.currentTrack - 1] : -1;
             for (var i = 0; i < playlistNew.length; i++) {
               if (angular.equals(playlistNew[i], currentTrack)) { newTrackNum = i; break; }
             }
