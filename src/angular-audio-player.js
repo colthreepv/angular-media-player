@@ -241,7 +241,12 @@ angular.module('angular-audio-player', ['helperFunctions'])
               newTrackNum = null;
 
           if (playlistNew === undefined) {
-            return $log.error('if you use playlist attribute, you need to $scope.playlistVariable = []; in your code');
+            if (playlistOld !== undefined) {
+              player.pause();
+              return $log.debug('playlist was deleted from scope, pausing and returning');
+            } else {
+              return $log.error('if you use playlist attribute, you need to $scope.playlistVariable = []; in your code');
+            }
           }
           
           /**
