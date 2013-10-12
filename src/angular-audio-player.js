@@ -18,9 +18,9 @@ angular.module('angular-audio-player', ['helperFunctions'])
     /**
      * @usage: new AudioPlayer(element, scope, [playlist], [options]);
      *
-     * @param {jqLite/jQuery element} [element] [usually that would be the element the directive is attached to]
-     * @param {angular Scope} [scope] [scope in which call $apply, it could even be $rootScope (untested!)]
-     * @param {Array} [playlist] [an Array made of audioElements (refer to README.md)]
+     * @param {jqLite/jQuery element} element the DOM element the directive is attached to
+     * @param {angular Scope} [scope] scope in which call $apply, it could even be $rootScope (untested!)
+     * @param {Array} playlist an Array made of audioElements (refer to documentation)
      */
     var AudioPlayer = function (element, scope, playlist, options) {
       if (!(this instanceof AudioPlayer)) { return new AudioPlayer(element, scope, playlist, options); }
@@ -31,7 +31,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
       this._element = element;
       this._audioTag = element[0];
       this.name = options.name || 'audioplayer';
-      this._scope = scope; // useless for now
+      this._scope = scope;
       this._bindListeners(scope);
       this._playlist = playlist;
 
@@ -42,29 +42,25 @@ angular.module('angular-audio-player', ['helperFunctions'])
       this.volume = this._audioTag.volume;
       this.muted = this._audioTag.muted;
       this.duration = this._audioTag.duration;
-      this.formatDuration = '';
       this.currentTime = this._audioTag.currentTime;
+      // TimeRanges structures
+      this.buffered = this._audioTag.buffered;
+      this.played = this._audioTag.played;
+      this.seekable = this._audioTag.seekable;
+      // formatted fields
+      this.formatDuration = '';
       this.formatTime = '';
       this.loadPercent = 0;
       // Alias
       this.position = this.currentTime;
-      /**
-       * TODO:
-       * buffered - from audioTag
-       * seekable - from audioTag
-       *
-       * Events:
-       * audioplayer:next - when issued a next()
-       * audioplayer:prev - when issued a prev()
-       */
     };
 
     AudioPlayer.prototype = {
       /**
        * @usage load([audioElement], [autoplayNext]);
        * 
-       * @param  {audioElement Obj} audioElement [a single audioElement, may contain multiple <source>(s)]
-       * @param  {boolean} autoplayNext [flag to autostart loaded element]
+       * @param  {audioElement Obj} audioElement a single audioElement, may contain multiple <source>(s)
+       * @param  {boolean} autoplayNext flag to autostart loaded element
        */
       load: function (audioElement, autoplayNext) {
         if (typeof audioElement === 'boolean') {
@@ -86,7 +82,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
       },
       /**
        * @usage play([index])
-       * @param  {integer} index [playlist index (0...n), to start playing from]
+       * @param  {integer} index playlist index (0...n), to start playing from
        */
       play: function (index) {
         if (this._playlist.length > index) {
@@ -158,9 +154,9 @@ angular.module('angular-audio-player', ['helperFunctions'])
             minutes = parseInt(seconds / 60, 10) % 60,
             secs = parseInt(seconds % 60, 10),
             result,
-            fragment = (minutes < 10 ? "0" + minutes : minutes) + ":" + (secs  < 10 ? "0" + secs : secs);
+            fragment = (minutes < 10 ? '0' + minutes : minutes) + ':' + (secs  < 10 ? '0' + secs : secs);
         if (hours > 0) {
-          result = (hours < 10 ? "0" + hours : hours) + ":" + fragment;
+          result = (hours < 10 ? '0' + hours : hours) + ':' + fragment;
         } else {
           result = fragment;
         }
@@ -235,9 +231,7 @@ angular.module('angular-audio-player', ['helperFunctions'])
         // Put audioElement as first element in the playlist
         if (audioElement.length) { playlist.unshift(audioElement); }
 
-        // New declaration style
         scope.exposedPlayer = new AudioPlayer(element, scope, playlist);
-
 
         scope.$watch('playlist', function (playlistNew, playlistOld, watchScope) {
           var player = scope.exposedPlayer,
