@@ -21,11 +21,12 @@
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-jshint": "latest",
     "grunt-contrib-copy": "latest",
-    "grunt-contrib-watch": "latest",
-    "grunt-contrib-concat": "latest",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-concat": "~0.3.0",
     "grunt-karma": "latest",
     "grunt-git-describe": "latest",
     "jasmine-node": "latest",
-    "karma": "latest"
+    "karma": "latest",
+    "grunt-contrib-connect": "~0.5.0"
   }
 }

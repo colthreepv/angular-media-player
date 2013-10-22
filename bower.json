@@ -6,7 +6,7 @@
     "components"
   ],
   "devDependencies": {
-    "angular-unstable": "latest",
-    "angular-mocks": "latest"
+    "angular": "~1.2.0",
+    "angular-mocks": "~1.2.0"
   }
 }

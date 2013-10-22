@@ -1,8 +1,6 @@
 angular-audio-player
 ====================
-
 AngularJS Directive that wraps an ```<audio>``` tag exposing handy events and selectors to customize your audio player.
-
 
 ## Abstract / Idea
 I've come across a lot of ```<audio>``` players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.  

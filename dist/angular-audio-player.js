@@ -10,7 +10,7 @@
  *
  * Wonderful documentation from MDN, really.
  */
-angular.module('angular-audio-player', ['helperFunctions'])
+angular.module('angular-audio-player', [])
 
 .directive('audioPlayer', ['$rootScope', '$log', '$interpolate', '$timeout', 'throttle',
   function ($rootScope, $log, $interpolate, $timeout, throttle) {
@@ -28,37 +28,46 @@ angular.module('angular-audio-player', ['helperFunctions'])
       options = options || {};
       playlist = playlist || [];
 
-      this._element = element;
-      this._audioTag = element[0];
-      this.name = options.name || 'audioplayer';
-      this._scope = scope;
-      this._bindListeners(scope);
-      this._playlist = playlist;
+      angular.extend(this, {
+        _element: element,
+        _audioTag: element[0],
+        _scope: scope,
+        _playlist: playlist,
 
-      this.playing = false;
-      this.currentTrack = 0;
-      this.tracks = playlist.length;
-      // just exposing <audio> properties.
-      this.volume = this._audioTag.volume;
-      this.muted = this._audioTag.muted;
-      this.duration = this._audioTag.duration;
-      this.currentTime = this._audioTag.currentTime;
-      // TimeRanges structures
-      this.buffered = this._audioTag.buffered;
-      this.played = this._audioTag.played;
-      this.seekable = this._audioTag.seekable;
-      // formatted fields
-      this.formatDuration = '';
-      this.formatTime = '';
-      this.loadPercent = 0;
-      // Alias
-      this.position = this.currentTime;
+        // general properties
+        name: options.name || 'audioplayer',
+        playing: false,
+        currentTrack: 0,
+        tracks: playlist.length,
+
+        // <audio> properties
+        volume: element[0].volume,
+        muted: element[0].muted,
+        duration: element[0].duration,
+        currentTime: element[0].currentTime,
+
+        // TimeRanges structures
+        buffered: element[0].buffered,
+        played: element[0].played,
+        seekable: element[0].seekable,
+
+        // formatted properties
+        formatDuration: '',
+        formatTime: '',
+        loadPercent: 0,
+
+        // aliases
+        position: element[0].currentTime
+      });
+      // bind listeners on <audio> events, will be broadcasted on specific `scope`
+      // the function returs a de-registering function, that will be bound on _unbindListeners
+      this._unbindListeners = this._bindListeners(scope);
     };
 
     AudioPlayer.prototype = {
       /**
        * @usage load([audioElement], [autoplayNext]);
-       * 
+       *
        * @param  {audioElement Obj} audioElement a single audioElement, may contain multiple <source>(s)
        * @param  {boolean} autoplayNext flag to autostart loaded element
        */
@@ -208,6 +217,15 @@ angular.module('angular-audio-player', ['helperFunctions'])
         element.bind('timeupdate', updateTime);
         element.bind('loadedmetadata', setDuration);
         element.bind('progress', updateProgress);
+
+        return function () {
+          element.unbind('playing');
+          element.unbind('pause');
+          element.unbind('ended');
+          element.unbind('timeupdate');
+          element.unbind('loadedmetadata');
+          element.unbind('progress');
+        };
       }
     };
 
@@ -220,9 +238,9 @@ angular.module('angular-audio-player', ['helperFunctions'])
         if (element[0].tagName !== 'AUDIO') {
           return $log.error('audioPlayer directive works only when attached to an <audio> type tag');
         }
-        var audioElement = []
-          , sourceElements = element.find('source')
-          , playlist = scope.playlist || [];
+        var audioElement = [],
+            sourceElements = element.find('source'),
+            playlist = scope.playlist || [];
 
         // Create a single playlist element from <source> tag(s).
         angular.forEach(sourceElements, function (sourceElement, index) {
@@ -243,10 +261,10 @@ angular.module('angular-audio-player', ['helperFunctions'])
               player.pause();
               return $log.debug('playlist was deleted from scope, pausing and returning');
             } else {
-              return $log.error('if you use playlist attribute, you need to $scope.playlistVariable = []; in your code');
+              return $log.error('if you use playlist attribute, you need $scope.playlistVariable = []; in your code');
             }
           }
-          
+
           /**
            * Playlist update logic:
            * If the player has started ->
@@ -255,15 +273,15 @@ angular.module('angular-audio-player', ['helperFunctions'])
            *     Assign to it the new tracknumber
            *   Else ->
            *     Pause the player, and get the new Playlist
-           *   
+           *
            * Else (if the player hasn't started yet)
            *   Just replace the <src> tags inside the <audio>
-           * 
+           *
            * Example
            * playlist: [a,b,c], playing: c, trackNum: 2
            * ----delay 5 sec-----
            * playlist: [f,a,b,c], playing: c, trackNum: 3
-           * 
+           *
            */
           if (player.currentTrack) {
             currentTrack = playlistOld ? playlistOld[player.currentTrack - 1] : -1;
@@ -294,9 +312,46 @@ angular.module('angular-audio-player', ['helperFunctions'])
         }, true);
 
         scope.$on('$destroy', function () {
-          // Cleanup code here! Remove EventListeners
+          scope.exposedPlayer._unbindListeners();
         });
       }
     };
   }]
 );
+
+angular.module('angular-audio-player')
+.factory('throttle', ['$timeout', function ($timeout) {
+  return function (delay, no_trailing, callback, debounce_mode) {
+    var timeout_id,
+    last_exec = 0;
+
+    if (typeof no_trailing !== 'boolean') {
+      debounce_mode = callback;
+      callback = no_trailing;
+      no_trailing = undefined;
+    }
+
+    var wrapper = function () {
+      var that = this,
+          elapsed = +new Date() - last_exec,
+          args = arguments,
+          exec = function () {
+            last_exec = +new Date();
+            callback.apply(that, args);
+          },
+          clear = function () {
+            timeout_id = undefined;
+          };
+
+      if (debounce_mode && !timeout_id) { exec(); }
+      if (timeout_id) { $timeout.cancel(timeout_id); }
+      if (debounce_mode === undefined && elapsed > delay) {
+        exec();
+      } else if (no_trailing !== true) {
+        timeout_id = $timeout(debounce_mode ? clear : exec, debounce_mode === undefined ? delay - elapsed : delay);
+      }
+    };
+
+    return wrapper;
+  };
+}]);

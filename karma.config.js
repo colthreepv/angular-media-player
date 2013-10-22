@@ -5,7 +5,7 @@ basePath = './';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  'components/angular-unstable/angular.js',
+  'components/angular/angular.js',
   'components/angular-mocks/angular-mocks.js',
   'src/angular-audio-player.js',
   'src/*.spec.js'

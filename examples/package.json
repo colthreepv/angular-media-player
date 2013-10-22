@@ -1,8 +1,0 @@
-{
-  "scripts": {
-    "start": "node webserver.js"
-  },
-  "devDependencies": {
-    "connect": "latest"
-  }
-}
