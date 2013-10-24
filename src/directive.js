@@ -10,7 +10,7 @@
  *
  * Wonderful documentation from MDN, really.
  */
-angular.module('angular-audio-player', [])
+angular.module('audioPlayer', [])
 
 .directive('audioPlayer', ['$rootScope', '$log', '$interpolate', '$timeout', 'throttle',
   function ($rootScope, $log, $interpolate, $timeout, throttle) {

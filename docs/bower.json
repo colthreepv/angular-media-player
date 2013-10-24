@@ -1,0 +1,23 @@
+{
+  "name": "angular-audio-player documentation",
+  "main": "docs.js",
+  "homepage": "https://github.com/mrgamer/angular-audio-player",
+  "authors": [
+    "mrgamer <mister.gamer@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.0",
+    "angular-route": "~1.2.0",
+    "angular-animate": "~1.2.0"
+  }
+}
