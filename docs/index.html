@@ -1,13 +1,27 @@
 <!DOCTYPE html>
   <html ng-app="docs">
   <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <title>angular-audio-player</title>
-      <link rel="stylesheet" href="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>angular-audio-player</title>
+
+    <!-- BootstrapCDN -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootswatch/3.0.0/slate/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <!-- compiled css -->
+    <link href="style.css" rel="stylesheet">
+    <!-- libraries concatenated -->
+    <script type="text/javascript" src="libs.js"></script>
+    <!-- app concatenated -->
+    <script type="text/javascript" src="app.js"></script>
+    <!-- html templates -->
+    <script type="text/javascript" src="templates-docs.js"></script>
+
   </head>
   <body ng-controller="BodyController">
-
+    <div class="container" ng-view></div>
   </body>
   <script type="text/javascript">
     var _gaq = _gaq || [];
