@@ -18,7 +18,7 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> v<%=grunt.option("gitRevision") %> | date: <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+        banner: '/*! <%=pkg.name %> v<%=pkg.version %> | date: <%=grunt.template.today("dd-mm-yyyy") %> */\n'
       },
       dist: {
         src: 'dist/angular-audio-player.js',
@@ -46,24 +46,20 @@ module.exports = function (grunt) {
         src: ['src/directive.js', 'src/helpers.js'],
         dest: 'dist/angular-audio-player.js'
       },
-      docs: {
-        files: [
-          {
-            src: [
-              'docs/*.js',
-              'docs/examples/*.js'
-            ],
-            dest: 'docs/app.js'
-          },
-          {
-            src: [
-              'docs/libs/angular/angular.js',
-              'docs/libs/angular-route/angular-route.js',
-              'docs/libs/angular-animate/angular-animate.js',
-            ],
-            dest: 'docs/libs.js'
-          }
-        ]
+      'docs-app': {
+        src: [
+          'docs/docs.js',
+          'docs/examples/*.js'
+        ],
+        dest: 'docs/app.js'
+      },
+      'docs-libs': {
+        src: [
+          'libs/angular/angular.js',
+          'libs/angular-route/angular-route.js',
+          'libs/angular-animate/angular-animate.js',
+        ],
+        dest: 'docs/libs.js'
       }
     },
     watch: {
@@ -73,6 +69,30 @@ module.exports = function (grunt) {
         },
         files: ['src/directive.js', 'src/helpers.js'],
         tasks: ['concat', 'saveRevision', 'uglify']
+      },
+      'docs-app': {
+        files: [
+          'docs/docs.js',
+          'docs/examples/*.js'
+        ],
+        tasks: ['concat:docs-app']
+      },
+      'docs-tpl': {
+        files: [
+          'docs/**/*.tpl.html',
+          'docs/*.tpl.html'
+        ],
+        tasks: ['html2js:docs']
+      },
+      'docs-md': {
+        options: {
+          atBegin: true
+        },
+        files: [
+          'docs/*.md',
+          'docs/examples/*.md'
+        ],
+        tasks: ['md2html', 'html2js:docs']
       }
     },
     connect: {
@@ -81,8 +101,7 @@ module.exports = function (grunt) {
           port: 8181,
           base: 'docs/',
           hostname: '*',
-          debug: true,
-          keepalive: true
+          debug: true
         }
       }
     },
@@ -91,7 +110,10 @@ module.exports = function (grunt) {
         options: {
           base: 'docs'
         },
-        src: ['docs/**/*.tpl.html', 'docs/*.tpl.html'],
+        src: [
+          'docs/**/*.tpl.html',
+          'docs/*.tpl.html'
+        ],
         dest: 'docs/templates-docs.js'
       }
     },
@@ -102,7 +124,6 @@ module.exports = function (grunt) {
           { src: ['docs/examples/*.md'], dest: '', ext: '.md.tpl.html', expand: true }
         ],
         options: {
-          template: 'docs/markdown.template.jst',
           markedOptions: {
             highlight: function (code, lang) {
               return hljs.highlightAuto(code).value;
@@ -112,15 +133,10 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-      docs: {
-        src: [
-          'docs/*.md.tpl.html',
-          'docs/examples/*.md.tpl.html',
-          'docs/templates-docs.js',
-          'docs/app.js',
-          'docs/libs.js'
-        ]
-      }
+      'docs-libs': ['docs/libs.js'],
+      'docs-app': ['docs/app.js'],
+      'docs-tpl': ['docs/templates-docs.js'],
+      'docs-md': ['docs/*.md.tpl.html', 'docs/examples/*.md.tpl.html']
     }
   });
 
@@ -134,6 +150,6 @@ module.exports = function (grunt) {
   grunt.registerTask('test', ['jshint', 'karma']);
   grunt.registerTask('build', ['jshint', 'saveRevision', 'concat', 'uglify']);
   grunt.registerTask('default', ['connect', 'watch']);
-  grunt.registerTask('docs', ['clean:docs', 'concat:docs', 'md2html', 'html2js', 'connect:docs']);
+  grunt.registerTask('docs', ['clean', 'jshint:docs', 'concat:docs-libs', 'connect:docs', 'watch']);
 
 };
