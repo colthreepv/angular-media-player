@@ -1,3 +1,4 @@
+/*! angular-audio-player v0.2.0 | date: 01-11-2013 */
 /**
  * USEFUL LINKS:
  * Media events on <audio> and <video> tags:
@@ -10,7 +11,7 @@
  *
  * Wonderful documentation from MDN, really.
  */
-angular.module('angular-audio-player', [])
+angular.module('audioPlayer', [])
 
 .directive('audioPlayer', ['$rootScope', '$log', '$interpolate', '$timeout', 'throttle',
   function ($rootScope, $log, $interpolate, $timeout, throttle) {
@@ -319,7 +320,7 @@ angular.module('angular-audio-player', [])
   }]
 );
 
-angular.module('angular-audio-player')
+angular.module('audioPlayer')
 .factory('throttle', ['$timeout', function ($timeout) {
   return function (delay, no_trailing, callback, debounce_mode) {
     var timeout_id,

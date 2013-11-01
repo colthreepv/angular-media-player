@@ -1,5 +1,7 @@
 {
   "name": "angular-audio-player",
+  "version": "0.2.0",
+  "main": "dist/angular-audio-player.min.js",
   "ignore": [
     "node_modules",
     "docs"
