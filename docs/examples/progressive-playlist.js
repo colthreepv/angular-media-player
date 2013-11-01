@@ -1,5 +1,5 @@
-angular.module('docs.example1', [])
-.controller('ExampleController', function ($scope, $timeout) {
+angular.module('docs')
+.controller('ProgressiveController', function ($scope, $timeout) {
   $scope.playlist1 = [];
   $scope.playlist1.push({
     src: 'http://upload.wikimedia.org/wikipedia/en/7/79/Korn_-_Predictable_%28demo%29.ogg',

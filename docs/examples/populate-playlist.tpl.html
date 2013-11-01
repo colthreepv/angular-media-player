@@ -1,11 +1,14 @@
 <div class="jumbotron">
-  <h1>angular-audio-player</h1>
+  <h1>Self-populating playlist</h1>
   <p>
-    The idea is to progressively add tracks to the playlist (thru your application events), <i>while</i> the playlist stay consistant.
+    playlist object gets populated with the first audioElement found in the HTML.<br>
+    <strong>WARNING</strong>: it's not a bi-directional binding.
   </p>
 </div>
 <div class="audio-control">
-  <audio data-player-control="audio1" data-playlist="playlist1" audio-player></audio>
+  <audio data-player-control="audio1" data-playlist="playlist1" audio-player>
+    <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
+  </audio>
   <div class="btn" ng-click="audio1.play()">
     <span>Simple Play</span>
     <i class="icon-play"></i>
@@ -27,4 +30,4 @@
   <code>playlist1 = {{ playlist1 }}</code>
 </pre>
 
-<div ng-include="'examples/progressive-playlist.md.tpl.html'"></div>
+<div ng-include="'examples/populate-playlist.md.tpl.html'"></div>

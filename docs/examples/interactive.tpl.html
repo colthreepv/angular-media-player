@@ -1,7 +1,7 @@
 <div class="jumbotron">
-  <h1>angular-audio-player</h1>
+  <h1>Interactive demo</h1>
   <p>
-    The idea is to progressively add tracks to the playlist (thru your application events), <i>while</i> the playlist stay consistant.
+    Interact with the directive through this demo page.
   </p>
 </div>
 <div class="audio-control">
@@ -24,7 +24,20 @@
   <span>audio1.currentTrack = {{ audio1.currentTrack }}</span>
 </div>
 <pre>
-  <code>playlist1 = {{ playlist1 }}</code>
+  <code>
+    audio1 = {
+      playing: {{ audio1.playing }}
+      currentTrack: {{ audio1.currentTrack }}
+      tracks: {{ audio1.tracks }}
+      volume: {{ audio1.volume }}
+      formatDuration: {{ audio1.formatDuration }}
+      duration: {{ audio1.duration }}
+      currentTime: {{ audio1.currentTime }}
+      formatTime: {{ audio1.formatTime }}
+      position: {{ audio1.position }}
+      loadPercent: {{ audio1.loadPercent }}
+    };
+  </code>
 </pre>
 
-<div ng-include="'examples/progressive-playlist.md.tpl.html'"></div>
+<div ng-include="'examples/interactive.md.tpl.html'"></div>

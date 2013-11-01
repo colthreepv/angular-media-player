@@ -1,1 +1,0 @@
-../build/angular-audio-player.js

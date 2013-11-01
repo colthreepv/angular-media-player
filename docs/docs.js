@@ -1,12 +1,33 @@
-angular.module('docs', ['ngRoute', 'templates-docs'])
+angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer'])
 
 // Definition of all examples as an hash
 .constant('exampleHash', {
   'progressive-playlist': {
     displayName: 'Progressive Playlist',
     templateUrl: 'examples/progressive-playlist.tpl.html',
-    controller: null
+    controller: 'ProgressiveController'
+  },
+  'populate-playlist': {
+    displayName: 'Self-populating playlist',
+    templateUrl: 'examples/populate-playlist.tpl.html',
+    controller: 'PopulateController'
+  },
+  'swap-playlist': {
+    displayName: 'Swap Audio during play',
+    templateUrl: 'examples/swap-playlist.tpl.html',
+    controller: 'SwapController'
+  },
+  'interactive-demo': {
+    displayName: 'Interactive Demo',
+    templateUrl: 'examples/interactive.tpl.html',
+    controller: 'InteractiveController'
   }
+  // ONGOING WORK.
+  // 'repeat-audio': {
+  //   displayName: 'Using ng-repeat',
+  //   templateUrl: 'examples/repeat-audio.tpl.html',
+  //   controller: 'RepeatController'
+  // }
 })
 
 .config(function ($routeProvider, exampleHash) {
@@ -26,10 +47,10 @@ angular.module('docs', ['ngRoute', 'templates-docs'])
   }
 })
 
-.run(function ($rootScope, $location) {
+.run(function ($rootScope, $window) {
   // google analitics
-  $rootScope.$on('$stateChangeSuccess', function () {
-    $window._gaq.push(['_trackPageview', $location.path()]);
+  $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+    $window._gaq.push(['_trackPageview', current.$$route.originalPath]);
   });
 })
 

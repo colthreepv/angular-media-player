@@ -1,8 +1,23 @@
+/**
+ * Custom CSS
+ */
+
+.audio-control {
+  margin-bottom: 10px;
+}
+
+body {
+  padding-top: 50px;
+}
+
+body > .container {
+  padding-top: 10px;
+}
+
 /*
   Code highlight syntax
   github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 */
-
 pre code {
   display: block; padding: 0.5em;
   color: #333;
