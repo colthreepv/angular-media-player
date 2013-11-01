@@ -43,6 +43,9 @@ module.exports = function (grunt) {
     },
     concat: {
       source: {
+        options: {
+          banner: '/*! <%=pkg.name %> v<%=pkg.version %> | date: <%=grunt.template.today("dd-mm-yyyy") %> */\n'
+        },
         src: ['src/directive.js', 'src/helpers.js'],
         dest: 'dist/angular-audio-player.js'
       },
@@ -58,18 +61,19 @@ module.exports = function (grunt) {
           'libs/angular/angular.js',
           'libs/angular-route/angular-route.js',
           'libs/angular-animate/angular-animate.js',
+          'dist/angular-audio-player.js'
         ],
         dest: 'docs/libs.js'
       }
     },
     watch: {
-      source: {
-        options: {
-          atBegin: true
-        },
-        files: ['src/directive.js', 'src/helpers.js'],
-        tasks: ['concat', 'saveRevision', 'uglify']
-      },
+      // source: {
+      //   options: {
+      //     atBegin: true
+      //   },
+      //   files: ['src/directive.js', 'src/helpers.js'],
+      //   tasks: ['concat', 'saveRevision', 'uglify']
+      // },
       'docs-app': {
         files: [
           'docs/docs.js',
