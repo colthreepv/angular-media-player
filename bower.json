@@ -2,6 +2,14 @@
   "name": "angular-audio-player",
   "version": "0.2.0",
   "main": "dist/angular-audio-player.min.js",
+  "keywords": [
+    "angular",
+    "angular.js",
+    "angularjs",
+    "audio",
+    "playlist",
+    "player"
+  ],
   "ignore": [
     "node_modules",
     "docs"
