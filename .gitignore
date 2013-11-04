@@ -1,2 +1,9 @@
 node_modules/
 libs/
+
+# docs ignore
+docs/*.md.tpl.html
+docs/examples/*.md.tpl.html
+docs/app.js
+docs/libs.js
+docs/templates-docs.js

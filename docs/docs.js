@@ -30,7 +30,7 @@ angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer'])
   // }
 })
 
-.config(function ($routeProvider, exampleHash) {
+.config(function ($routeProvider, $locationProvider, exampleHash) {
   var example;
   $routeProvider
   .when('/', {
@@ -45,6 +45,9 @@ angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer'])
       controller: exampleHash[example].controller
     });
   }
+
+  // Hashbang for searchbot indexing
+  $locationProvider.hashPrefix('!');
 })
 
 .run(function ($rootScope, $window) {

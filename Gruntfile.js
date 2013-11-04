@@ -1,4 +1,5 @@
-var hljs = require('highlight.js');
+var hljs = require('highlight.js'),
+    XML = require('xml');
 
 module.exports = function (grunt) {
 
@@ -13,6 +14,15 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-md2html');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-html-snapshot');
+
+  var docUrls = [
+    '#!/',
+    '#!/populate-playlist',
+    '#!/progressive-playlist',
+    '#!/swap-playlist',
+    '#!/interactive-demo'
+  ];
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -67,6 +77,9 @@ module.exports = function (grunt) {
       }
     },
     watch: {
+      // options : {
+      //   atBegin: true
+      // },
       // source: {
       //   options: {
       //     atBegin: true
@@ -89,9 +102,6 @@ module.exports = function (grunt) {
         tasks: ['html2js:docs']
       },
       'docs-md': {
-        options: {
-          atBegin: true
-        },
         files: [
           'docs/*.md',
           'docs/examples/*.md'
@@ -140,7 +150,23 @@ module.exports = function (grunt) {
       'docs-libs': ['docs/libs.js'],
       'docs-app': ['docs/app.js'],
       'docs-tpl': ['docs/templates-docs.js'],
-      'docs-md': ['docs/*.md.tpl.html', 'docs/examples/*.md.tpl.html']
+      'docs-md': ['docs/*.md.tpl.html', 'docs/examples/*.md.tpl.html'],
+      'docs-prerender': ['docs/prerender-*.html']
+    },
+    htmlSnapshot: {
+      docs: {
+        options: {
+          snapshotPath: 'docs/',
+          sitePath: 'http://localhost:8181/',
+          fileNamePrefix: 'prerender-',
+          sanitize: function (requestUri) {
+            return requestUri.replace(/\/|\#|\!/g, '');
+          },
+          removeScripts: true,
+          removeLinkTags: true,
+          urls: docUrls
+        }
+      }
     }
   });
 
@@ -151,9 +177,34 @@ module.exports = function (grunt) {
     grunt.task.run('git-describe');
   });
 
+  grunt.registerTask('sitemap', function () {
+    var sitemapJson,
+        baseUrl = 'http://aap.col3.me';
+    sitemapJson = {
+      urlset: [{ _attr: { xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' } }]
+    };
+
+    docUrls.forEach(function (pageUrl, index) {
+      sitemapJson.url.push({ loc: baseUrl + pageUrl, lastmod: grunt.template.today("yyyy-mm-dd"), changefreq: 'daily', priority: '0.5' });
+    });
+
+    grunt.file.write('docs/sitemap.xml', XML(sitemapJson));
+  });
+
   grunt.registerTask('test', ['jshint', 'karma']);
   grunt.registerTask('build', ['jshint', 'saveRevision', 'concat', 'uglify']);
   grunt.registerTask('default', ['connect', 'watch']);
-  grunt.registerTask('docs', ['clean', 'jshint:docs', 'concat:docs-libs', 'connect:docs', 'watch']);
+
+  // docs building
+  // - clean folder
+  // - jshint documentation
+  // - concatenate libraries for documentation
+  // - concatenate documentation app
+  // - convert markdown to html partials
+  // - convert all html partials to one .js file
+  // - start connect fileserver
+  // - take an HTML snapshot of the pages
+  // - put yourself on watch for changes
+  grunt.registerTask('docs', ['clean', 'jshint:docs', 'concat:docs-libs', 'concat:docs-app', 'md2html', 'html2js:docs', 'connect:docs',  'htmlSnapshot', 'watch']);
 
 };
