@@ -21,13 +21,12 @@ angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer'])
     displayName: 'Interactive Demo',
     templateUrl: 'examples/interactive.tpl.html',
     controller: 'InteractiveController'
+  },
+  'repeat-audio': {
+    displayName: 'Using ng-repeat',
+    templateUrl: 'examples/repeat-audio.tpl.html',
+    controller: 'RepeatController'
   }
-  // ONGOING WORK.
-  // 'repeat-audio': {
-  //   displayName: 'Using ng-repeat',
-  //   templateUrl: 'examples/repeat-audio.tpl.html',
-  //   controller: 'RepeatController'
-  // }
 })
 
 .config(function ($routeProvider, $locationProvider, exampleHash) {
@@ -63,6 +62,9 @@ angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer'])
 
   // Utility function to return a boolean value wheter the current route has a certain path
   $scope.currentRoute = function (urlToMatch) {
+    if (!urlToMatch) { // in case undefined or null, it returns the displayName of the route
+      return (this.route.current) ? exampleHash[this.route.current.$$route.originalPath.substring(1)].displayName : null;
+    }
     return (this.route.current) && this.route.current.$$route.originalPath === '/' + urlToMatch;
   };
 });

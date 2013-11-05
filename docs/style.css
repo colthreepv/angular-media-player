@@ -14,6 +14,16 @@ body > .container {
   padding-top: 10px;
 }
 
+.navbar-text.navbar-active {
+  color: #fff;
+  background-color: #5d6368;
+  padding: 15px;
+  margin: 0;
+  cursor: pointer;
+  border-left: 1px solid rgb(70, 70, 70);
+  border-right: 1px solid rgb(70, 70, 70);
+}
+
 /*
   Code highlight syntax
   github.com style (c) Vasily Polovnyov <vast@whiteants.net>
