@@ -165,7 +165,7 @@ module.exports = function (grunt) {
           },
           removeScripts: true,
           removeLinkTags: true,
-          urls: docUrls
+          urls: docUrls.map(function (docPage) { return (typeof docPage === 'object') ? docPage.loc : docPage; })
         }
       }
     }
