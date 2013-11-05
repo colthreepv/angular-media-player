@@ -11,17 +11,17 @@
   </audio>
   <div class="btn" ng-click="audio1.play()">
     <span>Simple Play</span>
-    <i class="icon-play"></i>
+    <i class="fa fa-play"></i>
   </div>
   <div class="btn" ng-click="audio1.playPause()">
-    <i ng-class="{ 'icon-pause': audio1.playing, 'icon-play': !audio1.playing }"></i>
+    <i class="fa" ng-class="{ 'fa-pause': audio1.playing, 'fa-play': !audio1.playing }"></i>
   </div>
   <div class="btn" ng-click="audio1.next()">
     <span>Next</span>
-    <i class="icon-step-forward"></i>
+    <i class="fa fa-step-forward"></i>
   </div>
   <div class="btn" ng-click="audio1.prev()">
-    <i class="icon-step-backward"></i>
+    <i class="fa fa-step-backward"></i>
     <span>Prev</span>
   </div>
   <span>audio1.currentTrack = {{ audio1.currentTrack }}</span>
