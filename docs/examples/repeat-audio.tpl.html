@@ -1,0 +1,31 @@
+<div class="jumbotron">
+  <h1>ng-repeating a playlist</h1>
+  <p>
+    playlist object gets populated with the first audioElement found in the HTML.<br>
+    <strong>WARNING</strong>: it's not a bi-directional binding.
+  </p>
+</div>
+<div class="audio-control">
+  <audio player-control="audioPlayer" playlist="audioPlaylist" audio-player></audio>
+  <div class="btn" ng-click="audio1.play()">
+    <span>Simple Play</span>
+    <i class="fa fa-play"></i>
+  </div>
+  <div class="btn" ng-click="audio1.playPause()">
+    <i class="fa" ng-class="{ 'fa-pause': audio1.playing, 'fa-play': !audio1.playing }"></i>
+  </div>
+  <div class="btn" ng-click="audio1.next()">
+    <span>Next</span>
+    <i class="fa fa-step-forward"></i>
+  </div>
+  <div class="btn" ng-click="audio1.prev()">
+    <i class="fa fa-step-backward"></i>
+    <span>Prev</span>
+  </div>
+  <span>audio1.currentTrack = {{ audio1.currentTrack }}</span>
+</div>
+<pre>
+  <code>audioPlaylist = {{ audioPlaylist | json }}</code>
+</pre>
+
+<div ng-include="'examples/repeat-audio.md.tpl.html'"></div>
