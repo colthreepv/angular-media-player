@@ -17,7 +17,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-html-snapshot');
 
   var docUrls = [
-    '#!/',
+    { loc: '#!/', priority: 1 },
     '#!/populate-playlist',
     '#!/progressive-playlist',
     '#!/swap-playlist',
@@ -185,14 +185,23 @@ module.exports = function (grunt) {
       urlset: [{ _attr: { xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' } }]
     };
 
-    docUrls.forEach(function (pageUrl, index) {
+    docUrls.forEach(function (docPage, index) {
+      var priority, pageUrl;
+      if (typeof docPage === 'object') {
+        pageUrl = docPage.loc;
+        priority = (docPage.priority) ? docPage.priority.toString(2) : '0.5';
+      } else {
+        pageUrl = docPage;
+        priority = '0.5';
+      }
+
       sitemapJson.urlset.push(
       {
         url: [
           { loc: baseUrl + pageUrl },
           { lastmod: grunt.template.today("yyyy-mm-dd") },
           { changefreq: 'daily' },
-          { priority: '0.5' }
+          { priority: priority }
         ]
       });
     });
@@ -214,6 +223,8 @@ module.exports = function (grunt) {
   // - start connect fileserver
   // - take an HTML snapshot of the pages
   // - put yourself on watch for changes
-  grunt.registerTask('docs', ['clean', 'jshint:docs', 'concat:docs-libs', 'concat:docs-app', 'md2html', 'html2js:docs', 'connect:docs',  'htmlSnapshot', 'watch']);
+  grunt.registerTask('docs', [
+    'clean', 'jshint:docs', 'concat:docs-libs', 'concat:docs-app', 'md2html', 'html2js:docs', 'connect:docs', 'sitemap', 'htmlSnapshot', 'watch'
+  ]);
 
 };
