@@ -151,7 +151,8 @@ module.exports = function (grunt) {
       'docs-app': ['docs/app.js'],
       'docs-tpl': ['docs/templates-docs.js'],
       'docs-md': ['docs/*.md.tpl.html', 'docs/examples/*.md.tpl.html'],
-      'docs-prerender': ['docs/prerender-*.html']
+      'docs-prerender': ['docs/prerender-*.html'],
+      'docs-sitemap': ['docs/sitemap.xml']
     },
     htmlSnapshot: {
       docs: {
@@ -179,16 +180,24 @@ module.exports = function (grunt) {
 
   grunt.registerTask('sitemap', function () {
     var sitemapJson,
-        baseUrl = 'http://aap.col3.me';
+        baseUrl = 'http://aap.col3.me/';
     sitemapJson = {
       urlset: [{ _attr: { xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' } }]
     };
 
     docUrls.forEach(function (pageUrl, index) {
-      sitemapJson.url.push({ loc: baseUrl + pageUrl, lastmod: grunt.template.today("yyyy-mm-dd"), changefreq: 'daily', priority: '0.5' });
+      sitemapJson.urlset.push(
+      {
+        url: [
+          { loc: baseUrl + pageUrl },
+          { lastmod: grunt.template.today("yyyy-mm-dd") },
+          { changefreq: 'daily' },
+          { priority: '0.5' }
+        ]
+      });
     });
 
-    grunt.file.write('docs/sitemap.xml', XML(sitemapJson));
+    grunt.file.write('docs/sitemap.xml', XML(sitemapJson, { declaration: true, indent: '  ' }));
   });
 
   grunt.registerTask('test', ['jshint', 'karma']);
