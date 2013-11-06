@@ -21,7 +21,8 @@ module.exports = function (grunt) {
     '#!/populate-playlist',
     '#!/progressive-playlist',
     '#!/swap-playlist',
-    '#!/interactive-demo'
+    '#!/interactive-demo',
+    '#!/repeat-audio'
   ];
 
   grunt.initConfig({
