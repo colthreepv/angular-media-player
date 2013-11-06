@@ -14,6 +14,14 @@ body > .container {
   padding-top: 10px;
 }
 
+.navbar-text.navbar-arrow {
+  padding: 0 5px;
+}
+.navbar-text.navbar-arrow:before {
+  font-family: FontAwesome;
+  content: "\f054";
+}
+
 .navbar-text.navbar-active {
   color: #fff;
   background-color: #5d6368;
