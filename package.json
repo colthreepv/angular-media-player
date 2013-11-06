@@ -31,7 +31,7 @@
     "grunt-contrib-clean": "~0.5.0",
     "grunt-md2html": "~0.1.4",
     "highlight.js": "~7.4.0",
-    "grunt-html-snapshot": "git://github.com/mrgamer/grunt-html-snapshot.git#sanitize-PR",
+    "grunt-html-snapshot": "~0.6.0",
     "xml": "git://github.com/NowTV-Iceberg/node-xml.git"
   }
 }
