@@ -1,31 +1,48 @@
 <div class="jumbotron">
   <h1>ng-repeating a playlist</h1>
   <p>
-    playlist object gets populated with the first audioElement found in the HTML.<br>
-    <strong>WARNING</strong>: it's not a bi-directional binding.
+    Iterating over the playlist object shouldn't be any different than using another <i>list</i> object.
   </p>
 </div>
 <div class="audio-control">
   <audio player-control="audioPlayer" playlist="audioPlaylist" audio-player></audio>
-  <div class="btn" ng-click="audio1.play()">
+  <div class="btn" ng-click="audioPlayer.play()">
     <span>Simple Play</span>
     <i class="fa fa-play"></i>
   </div>
-  <div class="btn" ng-click="audio1.playPause()">
-    <i class="fa" ng-class="{ 'fa-pause': audio1.playing, 'fa-play': !audio1.playing }"></i>
+  <div class="btn" ng-click="audioPlayer.playPause()">
+    <i class="fa" ng-class="{ 'fa-pause': audioPlayer.playing, 'fa-play': !audioPlayer.playing }"></i>
   </div>
-  <div class="btn" ng-click="audio1.next()">
+  <div class="btn" ng-click="audioPlayer.next()">
     <span>Next</span>
     <i class="fa fa-step-forward"></i>
   </div>
-  <div class="btn" ng-click="audio1.prev()">
+  <div class="btn" ng-click="audioPlayer.prev()">
     <i class="fa fa-step-backward"></i>
     <span>Prev</span>
   </div>
-  <span>audio1.currentTrack = {{ audio1.currentTrack }}</span>
+  <div class="btn btn-noclick">
+    <span>currentTrack: <span class="badge">{{ audioPlayer.currentTrack }}</span></span>
+  </div>
 </div>
+
+<table class="table table-hover table-rounded table-cursor">
+  <thead>
+    <th>#</th>
+    <th>Artist</th>
+    <th>Title</th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="song in audioPlaylist" ng-click="audioPlayer.playPause($index)" ng-class="{ active: audioPlayer.playing && audioPlayer.currentTrack-1 === $index }">
+      <th>{{ $index+1 }}</th>
+      <th>{{ song.artist }}</th>
+      <th>{{ song.title }}</th>
+    </tr>
+  </tbody>
+</table>
+
+<!-- <h3>Playlist structure</h3>
 <pre>
   <code>audioPlaylist = {{ audioPlaylist | json }}</code>
-</pre>
-
+</pre> -->
 <div ng-include="'examples/repeat-audio.md.tpl.html'"></div>
