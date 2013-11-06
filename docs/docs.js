@@ -63,7 +63,7 @@ angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer'])
 
   // Utility function to return a boolean value wheter the current route has a certain path
   $scope.currentRoute = function (urlToMatch) {
-    if (!urlToMatch) { // in case undefined or null, it returns the displayName of the route
+    if (urlToMatch === undefined || urlToMatch === null) { // in case undefined or null, it returns the displayName of the route
       return (this.route.current) ? exampleHash[this.route.current.$$route.originalPath.substring(1)].displayName : null;
     }
     return (this.route.current) && this.route.current.$$route.originalPath === '/' + urlToMatch;
