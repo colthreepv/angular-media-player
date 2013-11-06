@@ -23,10 +23,27 @@
   </div>
   <span>audio1.currentTrack = {{ audio1.currentTrack }}</span>
 </div>
+
+<h3>Add audio track</h3>
+<table class="table table-hover table-rounded table-cursor">
+  <thead>
+    <th>#</th>
+    <th>Artist</th>
+    <th>Title</th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="song in prefabPlaylist" ng-click="addSong(song)" ng-class="{ active: audioPlayer.playing && audioPlayer.currentTrack-1 === $index }">
+      <th>{{ $index+1 }}</th>
+      <th>{{ song.artist }}</th>
+      <th>{{ song.title }}</th>
+    </tr>
+  </tbody>
+</table>
+
 <pre>
   <code>
     audio1 = {
-      playing: {{ audio1.playing }}
+      playing: <span class="boolean">{{ audio1.playing }}</span>
       currentTrack: {{ audio1.currentTrack }}
       tracks: {{ audio1.tracks }}
       volume: {{ audio1.volume }}
