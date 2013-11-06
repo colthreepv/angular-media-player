@@ -2,6 +2,10 @@ angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer'])
 
 // Definition of all examples as an hash
 .constant('exampleHash', {
+  '': {
+    displayName: 'Getting Started',
+    templateUrl: 'docs.md.tpl.html'
+  },
   'progressive-playlist': {
     displayName: 'Progressive Playlist',
     templateUrl: 'examples/progressive-playlist.tpl.html',
@@ -31,12 +35,7 @@ angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer'])
 
 .config(function ($routeProvider, $locationProvider, exampleHash) {
   var example;
-  $routeProvider
-  .when('/', {
-    templateUrl: 'docs.md.tpl.html'
-  })
-  .otherwise('/');
-
+  $routeProvider.when(null, { redirectTo: '/' });
   // For each examples in list, new urls gets created.
   for (example in exampleHash) {
     $routeProvider.when('/' + example, {
@@ -52,7 +51,9 @@ angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer'])
 .run(function ($rootScope, $window) {
   // google analitics
   $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-    $window._gaq.push(['_trackPageview', current.$$route.originalPath]);
+    if (current.$$route.originalPath) {
+      $window._gaq.push(['_trackPageview', current.$$route.originalPath]);
+    }
   });
 })
 
