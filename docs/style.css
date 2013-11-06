@@ -24,6 +24,21 @@ body > .container {
   border-right: 1px solid rgb(70, 70, 70);
 }
 
+.table-rounded {
+  border: 2px solid white;
+  border-radius: 5px;
+  border-collapse: separate;
+  box-shadow: 2px 2px 4px rgb(80, 80, 80);
+}
+
+.table-cursor tr {
+  cursor: pointer;
+}
+
+.btn-noclick {
+  cursor: default;
+}
+
 /*
   Code highlight syntax
   github.com style (c) Vasily Polovnyov <vast@whiteants.net>
