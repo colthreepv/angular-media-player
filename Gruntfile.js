@@ -7,6 +7,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-concat-sourcemap');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-git-describe');
@@ -59,6 +60,11 @@ module.exports = function (grunt) {
         },
         src: ['src/directive.js', 'src/helpers.js'],
         dest: 'dist/angular-audio-player.js'
+      }
+    },
+    concat_sourcemap: {
+      options: {
+        sourcesContent: true
       },
       'docs-app': {
         src: [
@@ -72,6 +78,7 @@ module.exports = function (grunt) {
           'libs/angular/angular.js',
           'libs/angular-route/angular-route.js',
           'libs/angular-animate/angular-animate.js',
+          'libs/angular-dragdrop/draganddrop.js',
           'dist/angular-audio-player.js'
         ],
         dest: 'docs/libs.js'
@@ -93,7 +100,7 @@ module.exports = function (grunt) {
           'docs/docs.js',
           'docs/examples/*.js'
         ],
-        tasks: ['concat:docs-app']
+        tasks: ['concat_sourcemap:docs-app']
       },
       'docs-tpl': {
         files: [
@@ -225,7 +232,7 @@ module.exports = function (grunt) {
   // - take an HTML snapshot of the pages
   // - put yourself on watch for changes
   grunt.registerTask('docs', [
-    'clean', 'jshint:docs', 'concat:docs-libs', 'concat:docs-app', 'md2html', 'html2js:docs', 'connect:docs', 'sitemap', 'htmlSnapshot', 'watch'
+    'clean', 'jshint:docs', 'concat_sourcemap:docs-libs', 'concat_sourcemap:docs-app', 'md2html', 'html2js:docs', 'connect:docs', 'sitemap', 'htmlSnapshot', 'watch'
   ]);
 
 };

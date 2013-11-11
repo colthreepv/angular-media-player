@@ -32,6 +32,7 @@
     "grunt-md2html": "~0.1.4",
     "highlight.js": "~7.4.0",
     "grunt-html-snapshot": "~0.6.0",
-    "xml": "git://github.com/NowTV-Iceberg/node-xml.git"
+    "xml": "git://github.com/NowTV-Iceberg/node-xml.git",
+    "grunt-concat-sourcemap": "~0.3.2"
   }
 }
