@@ -34,9 +34,9 @@
   </thead>
   <tbody>
     <tr ng-repeat="song in audioPlaylist" ng-click="audioPlayer.playPause($index)" ng-class="{ active: audioPlayer.playing && audioPlayer.currentTrack-1 === $index }">
-      <th>{{ $index+1 }}</th>
-      <th>{{ song.artist }}</th>
-      <th>{{ song.title }}</th>
+      <td>{{ $index+1 }}</td>
+      <td>{{ song.artist }}</td>
+      <td>{{ song.title }}</td>
     </tr>
   </tbody>
 </table>
