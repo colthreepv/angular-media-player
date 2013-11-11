@@ -47,6 +47,23 @@ body > .container {
   cursor: default;
 }
 
+.progress {
+  position: relative;
+  margin-top: 6px;
+}
+
+.progress .time {
+  position: absolute;
+  left: 50%;
+}
+
+table .on-drag-hover {
+  outline: white 5px solid;
+}
+table .on-drag-hover > td {
+  padding-top: 40px !important;
+}
+
 /*
   Code highlight syntax
   github.com style (c) Vasily Polovnyov <vast@whiteants.net>

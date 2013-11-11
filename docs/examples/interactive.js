@@ -7,7 +7,14 @@ angular.module('docs')
   });
 
   $scope.addSong = function (audioElement) {
-    $log.debug('added song', audioElement);
-    $scope.audioPlaylist.push(audioElement);
+    $scope.audioPlaylist.push(angular.copy(audioElement));
+  };
+
+  $scope.removeSong = function (index) {
+    $scope.audioPlaylist.splice(index, 1);
+  };
+
+  $scope.dropSong = function (audioElement, index) {
+    $scope.audioPlaylist.splice(index, 0, angular.copy(audioElement));
   };
 });

@@ -25,14 +25,18 @@
     <span>currentTrack: <span class="badge">{{ audioPlayer.currentTrack }}</span></span>
   </div>
   <div class="progress">
-    <div class="progress-bar" role="progressbar" aria-valuenow="{{ audioPlayer.currentTime*100/audioPlayer.duration }}" aria-valuemin="0" aria-valuemax="100" ng-style="width: {{ audioPlayer.currentTime*100/audioPlayer.duration }}%;">
+    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: audioPlayer.currentTime*100/audioPlayer.duration + '%' }">
       <span class="sr-only">{{ audioPlayer.currentTime*100/audioPlayer.duration }}% Complete</span>
+    </div>
+    <div class="time" ng-show="audioPlayer.formatTime">
+      <span>{{ audioPlayer.formatTime }}</span><b>/</b><span>{{ audioPlayer.formatDuration }}</span>
     </div>
   </div>
 </div>
 
 <h3><i>Interactive</i> playlist</h3>
 <p>Keep track of this demo playlist in real-time</p>
+<p class="text-warning">You can drag songs, to re-order them!</p>
 <table class="table table-hover table-rounded table-cursor">
   <thead>
     <th>#</th>
@@ -40,10 +44,11 @@
     <th>Type</th>
   </thead>
   <tbody>
-    <tr ng-repeat="song in audioPlaylist" ng-click="audioPlayer.playPause($index)" ng-class="{ active: audioPlayer.playing && audioPlayer.currentTrack-1 === $index }">
-      <th>{{ $index+1 }}</th>
-      <th>{{ song.src }}</th>
-      <th>{{ song.type }}</th>
+    <tr ng-repeat="song in audioPlaylist" ng-click="audioPlayer.playPause($index)" ng-class="{ active: audioPlayer.playing && audioPlayer.currentTrack-1 === $index }"
+        ui-draggable="true" drag="song" on-drop-success="removeSong($index)" ui-on-drop="dropSong($data, $index)">
+      <td>{{ $index+1 }}</td>
+      <td><span ng-show="song.src.length > 50">...</span>{{ song.src | limitTo:-50 }}</td>
+      <td>{{ song.type }}</td>
     </tr>
   </tbody>
 </table>
