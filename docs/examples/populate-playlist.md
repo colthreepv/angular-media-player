@@ -3,16 +3,20 @@ This is to give some sort of compatibility for `<audio>` tags already present in
 
 #### HTML of the ```<audio>``` tag
 ```html
-<audio data-player-control="audio1" data-playlist="playlist1" audio-player>
+<audio data-player-control="audioPlayer" data-playlist="audioPlaylist" audio-player>
   <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
 </audio>
 ```
 
 #### Resulting `$scope.playlist`
 ```javascript
-$scope.playlist1 = [
+$scope.audioPlaylist = [
   [
-    {"src":"http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg","type":"audio/ogg","media":""}
+    {
+      "src":"http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg",
+      "type":"audio/ogg",
+      "media":""
+    }
   ]
 ];
 ```

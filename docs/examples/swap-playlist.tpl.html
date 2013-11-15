@@ -1,28 +1,34 @@
 <div class="jumbotron">
-  <h1>Swap Audio during play</h1>
+  <h1>swap songs safely</h1>
   <p>
-    Suddenly changing the playlist while the player is going on, simply makes it pause, and load the new tracks at once.
+    Suddenly changing the playing track while the player is going on, simply makes it pause, and load the new track(s) at once.
   </p>
 </div>
 <div class="audio-control">
-  <audio data-player-control="audio1" data-playlist="playlist1" audio-player></audio>
-  <div class="btn" ng-click="audio1.play()">
+  <audio player-control="audioPlayer" playlist="audioPlaylist" audio-player></audio>
+  <div class="btn" ng-click="audioPlayer.play()">
     <span>Simple Play</span>
     <i class="fa fa-play"></i>
   </div>
-  <div class="btn" ng-click="audio1.playPause()">
-    <i class="fa" ng-class="{ 'fa-pause': audio1.playing, 'fa-play': !audio1.playing }"></i>
+  <div class="btn" ng-click="audioPlayer.playPause()">
+    <i class="fa" ng-class="{ 'fa-pause': audioPlayer.playing, 'fa-play': !audioPlayer.playing }"></i>
   </div>
-  <div class="btn" ng-click="audio1.next()">
+  <div class="btn" ng-click="audioPlayer.next()">
     <span>Next</span>
     <i class="fa fa-step-forward"></i>
   </div>
-  <div class="btn" ng-click="audio1.prev()">
+  <div class="btn" ng-click="audioPlayer.prev()">
     <i class="fa fa-step-backward"></i>
     <span>Prev</span>
   </div>
-  <span>audio1.currentTrack = {{ audio1.currentTrack }}</span>
+  <div class="btn btn-noclick">
+    <span>currentTrack: <span class="badge">{{ audioPlayer.currentTrack }}</span></span>
+  </div>
+  <div class="btn" ng-click="swapSong()">
+    <i class="fa fa-retweet"></i>
+    <span>Swap Track</span>
+  </div>
 </div>
 <pre>
-  <code>playlist1 = {{ playlist1 }}</code>
+  <code>audioPlaylist = {{ audioPlaylist | json }}</code>
 </pre>

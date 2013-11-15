@@ -13,24 +13,19 @@ Means support for this project is the same as: [HTML5 audio draft][html5audiocom
   * `angular.module` changed from `'angular-audio-player'` to `'audioPlayer'` - seemed more ngCompliant to me
   * property `'playingTrack'` renamed to `'currentTrack'` - again, on first directive tapeout names weren't the most important thing
 
-_Non_ breaking, but important: documentation will get a revamp in a week  
 Bower package: `angular-audio-playlist`
 
-## Roadmap
+## Possible Roadmap
 
-  * better way to expose current time and buffered data (?!?)
+  * better way to expose current time and buffered data #4
   * song preload:
     * preload N songs before and after the current song.
     * multiple parallel preload connections
   * to achieve preload i need to use multiple `audio` tags
     * create only 2N `audio` tags
-    * memorize/paginate `audio` properties even when the tag is removed from the DOM, so if it gets added back it haves the same progress. 
+    * memorize/paginate `audio` properties even when the tag is removed from the DOM, so if it gets added back it haves the same progress.
 
-  * Documentation
-    * ~~playPause(index) documentation~~
-    * example4, displaying playlist with `ng-repeat` and using `playPause($index)` on it.
-
-## Dude i imported the library, where i can see it work?
+## Getting Started
 ### [Examples here][examples]  
 This directive it's just a way to expose `<audio>` tag property and methods to an AngularJS application, so you have to use custom html **and** css in order to interface with the audio directive.  
 
@@ -53,8 +48,8 @@ Then in the html:
 ## Directive
 `audio-player` is a directive working as an _attribute_, it **must** be used on an `<audio>` tag.
 
-
 ### Attributes
+Those can be used as any [AngularJS directive attributes notation](http://docs.angularjs.org/guide/directive#creating-custom-directives_matching-directives)
 
 * **playlist**: An Array containing audioElements(s)
 * **player-control**: Exposed properties and methods of the `<audio>` tag
@@ -62,9 +57,7 @@ Then in the html:
 ### playlist structure
 
 Playlist is an Array containing `audioElement(s)`.  
-An `audioElement` could be an Array of sourceObjects, or a single sourceObject.  
-
-sourceObject mimics `<source>` HTML draft  
+An `audioElement` itself could be an Array of sourceObjects, or a single sourceObject, mimicking the `<source>` [HTML draft][sourcedraft]  
 
 > **sourceObject structure**:
 ```javascript
@@ -82,41 +75,97 @@ sourceObject mimics `<source>` HTML draft
 
 *For whoever wondering what `media` is*: it's just a [css media query][cssmediaquery], so the browser can pick which `<source>` tag to load.
 
-### player-control methods and properties
+### player-control Methods
 
-#### `player.play([index])`
-`index` is an _optional_ parameter, referring to the playlist index (0...playlist.length-1)
+#### player.load([audioElement, autoplayNext])
+Parameter `audioElement` type `object`, structure as specified above.  
+Parameter `autoplayNext` type `boolean`  
+Internal function called from the below methods, can still be accessed directly if want to, if no parameter is provided just calls the `<audio>` _load_ method (means it starts buffering).
 
-#### `player.playPause([index])`
-`index` is an _optional_ parameter, referring to the playlist index (0...playlist.length-1)
+#### player.play([index])
+Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
+You can force to play a specific song using the `index` param.
 
-#### `player.pause()`
+#### player.playPause([index])
+Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
+If you `playPause` the same index twice it will alternate start and stop.
 
-#### `player.next([autoplay])`
-Goes to next audioElement if there is one in the playlist, otherwise does **nothing**.  
+#### player.pause()
+Pauses the player.
+
+#### player.next([autoplay])
+Parameter `autoplay` type `boolean`  
+Goes to next audioElement if there is one in the playlist.  
 Autoplay behaviour is the following:
-If a song is _already_ playing, it will change to the next audioElement, and start playing ASAP.  
-You can force the autoplay on/off using the `autoplay` Boolean parameter.
+If a song is _already_ playing, it will change to the next audioElement, and autoplay as soon as it's loaded.  
+You can force the autoplay using the `autoplay` parameter.
 
-#### `player.prev([autoplay])`
-Goes to previous audioElement if there is one in the playlist, otherwise does **nothing**.  
-Refer to `.next()` about `autoplay` parameter.
+#### player.prev([autoplay])
+Parameter `autoplay` type `boolean`  
+Goes to previous audioElement if there is one in the playlist.
+If a song is _already_ playing, it will change to the previous audioElement, and autoplay as soon as it's loaded.  
+You can force the autoplay using the `autoplay` parameter.
 
-#### `player.playing`
+#### player.toggleMute()
+Toggles mute property.
+
+### player-control Properties
+
+#### player.name
+Default is `audioplayer`, it's the name-prefix used in the Events
+
+#### player.playing
 `true` or `false`
 
-#### `player.currentTrack`
+#### player.currentTrack
 Tracks the position of the playing track, it **might** change during playing the same track due to pushing elements into `playlistArray`
 
-#### `player.tracks`
-Number of tracks in the playlist
+#### player.tracks
+Number of tracks in the playlist, zero-based (0....playlist.length)
 
-### Functionality
+#### `<audio>` properties forward
+Some properties are just forwared to this `player-control` but are unchanged against [HTMLMediaElement spec][mediaelement]  
+`player.volume`  
+`player.muted`  
+`player.duration`  
+`player.currentTime`  
+`player.position` _same_ as `player.currentTime`  
+`player.buffered`  
+`player.played`  
+`player.seekable`  
 
+#### formatted properties
+The following properties refer to some [HTMLMediaElement spec][mediaelement] properties, but are formatted for handiness.  
+`player.formatDuration`  hh:mm:ss version of `player.duration`  
+`player.formatTime` hh:mm:ss version of `player.duration`  
+`player.loadPercent` 0-100 version of `player.buffered`, it's just a number, not a TimeRange element.  
+
+### $rootScope events
+Some events gets dispatched to the `$rootScope`, they give some informations when handled with an event listener.
+
+Example:
+```javascript
+angular.module('myApp',['audioPlayer'])
+.controller('MyController', function ($scope, $rootScope) {
+  $rootScope.$on('audioplayer:load', function (event, autoplayNext) {
+    // Tell someone a song is gonna get loaded.
+  });
+})
+```
+
+#### audioplayer:load
+Parameter `autoplayNext` type `boolean`, returns true or false wheter the loading song is going to get played as soon as it's loaded.
+
+#### audioplayer:play
+Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
+
+#### audioplayer:pause
+Emitted when the player stops.
+
+### Special Behaviour
 You can add/remove tracks on-fly from/to the playlist.  
-If the current track gets removed, the player goes on **pause()**. (And starts loading the first track of the new playlist)
-
-**TBD**
+If the current track gets removed, the player goes on **pause()**. (And starts loading the first track of the new playlist)  
+Try and get the hold of this in the [examples][examples]
 
 ### Credits
 A lot of guidelines to realize a simple re-usable project like this have come mainly from:
@@ -129,7 +178,9 @@ A lot of guidelines to realize a simple re-usable project like this have come ma
 [socketbf]: https://github.com/btford/angular-socket-io
 [brianf]: https://github.com/btford
 [self]: http://github.com/mrgamer/angular-audio-player
-[examples]: http://mrgamer.github.com/angular-audio-player/
+[examples]: http://aap.col3.me
+[sourcedraft]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source
+[mediaelement]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
 
 
 [html5audiocompatibility]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#Browser_compatibility
