@@ -185,3 +185,7 @@ A lot of guidelines to realize a simple re-usable project like this have come ma
 
 [html5audiocompatibility]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#Browser_compatibility
 [cssmediaquery]: http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/#media0
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mrgamer/angular-audio-player/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
