@@ -59,6 +59,7 @@ angular.module('audioPlayer', [])
         // aliases
         position: element[0].currentTime
       });
+
       // bind listeners on <audio> events, will be broadcasted on specific `scope`
       // the function returs a de-registering function, that will be bound on _unbindListeners
       this._unbindListeners = this._bindListeners(scope);
@@ -250,6 +251,8 @@ angular.module('audioPlayer', [])
         if (audioElement.length) { playlist.unshift(audioElement); }
 
         scope.exposedPlayer = new AudioPlayer(element, scope, playlist);
+        // You can listen for 'ready' event to know when DOM compilation is done
+        scope.$emit(scope.exposedPlayer.name + ':ready', scope.exposedPlayer);
 
         scope.$watch('playlist', function (playlistNew, playlistOld, watchScope) {
           var player = scope.exposedPlayer,
