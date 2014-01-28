@@ -157,13 +157,13 @@ The player-name attribute specifies the namespace for the events audio player em
 ```
 audioPlayerName = value of player-name attribute, defaults to audioplayer
 
-#### <audioPlayerName>:load
+#### audioPlayerName:load
 Parameter `autoplayNext` type `boolean`, returns true or false wheter the loading song is going to get played as soon as it's loaded.
 
-#### <audioPlayerName>:play
+#### audioPlayerName:play
 Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
 
-#### <audioPlayerName>:pause
+#### audioPlayerName:pause
 Emitted when the player stops.
 
 ### Special Behaviour
