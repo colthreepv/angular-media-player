@@ -38,7 +38,7 @@ angular.module('myApp', ['audioPlayer'])
 
 Then in the html:
 ```html
-<audio data-player-control="audio1" data-playlist="playlist1" audio-player>
+<audio data-player-control="audio1" data-playlist="playlist1" data-player-name="audio1" audio-player>
   <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
 </audio>
 <span ng-show="audio1.playing">Player status: Playing</span>
@@ -151,15 +151,19 @@ angular.module('myApp',['audioPlayer'])
     // Tell someone a song is gonna get loaded.
   });
 })
-```
 
-#### audioplayer:load
+The player-name attribute specifies the namespace for the events audio player emits.
+
+```
+audioPlayerName = value of player-name attribute, defaults to audioplayer
+
+#### audioPlayerName:load
 Parameter `autoplayNext` type `boolean`, returns true or false wheter the loading song is going to get played as soon as it's loaded.
 
-#### audioplayer:play
+#### audioPlayerName:play
 Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
 
-#### audioplayer:pause
+#### audioPlayerName:pause
 Emitted when the player stops.
 
 ### Special Behaviour
