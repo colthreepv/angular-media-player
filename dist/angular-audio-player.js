@@ -236,8 +236,7 @@ angular.module('audioPlayer', [])
         playlist: '=playlist',
         playername: "@playerName"
       },
-      compile: function(element, attrs) {
-          return function(scope, element, attrs, ctrl) {
+      link: function (scope, element, attrs, ctrl) {
           if (element[0].tagName !== 'AUDIO') {
             return $log.error('audioPlayer directive works only when attached to an <audio> type tag');
           }
@@ -317,7 +316,6 @@ angular.module('audioPlayer', [])
           scope.$on('$destroy', function () {
             scope.exposedPlayer._unbindListeners();
           });
-      };
     }
     };
   }]
