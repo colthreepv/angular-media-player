@@ -233,89 +233,92 @@ angular.module('audioPlayer', [])
     return {
       scope: {
         exposedPlayer: '=playerControl',
-        playlist: '=playlist'
+        playlist: '=playlist',
+        playername: "@playerName"
       },
-      link: function (scope, element, attrs, ctrl) {
-        if (element[0].tagName !== 'AUDIO') {
-          return $log.error('audioPlayer directive works only when attached to an <audio> type tag');
-        }
-        var audioElement = [],
-            sourceElements = element.find('source'),
-            playlist = scope.playlist || [];
-
-        // Create a single playlist element from <source> tag(s).
-        angular.forEach(sourceElements, function (sourceElement, index) {
-          audioElement.push({ src: sourceElement.src, type: sourceElement.type, media: sourceElement.media });
-        });
-        // Put audioElement as first element in the playlist
-        if (audioElement.length) { playlist.unshift(audioElement); }
-
-        scope.exposedPlayer = new AudioPlayer(element, scope, playlist);
-
-        scope.$watch('playlist', function (playlistNew, playlistOld, watchScope) {
-          var player = scope.exposedPlayer,
-              currentTrack,
-              newTrackNum = null;
-
-          if (playlistNew === undefined) {
-            if (playlistOld !== undefined) {
-              player.pause();
-              return $log.debug('playlist was deleted from scope, pausing and returning');
-            } else {
-              return $log.error('if you use playlist attribute, you need $scope.playlistVariable = []; in your code');
-            }
+      compile: function(element, attrs) {
+          return function(scope, element, attrs, ctrl) {
+          if (element[0].tagName !== 'AUDIO') {
+            return $log.error('audioPlayer directive works only when attached to an <audio> type tag');
           }
+          var audioElement = [],
+              sourceElements = element.find('source'),
+              playlist = scope.playlist || [];
 
-          /**
-           * Playlist update logic:
-           * If the player has started ->
-           *   Check if the playing track is in the new Playlist [EXAMPLE BELOW]
-           *   If it is ->
-           *     Assign to it the new tracknumber
-           *   Else ->
-           *     Pause the player, and get the new Playlist
-           *
-           * Else (if the player hasn't started yet)
-           *   Just replace the <src> tags inside the <audio>
-           *
-           * Example
-           * playlist: [a,b,c], playing: c, trackNum: 2
-           * ----delay 5 sec-----
-           * playlist: [f,a,b,c], playing: c, trackNum: 3
-           *
-           */
-          if (player.currentTrack) {
-            currentTrack = playlistOld ? playlistOld[player.currentTrack - 1] : -1;
-            for (var i = 0; i < playlistNew.length; i++) {
-              if (angular.equals(playlistNew[i], currentTrack)) { newTrackNum = i; break; }
-            }
-            if (newTrackNum !== null) { // currentTrack it's still in the new playlist, update trackNumber
-              player.currentTrack = newTrackNum + 1;
-              player.tracks = playlistNew.length;
-            } else { // currentTrack has been removed.
-              player.pause();
-              if (playlistNew.length) { // if the new playlist has some elements, replace actual.
-                $timeout(function () { // need $timeout because the audioTag needs a little time to launch the 'pause' event
-                  player._clearAudioList();
-                  player._addAudioList(playlistNew[0]);
-                  player.load();
-                  player.tracks = playlistNew.length;
-                });
+          // Create a single playlist element from <source> tag(s).
+          angular.forEach(sourceElements, function (sourceElement, index) {
+            audioElement.push({ src: sourceElement.src, type: sourceElement.type, media: sourceElement.media });
+          });
+          // Put audioElement as first element in the playlist
+          if (audioElement.length) { playlist.unshift(audioElement); }
+
+          scope.exposedPlayer = new AudioPlayer(element, scope, playlist, {name: scope.playername});
+
+          scope.$watch('playlist', function (playlistNew, playlistOld, watchScope) {
+            var player = scope.exposedPlayer,
+                currentTrack,
+                newTrackNum = null;
+
+            if (playlistNew === undefined) {
+              if (playlistOld !== undefined) {
+                player.pause();
+                return $log.debug('playlist was deleted from scope, pausing and returning');
+              } else {
+                return $log.error('if you use playlist attribute, you need $scope.playlistVariable = []; in your code');
               }
             }
-          } else if (playlistNew.length) {
-            player._clearAudioList();
-            player._addAudioList(playlistNew[0]);
-            player.load();
-            player.tracks = playlistNew.length;
-          }
 
-        }, true);
+            /**
+             * Playlist update logic:
+             * If the player has started ->
+             *   Check if the playing track is in the new Playlist [EXAMPLE BELOW]
+             *   If it is ->
+             *     Assign to it the new tracknumber
+             *   Else ->
+             *     Pause the player, and get the new Playlist
+             *
+             * Else (if the player hasn't started yet)
+             *   Just replace the <src> tags inside the <audio>
+             *
+             * Example
+             * playlist: [a,b,c], playing: c, trackNum: 2
+             * ----delay 5 sec-----
+             * playlist: [f,a,b,c], playing: c, trackNum: 3
+             *
+             */
+            if (player.currentTrack) {
+              currentTrack = playlistOld ? playlistOld[player.currentTrack - 1] : -1;
+              for (var i = 0; i < playlistNew.length; i++) {
+                if (angular.equals(playlistNew[i], currentTrack)) { newTrackNum = i; break; }
+              }
+              if (newTrackNum !== null) { // currentTrack it's still in the new playlist, update trackNumber
+                player.currentTrack = newTrackNum + 1;
+                player.tracks = playlistNew.length;
+              } else { // currentTrack has been removed.
+                player.pause();
+                if (playlistNew.length) { // if the new playlist has some elements, replace actual.
+                  $timeout(function () { // need $timeout because the audioTag needs a little time to launch the 'pause' event
+                    player._clearAudioList();
+                    player._addAudioList(playlistNew[0]);
+                    player.load();
+                    player.tracks = playlistNew.length;
+                  });
+                }
+              }
+            } else if (playlistNew.length) {
+              player._clearAudioList();
+              player._addAudioList(playlistNew[0]);
+              player.load();
+              player.tracks = playlistNew.length;
+            }
 
-        scope.$on('$destroy', function () {
-          scope.exposedPlayer._unbindListeners();
-        });
-      }
+          }, true);
+
+          scope.$on('$destroy', function () {
+            scope.exposedPlayer._unbindListeners();
+          });
+      };
+    }
     };
   }]
 );
