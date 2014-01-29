@@ -9,7 +9,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-concat-sourcemap');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-git-describe');
   // docs-only
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-md2html');
@@ -178,13 +177,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('saveRevision', function () {
-    grunt.event.once('git-describe', function (rev) {
-      grunt.option('gitRevision', rev);
-    });
-    grunt.task.run('git-describe');
-  });
-
   grunt.registerTask('sitemap', function () {
     var sitemapJson,
         baseUrl = 'http://aap.col3.me/';
@@ -216,7 +208,7 @@ module.exports = function (grunt) {
     grunt.file.write('docs/sitemap.xml', XML(sitemapJson, { declaration: true, indent: '  ' }));
   });
 
-  grunt.registerTask('build', ['jshint:source', 'saveRevision', 'concat', 'uglify']);
+  grunt.registerTask('build', ['jshint:source', 'concat', 'uglify']);
   grunt.registerTask('default', ['connect', 'watch']);
 
   // docs building
