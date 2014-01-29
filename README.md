@@ -155,16 +155,57 @@ angular.module('myApp',['audioPlayer'])
 The player-name attribute specifies the namespace for the events audio player emits.
 
 ```
-audioPlayerName = value of player-name attribute, defaults to audioplayer
+`audioPlayerName` stands for player-name attribute, defaults to `audioplayer`
+
+#### audioPlayerName:ready
+Parameter `playerInstance` type `AudioPlayer`, returns the audioplayer that has just got compiled by the directive.
+
+example:
+```javascript
+$scope.$on('audioplayer:ready', function (playerInstance) {});
+```
+
+example with multiple audio tags:
+```javascript
+var players = {};
+var count = 0;
+
+function doSomething() { console.log('players are ready, sir!'); }
+function whenPlayersReady(name) {
+  count++;
+  return function (playerInstance) {
+    players[name] = playerInstance;
+    if (--count === 0) { doSomething(); };
+  }
+}
+
+$scope.$on('audio1:ready', whenPlayersReady('audio1'));
+$scope.$on('audio2:ready', whenPlayersReady('audio2'));
+```
 
 #### audioPlayerName:load
 Parameter `autoplayNext` type `boolean`, returns true or false wheter the loading song is going to get played as soon as it's loaded.
 
+example:
+```javascript
+$scope.$on('audioplayer:load', function (autoplayNext) {});
+```
+
 #### audioPlayerName:play
 Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
 
+example:
+```javascript
+$scope.$on('audioplayer:play', function (index) {});
+```
+
 #### audioPlayerName:pause
 Emitted when the player stops.
+
+example:
+```javascript
+$scope.$on('audioplayer:play', function (index) {});
+```
 
 ### Special Behaviour
 You can add/remove tracks on-fly from/to the playlist.  

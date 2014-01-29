@@ -38,7 +38,7 @@ angular.module('myApp', ['audioPlayer'])
 
 Then in the html:
 ```html
-<audio data-player-control="audio1" data-playlist="playlist1" audio-player>
+<audio data-player-control="audio1" data-playlist="playlist1" data-player-name="audio1" audio-player>
   <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
 </audio>
 <span ng-show="audio1.playing">Player status: Playing</span>
@@ -151,16 +151,61 @@ angular.module('myApp',['audioPlayer'])
     // Tell someone a song is gonna get loaded.
   });
 })
+
+The player-name attribute specifies the namespace for the events audio player emits.
+
+```
+`audioPlayerName` stands for player-name attribute, defaults to `audioplayer`
+
+#### audioPlayerName:ready
+Parameter `playerInstance` type `AudioPlayer`, returns the audioplayer that has just got compiled by the directive.
+
+example:
+```javascript
+$scope.$on('audioplayer:ready', function (playerInstance) {});
 ```
 
-#### audioplayer:load
+example with multiple audio tags:
+```javascript
+var players = {};
+var count = 0;
+
+function doSomething() { console.log('players are ready, sir!'); }
+function whenPlayersReady(name) {
+  count++;
+  return function (playerInstance) {
+    players[name] = playerInstance;
+    if (--count === 0) { doSomething(); };
+  }
+}
+
+$scope.$on('audio1:ready', whenPlayersReady('audio1'));
+$scope.$on('audio2:ready', whenPlayersReady('audio2'));
+```
+
+#### audioPlayerName:load
 Parameter `autoplayNext` type `boolean`, returns true or false wheter the loading song is going to get played as soon as it's loaded.
 
-#### audioplayer:play
+example:
+```javascript
+$scope.$on('audioplayer:load', function (autoplayNext) {});
+```
+
+#### audioPlayerName:play
 Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
 
-#### audioplayer:pause
+example:
+```javascript
+$scope.$on('audioplayer:play', function (index) {});
+```
+
+#### audioPlayerName:pause
 Emitted when the player stops.
+
+example:
+```javascript
+$scope.$on('audioplayer:play', function (index) {});
+```
 
 ### Special Behaviour
 You can add/remove tracks on-fly from/to the playlist.  
@@ -185,3 +230,38 @@ A lot of guidelines to realize a simple re-usable project like this have come ma
 
 [html5audiocompatibility]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#Browser_compatibility
 [cssmediaquery]: http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/#media0
+
+### Contributing
+As you can see from the Issues, i would like some help (especially experience in cross-browser compatibility)
+
+# Important
+While you're filing a _Pull Request_ be sure to edit files under the `src/` folder
+
+You can clone the repository and start working:
+```bash
+git clone git@github.com:mrgamer/angular-audio-player.git
+cd angular-audio-player
+?!?!?
+profit!
+```
+
+To test the documentation system you need to:
+```bash
+npm install
+# if you don't have bower installed globally
+# sudo npm install bower -g
+bower install
+# if you don't have grunt installed globally
+# sudo npm install grunt-cli -g
+grunt docs
+# keep grunt executing and open a browser on http://localhost:8181/
+```
+
+To create a new release:
+```bash
+# !update package.json with a new version!
+npm install
+grunt build
+git tag x.x.x
+git push && git push --tags
+```
