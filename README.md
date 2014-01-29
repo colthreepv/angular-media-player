@@ -189,3 +189,38 @@ A lot of guidelines to realize a simple re-usable project like this have come ma
 
 [html5audiocompatibility]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#Browser_compatibility
 [cssmediaquery]: http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/#media0
+
+### Contributing
+As you can see from the Issues, i would like some help (especially experience in cross-browser compatibility)
+
+# Important
+While you're filing a _Pull Request_ be sure to edit files under the `src/` folder
+
+You can clone the repository and start working:
+```bash
+git clone git@github.com:mrgamer/angular-audio-player.git
+cd angular-audio-player
+?!?!?
+profit!
+```
+
+To test the documentation system you need to:
+```bash
+npm install
+# if you don't have bower installed globally
+# sudo npm install bower -g
+bower install
+# if you don't have grunt installed globally
+# sudo npm install grunt-cli -g
+grunt docs
+# keep grunt executing and open a browser on http://localhost:8181/
+```
+
+To create a new release:
+```bash
+# !update package.json with a new version!
+npm install
+grunt build
+git tag x.x.x
+git push && git push --tags
+```
