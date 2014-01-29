@@ -9,9 +9,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-concat-sourcemap');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-git-describe');
-  // docs grunt-requirements
+  // docs-only
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-md2html');
   grunt.loadNpmTasks('grunt-contrib-clean');
@@ -217,7 +216,6 @@ module.exports = function (grunt) {
     grunt.file.write('docs/sitemap.xml', XML(sitemapJson, { declaration: true, indent: '  ' }));
   });
 
-  grunt.registerTask('test', ['jshint:source', 'karma']);
   grunt.registerTask('build', ['jshint:source', 'saveRevision', 'concat', 'uglify']);
   grunt.registerTask('default', ['connect', 'watch']);
 
