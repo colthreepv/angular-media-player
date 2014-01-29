@@ -254,7 +254,7 @@ angular.module('audioPlayer', [])
         // You can listen for 'ready' event to know when DOM compilation is done
         scope.$emit(scope.exposedPlayer.name + ':ready', scope.exposedPlayer);
 
-        scope.$watch('playlist', function (playlistNew, playlistOld, watchScope) {
+        function watchFn(playlistNew, playlistOld, watchScope) {
           var player = scope.exposedPlayer,
               currentTrack,
               newTrackNum = null;
@@ -312,7 +312,9 @@ angular.module('audioPlayer', [])
             player.tracks = playlistNew.length;
           }
 
-        }, true);
+        }
+
+        scope.$watch('playlist', watchFn, true);
 
         scope.$on('$destroy', function () {
           scope.exposedPlayer._unbindListeners();
