@@ -2,7 +2,7 @@
   "author": "mrgamer",
   "name": "angular-audio-player",
   "description": "AngularJS Directive that wraps an <audio> tag exposing handy events and selectors to customize your audio player.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/mrgamer/angular-audio-player",
   "repository": {
     "type": "git",

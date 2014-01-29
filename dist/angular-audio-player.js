@@ -1,4 +1,4 @@
-/*! angular-audio-player v0.2.0 | date: 01-11-2013 */
+/*! angular-audio-player v0.2.1 | date: 29-01-2014 */
 /**
  * USEFUL LINKS:
  * Media events on <audio> and <video> tags:
@@ -60,6 +60,7 @@ angular.module('audioPlayer', [])
         // aliases
         position: element[0].currentTime
       });
+
       // bind listeners on <audio> events, will be broadcasted on specific `scope`
       // the function returs a de-registering function, that will be bound on _unbindListeners
       this._unbindListeners = this._bindListeners(scope);
@@ -251,8 +252,10 @@ angular.module('audioPlayer', [])
         if (audioElement.length) { playlist.unshift(audioElement); }
 
         scope.exposedPlayer = new AudioPlayer(element, scope, playlist);
+        // You can listen for 'ready' event to know when DOM compilation is done
+        scope.$emit(scope.exposedPlayer.name + ':ready', scope.exposedPlayer);
 
-        scope.$watch('playlist', function (playlistNew, playlistOld, watchScope) {
+        function watchFn(playlistNew, playlistOld, watchScope) {
           var player = scope.exposedPlayer,
               currentTrack,
               newTrackNum = null;
@@ -310,7 +313,9 @@ angular.module('audioPlayer', [])
             player.tracks = playlistNew.length;
           }
 
-        }, true);
+        }
+
+        scope.$watch('playlist', watchFn, true);
 
         scope.$on('$destroy', function () {
           scope.exposedPlayer._unbindListeners();
