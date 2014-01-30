@@ -204,7 +204,7 @@ Emitted when the player stops.
 
 example:
 ```javascript
-$scope.$on('audioplayer:play', function (index) {});
+$scope.$on('audioplayer:pause', function () {});
 ```
 
 ### Special Behaviour
