@@ -115,6 +115,10 @@ angular.module('audioPlayer', [])
       pause: function () {
         this._audioTag.pause();
       },
+      stop: function () {
+          this._audioTag.pause();
+          this._audioTag.currentTime = 0;
+      },
       toggleMute: function () {
         this.muted = this._audioTag.muted = !this._audioTag.muted;
       },
