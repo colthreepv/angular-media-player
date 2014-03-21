@@ -28,6 +28,8 @@
     "highlight.js": "~7.4.0",
     "grunt-html-snapshot": "~0.6.0",
     "xml": "git://github.com/NowTV-Iceberg/node-xml.git",
-    "grunt-concat-sourcemap": "~0.3.2"
+    "grunt-concat-sourcemap": "~0.3.2",
+    "grunt-swig": "git://github.com/mrgamer/grunt-swig#custom-tags",
+    "swig-highlight": "0.0.2"
   }
 }

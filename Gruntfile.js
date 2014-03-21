@@ -14,6 +14,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-md2html');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-html-snapshot');
+  grunt.loadNpmTasks('grunt-swig');
 
   var docUrls = [
     { loc: '#!/', priority: 1 },
@@ -172,6 +173,25 @@ module.exports = function (grunt) {
           removeScripts: true,
           removeLinkTags: true,
           urls: docUrls.map(function (docPage) { return (typeof docPage === 'object') ? docPage.loc : docPage; })
+        }
+      }
+    },
+    swig: {
+      development: {
+        init: {
+          autoescape: true
+        },
+        dest: 'www/',
+        src: ['docs/*.swig'],
+        generateSitemap: true,
+        generateRobotstxt: true,
+        siteUrl: 'http://mrgamer.github.io/angular-audio-player',
+        ga_account_id: 'UA-xxxxxxxx-1',
+        tags: {
+          highlight: require('swig-highlight')
+        },
+        sitemap_priorities: {
+          'index.html': '0.8',
         }
       }
     }
