@@ -219,6 +219,10 @@ module.exports = function (grunt) {
       dragdrop: {
         src: 'libs/angular-dragdrop/draganddrop.js',
         dest: 'www/libs/angular-dragdrop.js'
+      },
+      library: {
+        src: 'dist/angular-audio-player.js',
+        dest: 'www/libs/angular-audio-player.js'
       }
     }
   });

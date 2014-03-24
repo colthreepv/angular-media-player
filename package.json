@@ -30,7 +30,7 @@
     "xml": "git://github.com/NowTV-Iceberg/node-xml.git",
     "grunt-concat-sourcemap": "^0.3.2",
     "grunt-swig": "git://github.com/mrgamer/grunt-swig#custom-tags",
-    "swig-highlight": "0.0.2",
+    "swig-highlight": "^0.1.0",
     "grunt-contrib-copy": "^0.5.0"
   }
 }

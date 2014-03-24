@@ -8,12 +8,15 @@
     <!-- BootstrapCDN -->
     <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/darkly/bootstrap.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-    <!-- compiled css -->
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//yandex.st/highlightjs/8.0/styles/github.min.css">
+    <!-- overridden css -->
     <link href="/style.css" rel="stylesheet">
 
     <!-- google analytics -->
     <script type="text/javascript">{% include './google-analytics.js' %}</script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
+    <script type="text/javascript" src="/libs/angular-audio-player.js"></script>
     {% block javascript %}{% endblock %}
   </head>
   <body>

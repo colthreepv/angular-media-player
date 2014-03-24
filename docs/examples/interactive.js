@@ -1,4 +1,4 @@
-angular.module('docs', ['ngDragDrop'])
+angular.module('docs', ['audioPlayer', 'ngDragDrop'])
 // Taken from http://en.wikipedia.org/wiki/List_of_songs_considered_the_best
 // Thanks again, wikipedia.
 .constant('top100SongsEver', [
