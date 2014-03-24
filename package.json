@@ -19,17 +19,18 @@
     "grunt": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-jshint": "latest",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-connect": "~0.5.0",
-    "grunt-html2js": "~0.1.8",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-md2html": "~0.1.4",
-    "highlight.js": "~7.4.0",
-    "grunt-html-snapshot": "~0.6.0",
+    "grunt-contrib-watch": "^0.5.3",
+    "grunt-contrib-concat": "^0.3.0",
+    "grunt-contrib-connect": "^0.5.0",
+    "grunt-html2js": "^0.1.8",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-md2html": "^0.1.4",
+    "highlight.js": "^7.4.0",
+    "grunt-html-snapshot": "^0.6.0",
     "xml": "git://github.com/NowTV-Iceberg/node-xml.git",
-    "grunt-concat-sourcemap": "~0.3.2",
+    "grunt-concat-sourcemap": "^0.3.2",
     "grunt-swig": "git://github.com/mrgamer/grunt-swig#custom-tags",
-    "swig-highlight": "0.0.2"
+    "swig-highlight": "0.0.2",
+    "grunt-contrib-copy": "^0.5.0"
   }
 }
