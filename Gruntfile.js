@@ -15,6 +15,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-html-snapshot');
   grunt.loadNpmTasks('grunt-swig');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   var docUrls = [
     { loc: '#!/', priority: 1 },
@@ -120,9 +121,10 @@ module.exports = function (grunt) {
       docs: {
         options: {
           port: 8181,
-          base: 'docs/',
+          base: 'www/',
           hostname: '*',
-          debug: true
+          debug: true,
+          keepalive: true
         }
       }
     },
@@ -151,6 +153,18 @@ module.exports = function (grunt) {
             }
           }
         }
+      },
+      docsnew: {
+        files: [
+          { src: ['README.md'], dest: 'docs/', ext: '.md.tpl.html', expand: true }
+        ],
+        options: {
+          markedOptions: {
+            highlight: function (code, lang) {
+              return hljs.highlightAuto(code).value;
+            }
+          }
+        }
       }
     },
     clean: {
@@ -159,7 +173,8 @@ module.exports = function (grunt) {
       'docs-tpl': ['docs/templates-docs.js'],
       'docs-md': ['docs/*.md.tpl.html', 'docs/examples/*.md.tpl.html'],
       'docs-prerender': ['docs/prerender-*.html'],
-      'docs-sitemap': ['docs/sitemap.xml']
+      'docs-sitemap': ['docs/sitemap.xml'],
+      'www': ['www/*']
     },
     htmlSnapshot: {
       docs: {
@@ -181,18 +196,29 @@ module.exports = function (grunt) {
         init: {
           autoescape: true
         },
+        src: ['docs/*.swig', 'docs/examples/*.swig'],
         dest: 'www/',
-        src: ['docs/*.swig'],
         generateSitemap: true,
         generateRobotstxt: true,
         siteUrl: 'http://mrgamer.github.io/angular-audio-player',
         ga_account_id: 'UA-xxxxxxxx-1',
+        home: '/index.html',
         tags: {
           highlight: require('swig-highlight')
         },
         sitemap_priorities: {
           'index.html': '0.8',
         }
+      }
+    },
+    copy: {
+      css: {
+        src: 'docs/style.css',
+        dest: 'www/style.css'
+      },
+      dragdrop: {
+        src: 'libs/angular-dragdrop/draganddrop.js',
+        dest: 'www/libs/angular-dragdrop.js'
       }
     }
   });
@@ -243,6 +269,10 @@ module.exports = function (grunt) {
   // - put yourself on watch for changes
   grunt.registerTask('docs', [
     'clean', 'jshint:docs', 'concat_sourcemap:docs-libs', 'concat_sourcemap:docs-app', 'md2html', 'html2js:docs', 'connect:docs', 'sitemap', 'htmlSnapshot', 'watch'
+  ]);
+
+  grunt.registerTask('docs-once', [
+    'clean:www', 'clean:docs-md', 'md2html:docsnew', 'copy', 'swig', 'connect:docs'
   ]);
 
 };

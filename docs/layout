@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+  <html ng-app="docs">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>audioPlayer: {{ title }}</title>
+
+    <!-- BootstrapCDN -->
+    <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/darkly/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- compiled css -->
+    <link href="/style.css" rel="stylesheet">
+
+    <!-- google analytics -->
+    <script type="text/javascript">{% include './google-analytics.js' %}</script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
+    {% block javascript %}{% endblock %}
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{{ home }}">angular-audio-player</a>
+          <p class="navbar-text navbar-arrow"></p>
+          <p class="navbar-text navbar-active">{{ title }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      {% block controller %}
+      <div class="col-xs-12 col-sm-9">
+      {% endblock %}
+      {% block content %}
+      {% endblock %}
+      </div>
+      <div class="col-xs-12 col-sm-3" role="navigation">
+        <p class="text-primary">Examples List</p>
+        <div class="list-group">
+          {% for page in pagelist %}
+          {% if title === page.name %}
+          <a class="list-group-item active" href="{{ page.url }}">{{ page.name }}</a>
+          {% else %}
+          <a class="list-group-item" href="{{ page.url }}">{{ page.name }}</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
