@@ -1,4 +1,4 @@
 {% extends './layout' %}
 {% block content %}
-  {% include 'README.md.tpl.html' %}
+  {% include 'docs.md.tpl.html' %}
 {% endblock %}

@@ -24,6 +24,10 @@
     {
       "name": "Using ng-repeat",
       "url": "/examples/repeat-audio.html"
+    },
+    {
+      "name": "Test Page",
+      "url": "/examples/development.html"
     }
   ]
 }
