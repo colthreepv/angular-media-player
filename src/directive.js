@@ -65,7 +65,39 @@ angular.module('audioPlayer', [])
       this._unbindListeners = this._bindListeners(scope);
     };
 
-    AudioPlayer.prototype = {
+    var playerProperties = {
+      _element: element,
+      _audioTag: element[0],
+      _scope: scope,
+      _playlist: playlist,
+
+      // general properties
+      name: options.name || 'audioplayer',
+      playing: false,
+      currentTrack: 0,
+      tracks: playlist.length,
+
+      // <audio> properties
+      volume: element[0].volume,
+      muted: element[0].muted,
+      duration: element[0].duration,
+      currentTime: element[0].currentTime,
+
+      // TimeRanges structures
+      buffered: element[0].buffered,
+      played: element[0].played,
+      seekable: element[0].seekable,
+
+      // formatted properties
+      formatDuration: '',
+      formatTime: '',
+      loadPercent: 0,
+
+      // aliases
+      position: element[0].currentTime
+    };
+
+    var playerMethods = AudioPlayer.prototype = {
       /**
        * @usage load([audioElement], [autoplayNext]);
        *
@@ -232,6 +264,39 @@ angular.module('audioPlayer', [])
           element.unbind('progress');
         };
       }
+    };
+
+    var AudioPlayerNext = function (element) {
+      return angular.extend($rootScope.$new(true), {
+        $element: element,
+        $audioEl: undefined,
+        $playlist: undefined,
+
+        // general properties
+        playing: false,
+        currentTrack: 0,
+        tracks: 0,
+
+        // <audio> properties
+        /*
+        volume: element[0].volume,
+        muted: element[0].muted,
+        duration: element[0].duration,
+        currentTime: element[0].currentTime,
+
+        // TimeRanges structures
+        buffered: element[0].buffered,
+        played: element[0].played,
+        seekable: element[0].seekable,
+
+        // formatted properties
+        formatDuration: '',
+        formatTime: '',
+        loadPercent: 0,
+
+        // aliases
+        position: element[0].currentTime */
+      }, playerMethods);
     };
 
     return {
