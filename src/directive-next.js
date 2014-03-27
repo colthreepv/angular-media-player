@@ -101,14 +101,17 @@ angular.module('audioPlayer', [])
       },
       $addAudioList: function (audioList) {
         var self = this;
-        var srcTemplate = '<source src="{{ src }}" type="{{ type }}" media="{{ media }}">';
         if (angular.isArray(audioList)) {
           angular.forEach(audioList, function (singleElement, index) {
-            var sourceElem = angular.element($interpolate(srcTemplate)(singleElement));
+            var sourceElem = document.createElement('SOURCE');
+            angular.forEach(singleElement, function (value, key) {
+              sourceElem.setAttribute(key, value);
+            });
             self.$element.append(sourceElem);
           });
         } else if (angular.isObject(audioList)) {
-          var sourceElem = angular.element($interpolate(srcTemplate)(audioList));
+          var sourceElem = document.createElement('SOURCE');
+          angular.forEach(audioList, function (value, key) { sourceElem.setAttribute(key, value); });
           self.$element.append(sourceElem);
         }
       },
@@ -171,19 +174,14 @@ angular.module('audioPlayer', [])
           }
         },
         timeupdate: throttle(1000, false, function () {
-          console.log(au.$audioEl.duration);
           au.$apply(function (scope) {
             scope.currentTime = scope.position = scope.$audioEl.currentTime;
             scope.formatTime = scope.$formatTime(scope.currentTime);
           });
         }),
-        durationchange: function () {
-          console.log(au.$audioEl.duration);
-        },
         loadedmetadata: function () {
           au.$apply(function (scope) {
             if (!scope.currentTrack) { scope.currentTrack++; } // This is triggered *ONLY* the first time a <source> gets loaded.
-            console.log(scope.$audioEl.duration);
             scope.duration = scope.$audioEl.duration;
             scope.formatDuration = scope.$formatTime(scope.duration);
             scope.loadPercent = parseInt((scope.$audioEl.buffered.end(scope.$audioEl.buffered.length - 1) / scope.duration) * 100, 10);
@@ -300,6 +298,7 @@ angular.module('audioPlayer', [])
         } else if (playlistNew.length) {
           player.$clearAudioList();
           player.$addAudioList(playlistNew[0]);
+          // console.dir(player.$element.contents().eq(0)[0]);
           player.load();
           player.tracks = playlistNew.length;
         }

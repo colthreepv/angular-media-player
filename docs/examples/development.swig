@@ -9,7 +9,7 @@
 
 {% block content %}
 {% raw %}
-<audio controls data-audio-player="audioPlayer">
+<audio controls audio-player="audioPlayer" playlist="audioPlaylist">
   <source src="http://www.soundjay.com/misc/bell-ringing-01.mp3" type="audio/mp3">
 </audio>
 <div class="audio-control">
