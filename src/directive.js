@@ -1,7 +1,7 @@
 /**
  * USEFUL LINKS:
  * Media events on <audio> and <video> tags:
- * https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Events/Media_events
+ * https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
  * Properties and Methods:
  * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
  *
