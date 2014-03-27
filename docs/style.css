@@ -48,13 +48,15 @@ body > .container {
 }
 
 .progress {
-  position: relative;
-  margin-top: 6px;
+  margin: 6px 0 12px 0;
+  height: 20px;
 }
 
 .progress .time {
   position: absolute;
   left: 50%;
+  color: #0ce3ac;
+  font-weight: 800;
 }
 
 table .on-drag-hover {

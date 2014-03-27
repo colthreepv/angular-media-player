@@ -47,12 +47,25 @@ module.exports = function (grunt) {
     },
     watch: {
       docs: {
-        files: ['docs/*', 'docs/examples/*'],
+        files: [
+          'docs/*.swig',
+          'docs/*.js',
+          'docs/*.json',
+          'docs/*.md',
+          'docs/examples/*.swig',
+          'docs/examples/*.js',
+          'docs/examples/*.json',
+          'docs/examples/*.md'
+        ],
         tasks: ['clean:html', 'swig']
       },
       library: {
         files: ['src/*'],
         tasks: ['concat:devlib']
+      },
+      css: {
+        files: ['docs/style.css'],
+        tasks: ['copy:css']
       }
     },
     connect: {
