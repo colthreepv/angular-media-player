@@ -10,7 +10,7 @@
 {% block content %}
 {% raw %}
 <audio controls audio-player="audioPlayer" playlist="audioPlaylist">
-  <source src="http://www.soundjay.com/misc/bell-ringing-01.mp3" type="audio/mp3">
+  <source src="http://incompetech.com/music/royalty-free/mp3-royaltyfree/Happy%20Bee.mp3" type="audio/mp3">
 </audio>
 <div class="audio-control">
   <div class="btn" ng-click="audioPlayer.play()">
@@ -44,6 +44,7 @@
 
 <pre><code>
   audioPlayer.playing: {{ audioPlayer.playing }}
+  audioPlayer.ended: {{ audioPlayer.ended }}
 </code></pre>
 <pre><code>
   browser: {{ browser }}

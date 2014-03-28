@@ -31,8 +31,9 @@ angular.module('audioPlayer', [])
           this.$clearAudioList();
           this.$addAudioList(audioElement);
         }
-        this.$emit(this.name + ':load', autoplayNext);
+        // this.$emit(this.name + ':load', autoplayNext);
         this.$audioEl.load();
+        this.ended = undefined;
         if (autoplayNext) {
           var self = this;
           self.$element.bind('canplaythrough', function (evt) {
@@ -52,7 +53,13 @@ angular.module('audioPlayer', [])
         }
         // readyState = HAVE_NOTHING (0) means there's nothing into the <audio> tag
         if (!this.currentTrack && this.$audioEl.readyState) { this.currentTrack++; }
-        this.$audioEl.play();
+
+        // In case the stream is completed, reboot it with a load()
+        if (this.ended) {
+          this.load(true);
+        } else {
+          this.$audioEl.play();
+        }
       },
       playPause: function (index) {
         if (typeof index === 'number' && index + 1 !== this.currentTrack) {
