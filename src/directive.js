@@ -116,8 +116,8 @@ angular.module('audioPlayer', [])
         this._audioTag.pause();
       },
       stop: function () {
-          this._audioTag.pause();
-          this._audioTag.currentTime = 0;
+        this._audioTag.pause();
+        this._audioTag.currentTime = 0;
       },
       toggleMute: function () {
         this.muted = this._audioTag.muted = !this._audioTag.muted;
@@ -152,11 +152,15 @@ angular.module('audioPlayer', [])
         var self = this;
         if (angular.isArray(audioList)) {
           angular.forEach(audioList, function (singleElement, index) {
-            var sourceElem = angular.element($interpolate('<source src="{{ src }}" type="{{ type }}" media="{{ media }}">')(singleElement));
+            var sourceElem = document.createElement('SOURCE');
+            angular.forEach(singleElement, function (value, key) {
+              sourceElem.setAttribute(key, value);
+            });
             self._element.append(sourceElem);
           });
         } else if (angular.isObject(audioList)) {
-          var sourceElem = angular.element($interpolate('<source src="{{ src }}" type="{{ type }}" media="{{ media }}">')(audioList));
+          var sourceElem = document.createElement('SOURCE');
+          angular.forEach(audioList, function (value, key) { sourceElem.setAttribute(key, value); });
           self._element.append(sourceElem);
         }
       },

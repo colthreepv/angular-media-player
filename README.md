@@ -1,4 +1,4 @@
-angular-audio-player [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mrgamer/angular-audio-player/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+angular-audio-player
 ====================
 AngularJS Directive that wraps an `<audio>` tag exposing handy events and selectors to customize your audio player.
 
@@ -8,22 +8,15 @@ What i really was looking for was a simple audio wrapper **without** the need to
 Means support for this project is the same as: [HTML5 audio draft][html5audiocompatibility], jQuery is not necessary, and DOM manipulation is done with 'modern' browsers in mind (IE9 not really being a top player here)  
 [angular-audio-player][self] is html/css **agnostic**, meaning you can use it with your browser controls and default style, or bind the methods and properties in your own View
 
-## Breaking changes with `0.2.0`
+## How-To install
 
-  * `angular.module` changed from `'angular-audio-player'` to `'audioPlayer'` - seemed more ngCompliant to me
-  * property `'playingTrack'` renamed to `'currentTrack'` - again, on first directive tapeout names weren't the most important thing
+Just get the latest version from Bower, package name: `angular-audio-playlist`
 
-Bower package: `angular-audio-playlist`
+```bash
+$ bower install angular-audio-playlist
+```
 
-## Possible Roadmap
-
-  * better way to expose current time and buffered data #4
-  * song preload:
-    * preload N songs before and after the current song.
-    * multiple parallel preload connections
-  * to achieve preload i need to use multiple `audio` tags
-    * create only 2N `audio` tags
-    * memorize/paginate `audio` properties even when the tag is removed from the DOM, so if it gets added back it haves the same progress.
+If you are an active user checkout the [release history](#release-history) for every release
 
 ## Getting Started
 ### [Examples here][examples]  
@@ -259,9 +252,17 @@ grunt docs
 
 To create a new release:
 ```bash
-# !update package.json with a new version!
 npm install
+# !update package.json with a new version!
 grunt build
+git commit <...>
 git tag x.x.x
 git push && git push --tags
 ```
+
+# Release History
+
+  * `0.2.2` - Backport from the `next` branch to support IE9-10
+  * `0.2.0` :
+    * `angular.module` changed from `'angular-audio-player'` to `'audioPlayer'` - seemed more ngCompliant to me
+    * property `'playingTrack'` renamed to `'currentTrack'` - again, on first directive tapeout names weren't the most important thing
