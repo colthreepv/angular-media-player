@@ -11,7 +11,7 @@
  * Understanding TimeRanges objects:
  * http://html5doctor.com/html5-audio-the-state-of-play/
  */
-angular.module('audioPlayer', [])
+angular.module('audioPlayer', ['audioPlayer.helpers'])
 
 .directive('audioPlayer', ['$rootScope', '$log', '$interpolate', '$timeout', 'throttle',
   function ($rootScope, $log, $interpolate, $timeout, throttle) {

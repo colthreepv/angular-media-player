@@ -1,4 +1,4 @@
-angular.module('audioPlayer')
+angular.module('audioPlayer.helpers', [])
 .factory('throttle', ['$timeout', function ($timeout) {
   return function (delay, no_trailing, callback, debounce_mode) {
     var timeout_id,
