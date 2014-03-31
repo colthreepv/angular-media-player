@@ -1,65 +1,65 @@
-/*describe('unit tests: scopes', function () {
+/* jshint -W030 */
+describe('unit tests: scopes', function () {
   beforeEach(module('audioPlayer'));
 
   it('should create a scope inside the scope', inject(function ($compile, $rootScope) {
     var element = $compile('<audio audio-player="testplayer"></audio>')($rootScope);
-    element.scope().testplayer.should.be.an('object');
+    expect($rootScope.testplayer).to.exist;
+    expect($rootScope.testplayer).to.be.an('object');
   }));
 
   it('should create a scope if playlist attribute is declared', inject(function ($compile, $rootScope) {
     var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
-    element.scope().testplaylist.should.be.an('array');
-    element.scope().testplaylist.should.have.length(0);
+    expect($rootScope.testplaylist).to.exist;
+    expect($rootScope.testplaylist).to.be.an('array');
+    expect($rootScope.testplaylist).to.have.length(0);
   }));
 
   it('should create a local playlist even if the attribute is not declared', inject(function ($compile, $rootScope) {
     var element = $compile('<audio audio-player="testplayer"></audio>')($rootScope);
-    element.scope().testplayer.$playlist.should.be.an('array');
-    element.scope().testplayer.$playlist.should.have.length(0);
+    expect($rootScope.testplayer.$playlist).to.be.an('array');
+    expect($rootScope.testplayer.$playlist).to.have.length(0);
   }));
 
-});*/
+});
 
 describe('unit tests: controllers behaviour', function () {
-  // beforeEach(function () {
-  //   // calls the module
-  //   module('unit-tests');
-  //   // injects angular $compile service to render a directive
-  //   inject(function (_$compile_, _$rootScope_) {
-  //     $compile = _$compile_;
-  //     $rootScope = _$rootScope_;
-  //   });
-  // });
+  beforeEach(module('audioPlayer'));
 
-  // DIFFERENT from beforeEach! Those tests are interdependent
-
-  // before(inject(['$compile', '$rootScope', function (c, r) {
-  //   rootScope = r;
-  //   compile = c;
-  // }]));
-
-  it('should create a directive with empty audioplayer playlist', inject(function ($compile, $rootScope) {
-    expect($rootScope.testplayer).to.not.exist;
-    expect($rootScope.testplaylist).to.not.exist;
+  it('should propagate rootScope changes to audioPlayer', inject(function ($compile, $rootScope) {
+    $rootScope.testplaylist = [];
     var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
-    $rootScope.testplayer.should.be.an('object');
-    $rootScope.testplaylist.should.be.an('array');
-  }));
-
-  it('should create a directive with empty audioplayer', inject(function ($compile, $rootScope) {
-    // expect($rootScope.testplayer).to.exist;
-    /*$rootScope.testplaylist.should.be.an('array');
-    // be rickrolled!
+    expect($rootScope.testplayer).to.be.an('object');
+    expect($rootScope.testplaylist).to.be.an('array');
     $rootScope.testplaylist.push({
       src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg',
-      type: 'audio/ogg'
+      media: 'audio/ogg'
     });
-    $rootScope.$digest();*/
+    $rootScope.$digest();
+    expect($rootScope.testplayer.$playlist).to.have.length(1);
+    var sourceElement = element.find('source');
+    expect(sourceElement).to.have.length(1);
   }));
 
-  // it('should read the scope somewhat', function () {
-  //   var element = $compile('<audio audio-player="player"></audio>')($rootScope);
-  // });
+  it.skip('should remove <source> element if they get removed from playlist', inject(function ($compile, $rootScope) {
+    $rootScope.testplaylist = [{
+      src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg',
+      media: 'audio/ogg'
+    }];
+    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
+    var sourceElement = element.find('source');
+    expect(sourceElement).to.be.a('array');
+    expect(sourceElement).to.have.length(1);
+    // remove the Never Gonna Give you up
+    $rootScope.testplaylist.splice(0, 1);
+    $rootScope.$digest();
+    sourceElement = element.find('source');
+    expect(sourceElement).to.have.length(0);
+  }));
+
+  it.skip('should read an already existing <source> tag, and put it in the playlist', inject());
+  it.skip('should handle playlist element modification ??? NOT SURE', inject());
+
 });
 
 describe('unit tests: properties', function () {
