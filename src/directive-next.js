@@ -12,16 +12,41 @@
  * http://html5doctor.com/html5-audio-the-state-of-play/
  */
 angular.module('audioPlayer', ['audioPlayer.helpers'])
+.constant('playerDefaults', {
+  // general properties
+  playing: false,
+  ended: undefined,
+  currentTrack: 0,
+  tracks: 0,
 
-.directive('audioPlayer', ['$rootScope', '$log', '$interpolate', '$timeout', 'throttle',
-  function ($rootScope, $log, $interpolate, $timeout, throttle) {
+  // <audio> properties
+  /*
+  volume: element[0].volume,
+  muted: element[0].muted,
+  duration: element[0].duration,
+  currentTime: element[0].currentTime,
+
+  // TimeRanges structures
+  buffered: element[0].buffered,
+  played: element[0].played,
+  seekable: element[0].seekable,
+  */
+
+  // formatted properties
+  formatDuration: '00:00',
+  formatTime: '00:00',
+  loadPercent: 0
+})
+
+.directive('audioPlayer', ['$rootScope', '$interpolate', '$timeout', 'throttle', 'playerDefaults',
+  function ($rootScope, $interpolate, $timeout, throttle, playerDefaults) {
 
     var playerMethods = {
       /**
        * @usage load([audioElement], [autoplayNext]);
        *
        * @param  {audioElement Obj} audioElement a single audioElement, may contain multiple <source>(s)
-       * @param  {boolean} autoplayNext flag to autostart loaded element
+       * @param  {boolean} autoplayNext: flag to autostart loaded element
        */
       load: function (audioElement, autoplayNext) {
         if (typeof audioElement === 'boolean') {
@@ -41,6 +66,17 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
             self.$element.unbind('canplaythrough');
           });
         }
+      },
+      /**
+       * resets the player (clear the <source>s) and reloads the playlist
+       *
+       * @usage reset([autoplayNext]);
+       * @param  {boolean} autoplayNext: flag to autoplay once resetted
+       */
+      reset: function (autoplayNext) {
+        angular.extend(this, playerDefaults);
+        this.$clearAudioList();
+        this.load(this.$playlist, autoplayNext);
       },
       /**
        * @usage play([index])
@@ -220,12 +256,6 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
         $audioEl: element[0],
         $playlist: undefined,
 
-        // general properties
-        playing: false,
-        ended: undefined,
-        currentTrack: 0,
-        tracks: 0,
-
         // <audio> properties
         /*
         volume: element[0].volume,
@@ -239,15 +269,10 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
         seekable: element[0].seekable,
         */
 
-        // formatted properties
-        formatDuration: '00:00',
-        formatTime: '00:00',
-        loadPercent: 0
-
         // aliases
         // WARNING ALIAS REMOVED!!!
         // position: element[0].currentTime
-      }, playerMethods);
+      }, playerDefaults, playerMethods);
       audioScope.$unbindListeners = bindListeners(audioScope, element);
       return audioScope;
     };
@@ -272,7 +297,10 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
          *   If it is ->
          *     Assign to it the new tracknumber
          *   Else ->
-         *     Pause the player, and get the new Playlist
+         *     If the new Playlist has some song ->
+         *       Pause the player, and get the new Playlist
+         *     Else ->
+         *       Reset the player, and await for orders
          *
          * Else (if the player hasn't started yet)
          *   Just replace the <src> tags inside the <audio>
@@ -300,6 +328,8 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
                 player.load();
                 player.tracks = playlistNew.length;
               });
+            } else { // the new playlist has no elements, clear actual
+              player.reset();
             }
           }
         } else if (playlistNew.length) {
@@ -332,16 +362,8 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
         }
         if (audioName !== undefined) { scope[audioName] = player; }
 
-        /**
-         * Internet Explorer does not like custom tags appended to an <audio> element
-         * Usage with IE:
-         * <ANY audio-player autoplay=""
-         */
-        if (element[0].tagName === 'AUDIO' && /MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
-          // return $log.error('Internet Explorer does not support additional tags on <audio> elements. Use <div audio-player> instead.');
-        }
         if (element[0].tagName !== 'AUDIO') {
-          return $log.error('audioPlayer directive works only when attached to an <audio> type tag');
+          return new Error('audioPlayer directive works only when attached to an <audio> type tag');
         }
         var audioElement = [],
             sourceElements = element.find('source');
