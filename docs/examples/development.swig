@@ -9,9 +9,7 @@
 
 {% block content %}
 {% raw %}
-<audio controls audio-player="audioPlayer" playlist="audioPlaylist">
-  <source src="http://incompetech.com/music/royalty-free/mp3-royaltyfree/Happy%20Bee.mp3" type="audio/mp3">
-</audio>
+<audio controls audio-player="audioPlayer" playlist="audioPlaylist"></audio>
 <div class="audio-control">
   <div class="btn" ng-click="audioPlayer.play()">
     <span>Simple Play</span>

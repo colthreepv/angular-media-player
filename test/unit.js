@@ -23,7 +23,7 @@ describe('unit tests: scopes', function () {
 
 });
 
-describe('unit tests: controllers behaviour', function () {
+describe('unit tests: controller behaviour', function () {
   beforeEach(module('audioPlayer'));
 
   it('should propagate rootScope changes to audioPlayer', inject(function ($compile, $rootScope) {
@@ -41,14 +41,16 @@ describe('unit tests: controllers behaviour', function () {
     expect(sourceElement).to.have.length(1);
   }));
 
-  it.skip('should remove <source> element if they get removed from playlist', inject(function ($compile, $rootScope) {
+  it('should remove <source> element if they get removed from playlist', inject(function ($compile, $rootScope) {
     $rootScope.testplaylist = [{
       src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg',
       media: 'audio/ogg'
     }];
     var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
+    dump(element);
     var sourceElement = element.find('source');
-    expect(sourceElement).to.be.a('array');
+    dump(sourceElement);
+    // expect(sourceElement).to.be.a('array');
     expect(sourceElement).to.have.length(1);
     // remove the Never Gonna Give you up
     $rootScope.testplaylist.splice(0, 1);
