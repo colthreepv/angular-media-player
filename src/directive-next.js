@@ -284,7 +284,8 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
         var currentTrack,
             newTrackNum = null;
 
-        // TODO: needs testing !!!!
+        // on every playlist change, it refreshes the reference, safer/shorter approach
+        // than using multiple ifs and refresh only if it changed; there's no benefit in that
         player.$attachPlaylist(playlistNew);
         if (playlistNew === undefined && playlistOld !== undefined) {
           return player.pause();
@@ -332,12 +333,13 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
               player.reset();
             }
           }
-        } else if (playlistNew.length) {
+        } else if (playlistNew.length) { // new playlist has elements, load them
           player.$clearAudioList();
           player.$addAudioList(playlistNew[0]);
-          // console.dir(player.$element.contents().eq(0)[0]);
           player.load();
           player.tracks = playlistNew.length;
+        } else { // new playlist has no elements, clear actual
+          player.reset();
         }
       };
     }
@@ -355,10 +357,12 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
 
         var player = new AudioPlayer(element), playlist = scope[playlistName];
         // create data-structures in the father Scope
-        if (playlistName !== undefined && scope[playlistName] === undefined) {
-          playlist = scope[playlistName] = [];
+        if (playlistName === undefined) {
+          playlist = []; // local playlist gets defined as new
+        } else if (scope[playlistName] === undefined) {
+          playlist = scope[playlistName] = []; // define playlist on father scope
         } else {
-          playlist = [];
+          playlist = scope[playlistName];
         }
         if (audioName !== undefined) { scope[audioName] = player; }
 
@@ -368,12 +372,17 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
         var audioElement = [],
             sourceElements = element.find('source');
 
-        // Create a single playlist element from <source> tag(s).
-        angular.forEach(sourceElements, function (sourceElement) {
-          audioElement.push({ src: sourceElement.src, type: sourceElement.type, media: sourceElement.media });
-        });
-        // Put audioElement as first element in the playlist
-        if (audioElement.length) { playlist.unshift(audioElement); }
+        // create a single playlist element from <source> tag(s).
+        // if the <source> tag is one, use object notation...
+        if (sourceElements.length === 1) {
+          playlist.unshift({ src: sourceElements[0].src, type: sourceElements[0].type, media: sourceElements[0].media });
+        } else if (sourceElements.length > 1) { // otherwise use array notation
+          angular.forEach(sourceElements, function (sourceElement) {
+            audioElement.push({ src: sourceElement.src, type: sourceElement.type, media: sourceElement.media });
+          });
+          // put audioElement as first element in the playlist
+          playlist.unshift(audioElement);
+        }
 
         /**
          * If the user wants to keep track of the playlist changes
@@ -381,10 +390,13 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
          *
          * Otherwise: it will be created an empty playlist and attached to the player.
          */
-        if (playlistName !== undefined) {
-          scope.$watch(playlistName, playlistWatch(player), true);
+        if (playlistName === undefined) {
+          player.$attachPlaylist(playlist); // empty playlist case
+        } else if (playlist.length) {
+          playlistWatch(player)(playlist, undefined, scope); // playlist already populated gets bootstrapped
+          scope.$watch(playlistName, playlistWatch(player), true); // then watch gets applied
         } else {
-          player.$attachPlaylist(playlist);
+          scope.$watch(playlistName, playlistWatch(player), true); // playlist empty, only watch
         }
 
         scope.$on('$destroy', player.$destroy);

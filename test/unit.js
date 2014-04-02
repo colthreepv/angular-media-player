@@ -1,4 +1,4 @@
-/* jshint -W030 */
+/* jshint -W030, -W043 */
 describe('unit tests: scopes', function () {
   beforeEach(module('audioPlayer'));
 
@@ -40,27 +40,56 @@ describe('unit tests: controller behaviour', function () {
     var sourceElement = element.find('source');
     expect(sourceElement).to.have.length(1);
   }));
-
+  it('should handle playlist element modification', inject(function ($compile, $rootScope) {
+    $rootScope.testplaylist = [{
+      src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg',
+      media: 'audio/ogg'
+    }];
+    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
+    var sourceElement = element.find('source');
+    expect(sourceElement).to.have.length(1);
+    expect(sourceElement.attr('src')).to.equal($rootScope.testplaylist[0].src);
+    // replace Rick Astley's song with something less cool
+    $rootScope.testplaylist[0].src = 'http://upload.wikimedia.org/wikipedia/en/b/be/My_Name_Is.ogg';
+    $rootScope.$digest();
+    sourceElement = element.find('source');
+    expect(sourceElement).to.have.length(1);
+    expect(sourceElement.attr('src')).to.equal($rootScope.testplaylist[0].src);
+  }));
   it('should remove <source> element if they get removed from playlist', inject(function ($compile, $rootScope) {
     $rootScope.testplaylist = [{
       src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg',
       media: 'audio/ogg'
     }];
     var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
-    dump(element);
     var sourceElement = element.find('source');
-    dump(sourceElement);
-    // expect(sourceElement).to.be.a('array');
     expect(sourceElement).to.have.length(1);
+    expect(sourceElement.attr('src')).to.equal($rootScope.testplaylist[0].src);
     // remove the Never Gonna Give you up
     $rootScope.testplaylist.splice(0, 1);
     $rootScope.$digest();
     sourceElement = element.find('source');
     expect(sourceElement).to.have.length(0);
   }));
-
-  it.skip('should read an already existing <source> tag, and put it in the playlist', inject());
-  it.skip('should handle playlist element modification ??? NOT SURE', inject());
+  it('should read existing <source> tags, and put it in the playlist, with array notation', inject(function ($compile, $rootScope) {
+    $rootScope.testplaylist = [];
+    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"> \
+      <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" media="audio/ogg"> \
+      <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.mp3" media="audio/mp3"> \
+      </audio>')($rootScope);
+    expect($rootScope.testplaylist).to.have.length(1);
+    expect($rootScope.testplaylist[0]).to.have.length(2);
+    expect($rootScope.testplaylist[0][0].src).to.equal('http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg');
+    expect($rootScope.testplaylist[0][1].src).to.equal('http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.mp3');
+  }));
+  it('should read existing <source> tags, and put it in the playlist, with object notation', inject(function ($compile, $rootScope) {
+    $rootScope.testplaylist = [];
+    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"> \
+      <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" media="audio/ogg"> \
+      </audio>')($rootScope);
+    expect($rootScope.testplaylist).to.have.length(1);
+    expect($rootScope.testplaylist[0].src).to.equal('http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg');
+  }));
 
 });
 
