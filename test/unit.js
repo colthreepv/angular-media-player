@@ -93,8 +93,44 @@ describe('unit tests: controller behaviour', function () {
 
 });
 
-describe('unit tests: properties', function () {
-  it('should initialize audioPlayer scope with playing: false', function () {});
-});
+describe('browser tests: functionality', function () {
+  var audioIsReady = new Deferred();
+  var silentAudio = document.createElement('audio');
+  var silentSource = document.createElement('source');
+  silentSource.src = 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg';
+  silentSource.type = 'audio/ogg';
+  silentAudio.addEventListener('canplaythrough', function () { audioIsReady.resolve(); });
+  silentAudio.appendChild(silentSource);
+  document.body.appendChild(silentAudio);
 
-describe('unit tests: methods', function () {});
+  before(function (callback) {
+    audioIsReady.done(callback);
+  });
+  beforeEach(module('audioPlayer'));
+
+  it('should load a single file when calling load()', function (done) {
+    inject(function ($compile, $rootScope, $timeout) {
+      var element = $compile('<audio audio-player="testplayer"></audio>')($rootScope);
+      angular.element(document.body).append(element);
+      expect($rootScope.testplayer).to.be.an('object');
+      $rootScope.testplayer.load({ src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' });
+      setTimeout(function () {
+        expect($rootScope.testplayer.duration).to.be.above(1);
+        done();
+      }, 10);
+    });
+  });
+  it('should start playing when calling play()', function (done) {
+    setTimeout(done, 500);
+  });
+  it.skip('should stop playing when calling stop()', function () {});
+  it.skip('should pause playing when calling pause()', function () {});
+  it.skip('should start or stop playing when calling playPause()', function () {});
+  it.skip('should support playing a specific index calling play(index)', function () {});
+  it.skip('should autoplay the next file when calling next(), during playback', function () {});
+  ['next, prev'].forEach(function (methodName) {
+    [true, false].forEach(function (booleanValue) {
+      it.skip('should force autoplay to ' + booleanValue + ' when calling ' + methodName + '(' + booleanValue + ')', function () {});
+    });
+  });
+});

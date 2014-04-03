@@ -19,19 +19,6 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
   currentTrack: 0,
   tracks: 0,
 
-  // <audio> properties
-  /*
-  volume: element[0].volume,
-  muted: element[0].muted,
-  duration: element[0].duration,
-  currentTime: element[0].currentTime,
-
-  // TimeRanges structures
-  buffered: element[0].buffered,
-  played: element[0].played,
-  seekable: element[0].seekable,
-  */
-
   // formatted properties
   formatDuration: '00:00',
   formatTime: '00:00',
@@ -183,19 +170,19 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
         } else {
           this.$playlist = pl;
         }
-        // unshift first playlist item and put it in the <audio> tag ???
       }
     };
 
     /**
      * Binding function that gives life to AngularJS scope
-     * @param  {Scope}  au       AudioPlayer Scope
-     * @param  {jQlite} element  <audio> element
+     * @param  {Scope}  au        AudioPlayer Scope
+     * @param  {HTMLMediaElement} HTML5 element
+     * @param  {jQlite} element   <audio> element
      * @return {function}
      *
      * Returns an unbinding function
      */
-    var bindListeners = function (au, element) {
+    var bindListeners = function (au, al, element) {
       var listeners = {
         playing: function () {
           au.$apply(function (scope) {
@@ -218,25 +205,31 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
         },
         timeupdate: throttle(1000, false, function () {
           au.$apply(function (scope) {
-            scope.currentTime = scope.position = scope.$audioEl.currentTime;
+            scope.currentTime = scope.position = al.currentTime;
             scope.formatTime = scope.$formatTime(scope.currentTime);
           });
         }),
         loadedmetadata: function () {
           au.$apply(function (scope) {
             if (!scope.currentTrack) { scope.currentTrack++; } // This is triggered *ONLY* the first time a <source> gets loaded.
-            scope.duration = scope.$audioEl.duration;
+            scope.duration = al.duration;
             scope.formatDuration = scope.$formatTime(scope.duration);
-            scope.loadPercent = parseInt((scope.$audioEl.buffered.end(scope.$audioEl.buffered.length - 1) / scope.duration) * 100, 10);
+            scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
           });
         },
         progress: function () {
           // WHY THIS?
           if (au.$audioEl.buffered.length) {
             au.$apply(function (scope) {
-              scope.loadPercent = parseInt((scope.$audioEl.buffered.end(scope.$audioEl.buffered.length - 1) / scope.duration) * 100, 10);
+              scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
             });
           }
+        },
+        volumechange: function () { // Sent when the audio volume changes (both when the volume is set and when the muted attribute is changed).
+          au.$apply(function (scope) {
+            scope.volume = al.volume;
+            scope.muted = al.muted;
+          });
         }
       };
 
@@ -256,24 +249,25 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
         $audioEl: element[0],
         $playlist: undefined,
 
+        // bind TimeRanges structures to actual AudioElement
+        buffered: element[0].buffered,
+        played: element[0].played,
+        seekable: element[0].seekable,
+
         // <audio> properties
-        /*
+        /* USELESS??? :))
         volume: element[0].volume,
         muted: element[0].muted,
         duration: element[0].duration,
         currentTime: element[0].currentTime,
-
-        // TimeRanges structures
-        buffered: element[0].buffered,
-        played: element[0].played,
-        seekable: element[0].seekable,
         */
+
 
         // aliases
         // WARNING ALIAS REMOVED!!!
         // position: element[0].currentTime
       }, playerDefaults, playerMethods);
-      audioScope.$unbindListeners = bindListeners(audioScope, element);
+      audioScope.$unbindListeners = bindListeners(audioScope, element[0], element);
       return audioScope;
     };
 
