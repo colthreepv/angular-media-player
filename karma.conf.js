@@ -14,8 +14,8 @@ module.exports = function (config) {
       'src/helpers.js',
       'src/directive-next.js',
       // tests
-      'test/deferred.js',
-      'test/*.js'
+      'libs/rsvp/rsvp.js',
+      'test/unit.js'
     ],
     // list of files to exclude
     exclude: [],
