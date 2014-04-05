@@ -97,8 +97,7 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
         this.$audioEl.pause();
       },
       stop: function () {
-        this.$audioEl.pause();
-        this.$audioEl.currentTime = 0;
+        this.reset();
       },
       toggleMute: function () {
         this.muted = this.$audioEl.muted = !this.$audioEl.muted;
@@ -110,7 +109,7 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
           self.pause();
           $timeout(function () {
             self.$clearAudioList();
-            self.$addAudioList(self._playlist[self.currentTrack]);
+            self.$addAudioList(self.$playlist[self.currentTrack]);
             self.load(wasPlaying); // setup autoplay here.
             self.currentTrack++;
           });
@@ -123,7 +122,7 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
           self.pause();
           $timeout(function () {
             self.$clearAudioList();
-            self.$addAudioList(self._playlist[self.currentTrack - 2]);
+            self.$addAudioList(self.$playlist[self.currentTrack - 2]);
             self.load(wasPlaying); // setup autoplay here.
             self.currentTrack--;
           });
@@ -218,7 +217,6 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
           });
         },
         progress: function () {
-          // WHY THIS?
           if (au.$audioEl.buffered.length) {
             au.$apply(function (scope) {
               scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
