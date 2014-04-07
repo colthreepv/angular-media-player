@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - "0.10"
 
+addons:
+  firefox: "23.0"
+
 before_install:
   - "npm install -g bower"
   - "bower install"
