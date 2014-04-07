@@ -14,7 +14,6 @@ module.exports = function (config) {
       'src/helpers.js',
       'src/directive.js',
       // tests
-      'libs/rsvp/rsvp.js',
       'test/unit.js',
       'test/playback.js',
       'test/video.js'
@@ -41,7 +40,7 @@ module.exports = function (config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Firefox'],
+    browsers: ['Firefox', 'Chrome'],
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 60000,
     // Continuous Integration mode

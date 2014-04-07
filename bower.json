@@ -19,7 +19,6 @@
     "angular-mocks": "~1.2.0",
     "angular-route": "~1.2.0",
     "angular-animate": "~1.2.0",
-    "angular-dragdrop": "mrgamer/angular-dragdrop#master",
-    "rsvp": "~3.0.6"
+    "angular-dragdrop": "mrgamer/angular-dragdrop#master"
   }
 }

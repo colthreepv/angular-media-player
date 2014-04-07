@@ -45,7 +45,6 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           this.$clearSourceList();
           this.$addSourceList(mediaElement);
         }
-        // this.$emit(this.name + ':load', autoplayNext);
         this.$domEl.load();
         this.ended = undefined;
         if (autoplayNext) {
@@ -223,7 +222,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         },
         timeupdate: throttle(1000, false, function () {
           au.$apply(function (scope) {
-            scope.currentTime = scope.position = al.currentTime;
+            scope.currentTime = al.currentTime;
             scope.formatTime = scope.$formatTime(scope.currentTime);
           });
         }),
@@ -295,10 +294,6 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         buffered: element[0].buffered,
         played: element[0].played,
         seekable: element[0].seekable,
-
-        // aliases
-        // WARNING ALIAS REMOVED!!!
-        // position: element[0].currentTime
       }, playerDefaults, playerMethods);
       bindListeners(mediaScope, element[0], element);
       return mediaScope;
