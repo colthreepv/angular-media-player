@@ -1,22 +1,22 @@
 /* jshint -W030, -W043 */
 describe('unit tests: scope creation', function () {
-  beforeEach(module('audioPlayer'));
+  beforeEach(module('mediaPlayer'));
 
   it('should create a scope inside the scope', inject(function ($compile, $rootScope) {
-    var element = $compile('<audio audio-player="testplayer"></audio>')($rootScope);
+    var element = $compile('<audio media-player="testplayer"></audio>')($rootScope);
     expect($rootScope.testplayer).to.exist;
     expect($rootScope.testplayer).to.be.an('object');
   }));
 
   it('should create a scope if playlist attribute is declared', inject(function ($compile, $rootScope) {
-    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
+    var element = $compile('<audio media-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
     expect($rootScope.testplaylist).to.exist;
     expect($rootScope.testplaylist).to.be.an('array');
     expect($rootScope.testplaylist).to.have.length(0);
   }));
 
   it('should create a local playlist even if the attribute is not declared', inject(function ($compile, $rootScope) {
-    var element = $compile('<audio audio-player="testplayer"></audio>')($rootScope);
+    var element = $compile('<audio media-player="testplayer"></audio>')($rootScope);
     expect($rootScope.testplayer.$playlist).to.be.an('array');
     expect($rootScope.testplayer.$playlist).to.have.length(0);
   }));
@@ -24,11 +24,11 @@ describe('unit tests: scope creation', function () {
 });
 
 describe('unit tests: interaction between scopes', function () {
-  beforeEach(module('audioPlayer'));
+  beforeEach(module('mediaPlayer'));
 
-  it('should propagate rootScope changes to audioPlayer', inject(function ($compile, $rootScope) {
+  it('should propagate rootScope changes to mediaPlayer', inject(function ($compile, $rootScope) {
     $rootScope.testplaylist = [];
-    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
+    var element = $compile('<audio media-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
     expect($rootScope.testplayer).to.be.an('object');
     expect($rootScope.testplaylist).to.be.an('array');
     $rootScope.testplaylist.push({
@@ -45,7 +45,7 @@ describe('unit tests: interaction between scopes', function () {
       src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg',
       media: 'audio/ogg'
     }];
-    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
+    var element = $compile('<audio media-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
     var sourceElement = element.find('source');
     expect(sourceElement).to.have.length(1);
     expect(sourceElement.attr('src')).to.equal($rootScope.testplaylist[0].src);
@@ -61,7 +61,7 @@ describe('unit tests: interaction between scopes', function () {
       src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg',
       media: 'audio/ogg'
     }];
-    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
+    var element = $compile('<audio media-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
     var sourceElement = element.find('source');
     expect(sourceElement).to.have.length(1);
     expect(sourceElement.attr('src')).to.equal($rootScope.testplaylist[0].src);
@@ -73,7 +73,7 @@ describe('unit tests: interaction between scopes', function () {
   }));
   it('should read existing <source> tags, and put it in the playlist, with array notation', inject(function ($compile, $rootScope) {
     $rootScope.testplaylist = [];
-    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"> \
+    var element = $compile('<audio media-player="testplayer" playlist="testplaylist"> \
       <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" media="audio/ogg"> \
       <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.mp3" media="audio/mp3"> \
       </audio>')($rootScope);
@@ -84,7 +84,7 @@ describe('unit tests: interaction between scopes', function () {
   }));
   it('should read existing <source> tags, and put it in the playlist, with object notation', inject(function ($compile, $rootScope) {
     $rootScope.testplaylist = [];
-    var element = $compile('<audio audio-player="testplayer" playlist="testplaylist"> \
+    var element = $compile('<audio media-player="testplayer" playlist="testplaylist"> \
       <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" media="audio/ogg"> \
       </audio>')($rootScope);
     expect($rootScope.testplaylist).to.have.length(1);

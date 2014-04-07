@@ -12,11 +12,12 @@ module.exports = function (config) {
       'libs/angular-mocks/angular-mocks.js',
       // audioPlayer
       'src/helpers.js',
-      'src/directive-next.js',
+      'src/directive.js',
       // tests
       'libs/rsvp/rsvp.js',
       'test/unit.js',
-      'test/playback.js'
+      'test/playback.js',
+      'test/video.js'
     ],
     // list of files to exclude
     exclude: [],

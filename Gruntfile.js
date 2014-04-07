@@ -41,7 +41,7 @@ module.exports = function (grunt) {
         dest: 'dist/angular-audio-player.js'
       },
       devlib: {
-        src: ['src/directive-next.js', 'src/helpers.js'],
+        src: ['src/directive.js', 'src/helpers.js'],
         dest: 'www/libs/angular-audio-player.js'
       }
     },

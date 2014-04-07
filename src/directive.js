@@ -1,139 +1,90 @@
 /**
- * USEFUL LINKS:
+ * MDN references for hackers:
+ * ===========================
  * Media events on <audio> and <video> tags:
  * https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
  * Properties and Methods:
  * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+ * Internet Exploder version:
+ * http://msdn.microsoft.com/en-us/library/ff975061(v=vs.85).aspx
  *
  * Understanding TimeRanges objects:
  * http://html5doctor.com/html5-audio-the-state-of-play/
- *
- * Wonderful documentation from MDN, really.
  */
-angular.module('audioPlayer', [])
+angular.module('mediaPlayer', ['mediaPlayer.helpers'])
+.constant('playerDefaults', {
+  // general properties
+  currentTrack: 0,
+  ended: undefined,
+  network: undefined,
+  playing: false,
+  seeking: false,
+  tracks: 0,
 
-.directive('audioPlayer', ['$rootScope', '$log', '$interpolate', '$timeout', 'throttle',
-  function ($rootScope, $log, $interpolate, $timeout, throttle) {
+  // formatted properties
+  formatDuration: '00:00',
+  formatTime: '00:00',
+  loadPercent: 0
+})
 
-    /**
-     * @usage: new AudioPlayer(element, scope, [playlist], [options]);
-     *
-     * @param {jqLite/jQuery element} element the DOM element the directive is attached to
-     * @param {angular Scope} [scope] scope in which call $apply, it could even be $rootScope (untested!)
-     * @param {Array} playlist an Array made of audioElements (refer to documentation)
-     */
-    var AudioPlayer = function (element, scope, playlist, options) {
-      if (!(this instanceof AudioPlayer)) { return new AudioPlayer(element, scope, playlist, options); }
+.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'throttle', 'playerDefaults',
+  function ($rootScope, $interpolate, $timeout, throttle, playerDefaults) {
 
-      options = options || {};
-      playlist = playlist || [];
-
-      angular.extend(this, {
-        _element: element,
-        _audioTag: element[0],
-        _scope: scope,
-        _playlist: playlist,
-
-        // general properties
-        name: options.name || 'audioplayer',
-        playing: false,
-        currentTrack: 0,
-        tracks: playlist.length,
-
-        // <audio> properties
-        volume: element[0].volume,
-        muted: element[0].muted,
-        duration: element[0].duration,
-        currentTime: element[0].currentTime,
-
-        // TimeRanges structures
-        buffered: element[0].buffered,
-        played: element[0].played,
-        seekable: element[0].seekable,
-
-        // formatted properties
-        formatDuration: '',
-        formatTime: '',
-        loadPercent: 0,
-
-        // aliases
-        position: element[0].currentTime
-      });
-
-      // bind listeners on <audio> events, will be broadcasted on specific `scope`
-      // the function returs a de-registering function, that will be bound on _unbindListeners
-      this._unbindListeners = this._bindListeners(scope);
-    };
-
-    var playerProperties = {
-      _element: element,
-      _audioTag: element[0],
-      _scope: scope,
-      _playlist: playlist,
-
-      // general properties
-      name: options.name || 'audioplayer',
-      playing: false,
-      currentTrack: 0,
-      tracks: playlist.length,
-
-      // <audio> properties
-      volume: element[0].volume,
-      muted: element[0].muted,
-      duration: element[0].duration,
-      currentTime: element[0].currentTime,
-
-      // TimeRanges structures
-      buffered: element[0].buffered,
-      played: element[0].played,
-      seekable: element[0].seekable,
-
-      // formatted properties
-      formatDuration: '',
-      formatTime: '',
-      loadPercent: 0,
-
-      // aliases
-      position: element[0].currentTime
-    };
-
-    var playerMethods = AudioPlayer.prototype = {
+    var playerMethods = {
       /**
-       * @usage load([audioElement], [autoplayNext]);
+       * @usage load([mediaElement], [autoplayNext]);
        *
-       * @param  {audioElement Obj} audioElement a single audioElement, may contain multiple <source>(s)
-       * @param  {boolean} autoplayNext flag to autostart loaded element
+       * @param  {mediaElement Obj} mediaElement a single mediaElement, may contain multiple <source>(s)
+       * @param  {boolean} autoplayNext: flag to autostart loaded element
        */
-      load: function (audioElement, autoplayNext) {
-        if (typeof audioElement === 'boolean') {
-          autoplayNext = audioElement;
-          audioElement = null;
-        } else if (typeof audioElement === 'object') {
-          this._clearAudioList();
-          this._addAudioList(audioElement);
+      load: function (mediaElement, autoplayNext) {
+        if (typeof mediaElement === 'boolean') {
+          autoplayNext = mediaElement;
+          mediaElement = null;
+        } else if (typeof mediaElement === 'object') {
+          this.$clearSourceList();
+          this.$addSourceList(mediaElement);
         }
-        this._scope.$emit(this.name + ':load', autoplayNext);
-        this._audioTag.load();
+        // this.$emit(this.name + ':load', autoplayNext);
+        this.$domEl.load();
+        this.ended = undefined;
         if (autoplayNext) {
           var self = this;
-          self._element.bind('canplaythrough', function (evt) {
+          self.$element.on('canplaythrough', function (evt) {
             self.play();
-            self._element.unbind('canplaythrough');
+            self.$element.off('canplaythrough');
           });
         }
+      },
+      /**
+       * resets the player (clear the <source>s) and reloads the playlist
+       *
+       * @usage reset([autoplayNext]);
+       * @param  {boolean} autoplayNext: flag to autoplay once resetted
+       */
+      reset: function (autoplayNext) {
+        angular.extend(this, playerDefaults);
+        this.$clearSourceList();
+        this.load(this.$playlist, autoplayNext);
       },
       /**
        * @usage play([index])
        * @param  {integer} index playlist index (0...n), to start playing from
        */
       play: function (index) {
-        if (this._playlist.length > index) {
+        if (this.$playlist.length > index) {
           this.currentTrack = index + 1;
-          return this.load(this._playlist[index], true);
+          return this.load(this.$playlist[index], true);
         }
-        // readyState = HAVE_NOTHING (0) means there's nothing into the <audio> tag
-        if (!this.currentTrack && this._audioTag.readyState) { this.currentTrack++; }
-        this._audioTag.play();
+        // readyState = HAVE_NOTHING (0) means there's nothing into the <audio>/<video> tag
+        if (!this.currentTrack && this.$domEl.readyState) { this.currentTrack++; }
+
+        // In case the stream is completed, reboot it with a load()
+        if (this.ended) {
+          this.load(true);
+        } else {
+          this.$domEl.play();
+        }
       },
       playPause: function (index) {
         if (typeof index === 'number' && index + 1 !== this.currentTrack) {
@@ -145,14 +96,13 @@ angular.module('audioPlayer', [])
         }
       },
       pause: function () {
-        this._audioTag.pause();
+        this.$domEl.pause();
       },
       stop: function () {
-          this._audioTag.pause();
-          this._audioTag.currentTime = 0;
+        this.reset();
       },
       toggleMute: function () {
-        this.muted = this._audioTag.muted = !this._audioTag.muted;
+        this.muted = this.$domEl.muted = !this.$domEl.muted;
       },
       next: function (autoplay) {
         var self = this;
@@ -160,8 +110,8 @@ angular.module('audioPlayer', [])
           var wasPlaying = autoplay || self.playing;
           self.pause();
           $timeout(function () {
-            self._clearAudioList();
-            self._addAudioList(self._playlist[self.currentTrack]);
+            self.$clearSourceList();
+            self.$addSourceList(self.$playlist[self.currentTrack]);
             self.load(wasPlaying); // setup autoplay here.
             self.currentTrack++;
           });
@@ -173,29 +123,54 @@ angular.module('audioPlayer', [])
           var wasPlaying = autoplay || self.playing;
           self.pause();
           $timeout(function () {
-            self._clearAudioList();
-            self._addAudioList(self._playlist[self.currentTrack - 2]);
+            self.$clearSourceList();
+            self.$addSourceList(self.$playlist[self.currentTrack - 2]);
             self.load(wasPlaying); // setup autoplay here.
             self.currentTrack--;
           });
         }
       },
-      _addAudioList: function (audioList) {
+      setPlaybackRate: function (value) {
+        this.$domEl.playbackRate = value;
+      },
+      setVolume: function (value) {
+        this.$domEl.volume = value;
+      },
+      /**
+       * binds a specific event directly to the element
+       * @param  {string}   type   event name
+       * @param  {function} fn     callback
+       * @return {function}        unbind function, call it in order to remove the listener
+       */
+      on: function (type, fn) {
+        return this.$element.on(type, fn);
+      },
+      one: function (type, fn) {
+        return this.$element.one(type, fn);
+      },
+      $addSourceList: function (sourceList) {
         var self = this;
-        if (angular.isArray(audioList)) {
-          angular.forEach(audioList, function (singleElement, index) {
-            var sourceElem = angular.element($interpolate('<source src="{{ src }}" type="{{ type }}" media="{{ media }}">')(singleElement));
-            self._element.append(sourceElem);
+        if (angular.isArray(sourceList)) {
+          angular.forEach(sourceList, function (singleElement, index) {
+            var sourceElem = document.createElement('SOURCE');
+            angular.forEach(singleElement, function (value, key) {
+              sourceElem.setAttribute(key, value);
+            });
+            self.$element.append(sourceElem);
           });
-        } else if (angular.isObject(audioList)) {
-          var sourceElem = angular.element($interpolate('<source src="{{ src }}" type="{{ type }}" media="{{ media }}">')(audioList));
-          self._element.append(sourceElem);
+        } else if (angular.isObject(sourceList)) {
+          var sourceElem = document.createElement('SOURCE');
+          angular.forEach(sourceList, function (value, key) { sourceElem.setAttribute(key, value); });
+          self.$element.append(sourceElem);
         }
       },
-      _clearAudioList: function () {
-        this._element.contents().remove();
+      $clearSourceList: function () {
+        this.$element.contents().remove();
       },
-      _formatTime: function (seconds) {
+      $formatTime: function (seconds) {
+        if (seconds === Infinity) {
+          return '∞'; // If the data is streaming
+        }
         var hours = parseInt(seconds / 3600, 10) % 24,
             minutes = parseInt(seconds / 60, 10) % 60,
             secs = parseInt(seconds % 60, 10),
@@ -208,187 +183,252 @@ angular.module('audioPlayer', [])
         }
         return result;
       },
-      _bindListeners: function (scope) {
-        var self = this,
-          element = this._element,
-          updateTime = throttle(1000, false, function (evt) {
-            scope.$apply(function () {
-              self.currentTime = self.position = self._audioTag.currentTime;
-              self.formatTime = self._formatTime(self.currentTime);
-            });
-          }),
-          updatePlaying = function (isPlaying) {
-            return function (evt) {
-              scope.$apply(function () {
-                self.playing = isPlaying;
-              });
-              if (isPlaying) {
-                scope.$emit(self.name + ':play', self.currentTrack - 1);
-              } else {
-                scope.$emit(self.name + ':pause');
-              }
-            };
-          },
-          setDuration = function (evt) {
-            scope.$apply(function () {
-              if (!self.currentTrack) { self.currentTrack++; } // This is triggered *ONLY* the first time a <source> gets loaded.
-              self.duration = self._audioTag.duration;
-              self.formatDuration = self._formatTime(self.duration);
-              self.loadPercent = parseInt((self._audioTag.buffered.end(self._audioTag.buffered.length - 1) / self.duration) * 100, 10);
-            });
-          },
-          playNext = function (evt) {
-            self.next(true);
-          },
-          updateProgress = function (evt) {
-            if (self._audioTag.buffered.length) {
-              scope.$apply(function () {
-                self.loadPercent = parseInt((self._audioTag.buffered.end(self._audioTag.buffered.length - 1) / self.duration) * 100, 10);
-              });
-            }
-          };
-
-        element.bind('playing', updatePlaying(true));
-        element.bind('pause', updatePlaying(false));
-        element.bind('ended', playNext);
-        element.bind('timeupdate', updateTime);
-        element.bind('loadedmetadata', setDuration);
-        element.bind('progress', updateProgress);
-
-        return function () {
-          element.unbind('playing');
-          element.unbind('pause');
-          element.unbind('ended');
-          element.unbind('timeupdate');
-          element.unbind('loadedmetadata');
-          element.unbind('progress');
-        };
+      $attachPlaylist: function (pl) {
+        if (pl === undefined || pl === null) {
+          this.playlist = [];
+        } else {
+          this.$playlist = pl;
+        }
       }
     };
 
-    var AudioPlayerNext = function (element) {
-      return angular.extend($rootScope.$new(true), {
+    /**
+     * Binding function that gives life to AngularJS scope
+     * @param  {Scope}  au        Player Scope
+     * @param  {HTMLMediaElement} HTML5 element
+     * @param  {jQlite} element   <audio>/<video> element
+     * @return {function}
+     *
+     * Returns an unbinding function
+     */
+    var bindListeners = function (au, al, element) {
+      var listeners = {
+        playing: function () {
+          au.$apply(function (scope) {
+            scope.playing = true;
+            scope.ended = false;
+          });
+        },
+        pause: function () {
+          au.$apply(function (scope) { scope.playing = false; });
+        },
+        ended: function () {
+          if (au.currentTrack < au.tracks) {
+            au.next(true);
+          } else {
+            au.$apply(function (scope) {
+              scope.ended = true;
+              scope.playing = false; // IE9 does not throw 'pause' when file ends
+            });
+          }
+        },
+        timeupdate: throttle(1000, false, function () {
+          au.$apply(function (scope) {
+            scope.currentTime = scope.position = al.currentTime;
+            scope.formatTime = scope.$formatTime(scope.currentTime);
+          });
+        }),
+        loadedmetadata: function () {
+          au.$apply(function (scope) {
+            if (!scope.currentTrack) { scope.currentTrack++; } // This is triggered *ONLY* the first time a <source> gets loaded.
+            scope.duration = al.duration;
+            scope.formatDuration = scope.$formatTime(scope.duration);
+            scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
+          });
+        },
+        progress: function () {
+          if (au.$domEl.buffered.length) {
+            au.$apply(function (scope) {
+              scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
+              scope.network = 'progress';
+            });
+          }
+        },
+        volumechange: function () { // Sent when volume changes (both when the volume is set and when the muted attribute is changed).
+          au.$apply(function (scope) {
+            // scope.volume = Math.floor(al.volume * 100);
+            scope.volume = al.volume;
+            scope.muted = al.muted;
+          });
+        },
+        seeked: function () {
+          au.$apply(function (scope) {
+            scope.seeking = false;
+          });
+        },
+        seeking: function () {
+          au.$apply(function (scope) {
+            scope.seeking = true;
+          });
+        },
+        ratechange: function () {
+          au.$apply(function (scope) {
+            // scope.playbackRate = Math.floor(al.playbackRate * 100);
+            scope.playbackRate = al.playbackRate;
+          });
+        },
+        stalled: function () {
+          au.$apply(function (scope) {
+            scope.network = 'stalled';
+          });
+        },
+        suspend: function () {
+          au.$apply(function (scope) {
+            scope.network = 'suspend';
+          });
+        }
+      };
+
+      angular.forEach(listeners, function (f, listener) {
+        element.on(listener, f);
+      });
+    };
+
+    var MediaPlayer = function (element) {
+      var mediaScope = angular.extend($rootScope.$new(true), {
         $element: element,
-        $audioEl: undefined,
+        $domEl: element[0],
         $playlist: undefined,
 
-        // general properties
-        playing: false,
-        currentTrack: 0,
-        tracks: 0,
-
-        // <audio> properties
-        /*
-        volume: element[0].volume,
-        muted: element[0].muted,
-        duration: element[0].duration,
-        currentTime: element[0].currentTime,
-
-        // TimeRanges structures
+        // bind TimeRanges structures to actual MediaElement
         buffered: element[0].buffered,
         played: element[0].played,
         seekable: element[0].seekable,
 
-        // formatted properties
-        formatDuration: '',
-        formatTime: '',
-        loadPercent: 0,
-
         // aliases
-        position: element[0].currentTime */
-      }, playerMethods);
+        // WARNING ALIAS REMOVED!!!
+        // position: element[0].currentTime
+      }, playerDefaults, playerMethods);
+      bindListeners(mediaScope, element[0], element);
+      return mediaScope;
     };
+
+    // creates a watch function bound to the specific player
+    // optimizable: closures eats ram
+    function playlistWatch(player) {
+      return function (playlistNew, playlistOld, watchScope) {
+        var currentTrack,
+            newTrackNum = null;
+
+        // on every playlist change, it refreshes the reference, safer/shorter approach
+        // than using multiple ifs and refresh only if it changed; there's no benefit in that
+        player.$attachPlaylist(playlistNew);
+        if (playlistNew === undefined && playlistOld !== undefined) {
+          return player.pause();
+        }
+
+        /**
+         * Playlist update logic:
+         * If the player has started ->
+         *   Check if the playing track is in the new Playlist [EXAMPLE BELOW]
+         *   If it is ->
+         *     Assign to it the new tracknumber
+         *   Else ->
+         *     If the new Playlist has some song ->
+         *       Pause the player, and get the new Playlist
+         *     Else ->
+         *       Reset the player, and await for orders
+         *
+         * Else (if the player hasn't started yet)
+         *   Just replace the <src> tags
+         *
+         * Example
+         * playlist: [a,b,c], playing: c, trackNum: 2
+         * ----delay 5 sec-----
+         * playlist: [f,a,b,c], playing: c, trackNum: 3
+         *
+         */
+        if (player.currentTrack) {
+          currentTrack = playlistOld ? playlistOld[player.currentTrack - 1] : -1;
+          for (var i = 0; i < playlistNew.length; i++) {
+            if (angular.equals(playlistNew[i], currentTrack)) { newTrackNum = i; break; }
+          }
+          if (newTrackNum !== null) { // currentTrack it's still in the new playlist, update trackNumber
+            player.currentTrack = newTrackNum + 1;
+            player.tracks = playlistNew.length;
+          } else { // currentTrack has been removed.
+            player.pause();
+            if (playlistNew.length) { // if the new playlist has some elements, replace actual.
+              $timeout(function () { // need $timeout because the mediaTag needs a little time to launch the 'pause' event
+                player.$clearSourceList();
+                player.$addSourceList(playlistNew[0]);
+                player.load();
+                player.tracks = playlistNew.length;
+              });
+            } else { // the new playlist has no elements, clear actual
+              player.reset();
+            }
+          }
+        } else if (playlistNew.length) { // new playlist has elements, load them
+          player.$clearSourceList();
+          player.$addSourceList(playlistNew[0]);
+          player.load();
+          player.tracks = playlistNew.length;
+        } else { // new playlist has no elements, clear actual
+          player.reset();
+        }
+      };
+    }
 
     return {
-      scope: {
-        exposedPlayer: '=playerControl',
-        playlist: '=playlist'
-      },
+      /**
+       * The directive uses the Scope in which gets declared,
+       * so it can read/write it with ease.
+       * The only isolated Scope here gets created for the MediaPlayer.
+       */
+      scope: false,
       link: function (scope, element, attrs, ctrl) {
-        if (element[0].tagName !== 'AUDIO') {
-          return $log.error('audioPlayer directive works only when attached to an <audio> type tag');
+        var playlistName = attrs.playlist,
+            mediaName = attrs.mediaPlayer || attrs.playerControl;
+
+        var player = new MediaPlayer(element), playlist = scope[playlistName];
+        // create data-structures in the father Scope
+        if (playlistName === undefined) {
+          playlist = []; // local playlist gets defined as new
+        } else if (scope[playlistName] === undefined) {
+          playlist = scope[playlistName] = []; // define playlist on father scope
+        } else {
+          playlist = scope[playlistName];
         }
-        var audioElement = [],
-            sourceElements = element.find('source'),
-            playlist = scope.playlist || [];
+        if (mediaName !== undefined) { scope[mediaName] = player; }
 
-        // Create a single playlist element from <source> tag(s).
-        angular.forEach(sourceElements, function (sourceElement, index) {
-          audioElement.push({ src: sourceElement.src, type: sourceElement.type, media: sourceElement.media });
-        });
-        // Put audioElement as first element in the playlist
-        if (audioElement.length) { playlist.unshift(audioElement); }
+        if (element[0].tagName !== 'AUDIO' && element[0].tagName !== 'VIDEO') {
+          return new Error('player directive works only when attached to an <audio>/<video> type tag');
+        }
+        var mediaElement = [],
+            sourceElements = element.find('source');
 
-        scope.exposedPlayer = new AudioPlayer(element, scope, playlist);
-        // You can listen for 'ready' event to know when DOM compilation is done
-        scope.$emit(scope.exposedPlayer.name + ':ready', scope.exposedPlayer);
-
-        function watchFn(playlistNew, playlistOld, watchScope) {
-          var player = scope.exposedPlayer,
-              currentTrack,
-              newTrackNum = null;
-
-          if (playlistNew === undefined) {
-            if (playlistOld !== undefined) {
-              player.pause();
-              return $log.debug('playlist was deleted from scope, pausing and returning');
-            } else {
-              return $log.error('if you use playlist attribute, you need $scope.playlistVariable = []; in your code');
-            }
-          }
-
-          /**
-           * Playlist update logic:
-           * If the player has started ->
-           *   Check if the playing track is in the new Playlist [EXAMPLE BELOW]
-           *   If it is ->
-           *     Assign to it the new tracknumber
-           *   Else ->
-           *     Pause the player, and get the new Playlist
-           *
-           * Else (if the player hasn't started yet)
-           *   Just replace the <src> tags inside the <audio>
-           *
-           * Example
-           * playlist: [a,b,c], playing: c, trackNum: 2
-           * ----delay 5 sec-----
-           * playlist: [f,a,b,c], playing: c, trackNum: 3
-           *
-           */
-          if (player.currentTrack) {
-            currentTrack = playlistOld ? playlistOld[player.currentTrack - 1] : -1;
-            for (var i = 0; i < playlistNew.length; i++) {
-              if (angular.equals(playlistNew[i], currentTrack)) { newTrackNum = i; break; }
-            }
-            if (newTrackNum !== null) { // currentTrack it's still in the new playlist, update trackNumber
-              player.currentTrack = newTrackNum + 1;
-              player.tracks = playlistNew.length;
-            } else { // currentTrack has been removed.
-              player.pause();
-              if (playlistNew.length) { // if the new playlist has some elements, replace actual.
-                $timeout(function () { // need $timeout because the audioTag needs a little time to launch the 'pause' event
-                  player._clearAudioList();
-                  player._addAudioList(playlistNew[0]);
-                  player.load();
-                  player.tracks = playlistNew.length;
-                });
-              }
-            }
-          } else if (playlistNew.length) {
-            player._clearAudioList();
-            player._addAudioList(playlistNew[0]);
-            player.load();
-            player.tracks = playlistNew.length;
-          }
-
+        // create a single playlist element from <source> tag(s).
+        // if the <source> tag is one, use object notation...
+        if (sourceElements.length === 1) {
+          playlist.unshift({ src: sourceElements[0].src, type: sourceElements[0].type, media: sourceElements[0].media });
+        } else if (sourceElements.length > 1) { // otherwise use array notation
+          angular.forEach(sourceElements, function (sourceElement) {
+            mediaElement.push({ src: sourceElement.src, type: sourceElement.type, media: sourceElement.media });
+          });
+          // put mediaElement as first element in the playlist
+          playlist.unshift(mediaElement);
         }
 
-        scope.$watch('playlist', watchFn, true);
+        /**
+         * If the user wants to keep track of the playlist changes
+         * has to use data-playlist="variableName" in the <audio>/<video> tag
+         *
+         * Otherwise: it will be created an empty playlist and attached to the player.
+         */
+        if (playlistName === undefined) {
+          player.$attachPlaylist(playlist); // empty playlist case
+        } else if (playlist.length) {
+          playlistWatch(player)(playlist, undefined, scope); // playlist already populated gets bootstrapped
+          scope.$watch(playlistName, playlistWatch(player), true); // then watch gets applied
+        } else {
+          scope.$watch(playlistName, playlistWatch(player), true); // playlist empty, only watch
+        }
 
-        scope.$on('$destroy', function () {
-          scope.exposedPlayer._unbindListeners();
-        });
+        // player scope destructor
+        scope.$on('$destroy', player.$destroy);
       }
     };
+
   }]
 );
