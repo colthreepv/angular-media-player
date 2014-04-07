@@ -34,6 +34,7 @@ If you find something is missing from this list please take a couple of minutes 
   * I've already written it but... `<video>` tag support!
   * new property `network`
   * playback rate support
+  * seeking
   * test-driven: both unit tests and asynchronous tests with real audio/video files (requires internet working)
   * playlist handling is way more robust, and tested.
   * `mediaPlayer` is not created as an isolated scope, instead it **pollutes** the father scope. Watch out for name collisions.
@@ -42,6 +43,8 @@ If you find something is missing from this list please take a couple of minutes 
 
 The new documentation is on-going work, you can keep track of it being developed, but is not ready to be deployed yet.  
 And this time will be on `gh-pages`!
+
+More tests are coming.
 
 ## Getting Started
 ### [Examples here][examples]  
@@ -143,6 +146,11 @@ This method is a _setter_ for the `volume` property.
 Parameter `value` type `number`  
 This method is a _setter_ for the `playbackRate` property.  
 `value` is between `0.0` and `1.0`, [refer to MDN][mediaelement].
+
+##### player.seek(value)
+Parameter `value` can be type `number` or `string`  
+This method is a _setter_ using `fastSeek` [browser method][mediaelement].  
+`value` can be between `0.0` and `max duration`, or it can be expressed in `HH:mm:ss` string format.
 
 ### Exposed Properties
 

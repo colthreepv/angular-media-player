@@ -12,15 +12,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-md2html');
   grunt.loadNpmTasks('grunt-swig');
 
-  var docUrls = [
-    { loc: '#!/', priority: 1 },
-    '#!/populate-playlist',
-    '#!/progressive-playlist',
-    '#!/swap-playlist',
-    '#!/interactive-demo',
-    '#!/repeat-audio'
-  ];
-
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
@@ -28,8 +19,8 @@ module.exports = function (grunt) {
         banner: '/*! <%=pkg.name %> v<%=pkg.version %> | date: <%=grunt.template.today("dd-mm-yyyy") %> */\n'
       },
       dist: {
-        src: 'dist/angular-audio-player.js',
-        dest: 'dist/angular-audio-player.min.js'
+        src: 'dist/angular-media-player.js',
+        dest: 'dist/angular-media-player.min.js'
       }
     },
     concat: {
@@ -38,11 +29,11 @@ module.exports = function (grunt) {
           banner: '/*! <%=pkg.name %> v<%=pkg.version %> | date: <%=grunt.template.today("dd-mm-yyyy") %> */\n'
         },
         src: ['src/directive.js', 'src/helpers.js'],
-        dest: 'dist/angular-audio-player.js'
+        dest: 'dist/angular-media-player.js'
       },
       devlib: {
         src: ['src/directive.js', 'src/helpers.js'],
-        dest: 'www/libs/angular-audio-player.js'
+        dest: 'www/libs/angular-media-player.js'
       }
     },
     watch: {
@@ -106,7 +97,7 @@ module.exports = function (grunt) {
         dest: 'www/',
         generateSitemap: true,
         generateRobotstxt: true,
-        siteUrl: 'http://mrgamer.github.io/angular-audio-player/',
+        siteUrl: 'http://mrgamer.github.io/angular-media-player/',
         tags: {
           highlight: require('swig-highlight')
         },
@@ -135,7 +126,7 @@ module.exports = function (grunt) {
   // - clean folder
   // - convert markdown to html partials
   // - copy libraries from libs/ to www/libs/
-  // - compile audio-player library in www/libs/
+  // - compile media-player library in www/libs/
   // - compile documentation from docs/*.swig to www/*.html
   // - start connect static fileserver
   // - put yourself on watch for changes
