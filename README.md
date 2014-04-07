@@ -1,6 +1,6 @@
-angular-media-player
+angular-media-player [![Build Status](https://travis-ci.org/mrgamer/angular-audio-player.svg?branch=next)](https://travis-ci.org/mrgamer/angular-audio-player)
 ====================
-AngularJS Directive that wraps `<audio>` or `<video`> tag exposing handy events and selectors to customize your player.
+AngularJS Directive that wraps `<audio>` or `<video`> tag exposing methods and properties to manipulate your player
 
 ## Abstract / Idea
 I've come across a lot of `<audio>` players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.  
@@ -16,7 +16,9 @@ $ bower install angular-media-player
 
 Using github hosting:
 ```html
+<!-- non-minified for debugging -->
 <script src="//mrgamer.github.io/angular-media-player/dist/angular-media-player.js" type="text/javascript"></script>
+<!-- minified -->
 <script src="//mrgamer.github.io/angular-media-player/dist/angular-media-player.min.js" type="text/javascript"></script>
 ```
 
@@ -25,8 +27,21 @@ Using github hosting:
   * `angular.module` changed **AGAIN** from `'audioPlayer'` to `'mediaPlayer'` as the library supports `<video>` tag aswell
   * property `'position'` removed. Use `currentTime` instead.
 
-If you find something is missing from this list please take a couple of minutes to open an [Issue](https://github.com/mrgamer/angular-audio-player/issues/new)
+If you find something is missing from this list please take a couple of minutes to open an [Issue][issues]
 
+### What's new
+
+  * I've already written it but... `<video>` tag support!
+  * new property `network`
+  * playback rate support
+  * test-driven: both unit tests and asynchronous tests with real audio/video files (requires internet working)
+  * playlist handling is way more robust, and tested.
+  * `mediaPlayer` is not created as an isolated scope, instead it **pollutes** the father scope. Watch out for name collisions.
+  * Events are no more sent to `$rootScope`, they are handled by the namespaced `mediaPlayer`, that is now an [angular.js Scope][angularscopes]
+  * Minimalist and flexible [event system](#events), based off browser implementation.
+
+The new documentation is on-going work, you can keep track of it being developed, but is not ready to be deployed yet.  
+And this time will be on `gh-pages`!
 
 ## Getting Started
 ### [Examples here][examples]  
@@ -52,7 +67,7 @@ Then in the html:
 `media-player` is a directive working as an _attribute_, it **must** be used either on an `<audio>`, or `<video>` tag.
 
 ### Attributes
-Those can be used as any [AngularJS directive attributes notation](http://docs.angularjs.org/guide/directive#creating-custom-directives_matching-directives)
+Those can be used as any [AngularJS directive attributes notation][angularattributes]
 
 * **playlist**: A string, representing the name in the parent scope containing an Array containing audioElements(s)
 * **player-control**: _deprecated_: A string, referring to the name created in the parent scope to access `media-player` properties.
@@ -65,11 +80,11 @@ Those attributes have a one-way binding, the objects gets allocated in the paren
 Playlist is an Array containing `sourceElement(s)`.  
 An `sourceElement` itself could be an Array of sourceObjects, or a single sourceObject, mimicking the `<source>` [HTML draft][sourcedraft]  
 
-> **sourceObject structure**:
+**sourceObject structure**:
 ```javascript
 { src: 'http://some.where.com', type: 'mime/type', media: '.css.media.query' }
 ```
-> **or alternatively**
+**or alternatively**
 ```javascript
 [
   { src: 'http://some.where.com', type: 'audio/ogg' },
@@ -79,68 +94,96 @@ An `sourceElement` itself could be an Array of sourceObjects, or a single source
 ]
 ```
 
-*For whoever wondering what `media` is*: it's just a [css media query][cssmediaquery], so the browser can pick which `<source>` tag to load.
+_For whoever wondering what `media` is_: it's just a [css media query][cssmediaquery], so the browser can pick which `<source>` tag to load.
 
-### player-control Methods
+### Exposed Methods
 
-#### player.load([mediaElement, autoplayNext])
+##### player.load([mediaElement, autoplayNext])
 Parameter `mediaElement` type `object`, structure as specified above.  
 Parameter `autoplayNext` type `boolean`  
 Internal function called from the below methods, can still be accessed directly if want to, if no parameter is provided just calls the `<audio>` _load_ method (means it starts buffering).
 
-#### player.play([index])
+##### player.play([index])
+> **NOTE**: this is _0-based_ exactly as you refer to the elements of an Array.
+
 Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
 You can force to play a specific song using the `index` param.
 
-#### player.playPause([index])
+##### player.playPause([index])
+> **NOTE**: this is _0-based_ exactly as you refer to the elements of an Array.
+
 Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
 If you `playPause` the same index twice it will alternate start and stop.
 
-#### player.pause()
+##### player.pause()
 Pauses the player.
 
-#### player.next([autoplay])
+##### player.next([autoplay])
 Parameter `autoplay` type `boolean`  
 Goes to next mediaElement if there is one in the playlist.  
 Autoplay behaviour is the following:
-If a song is _already_ playing, it will change to the next mediaElement, and autoplay as soon as it's loaded.  
+If a song is _already_ playing, it will change to the next mediaElement, and autoplay itas soon as it's loaded.  
 You can force the autoplay using the `autoplay` parameter.
 
-#### player.prev([autoplay])
+##### player.prev([autoplay])
 Parameter `autoplay` type `boolean`  
 Goes to previous mediaElement if there is one in the playlist.
-If a song is _already_ playing, it will change to the previous mediaElement, and autoplay as soon as it's loaded.  
+If a song is _already_ playing, it will change to the previous mediaElement, and autoplay it as soon as it's loaded.  
 You can force the autoplay using the `autoplay` parameter.
 
-#### player.toggleMute()
+##### player.toggleMute()
 Toggles mute property.
 
-### player-control Properties
+##### player.setVolume(value)
+Parameter `value` type `number`  
+This method is a _setter_ for the `volume` property.  
+`value` is between `0.0` and `1.0`, [refer to MDN][mediaelement].
 
-#### player.name **REMOVED**
+##### player.setPlaybackRate(value)
+Parameter `value` type `number`  
+This method is a _setter_ for the `playbackRate` property.  
+`value` is between `0.0` and `1.0`, [refer to MDN][mediaelement].
+
+### Exposed Properties
+
+##### ~~player.name~~ **REMOVED**
 ~~Default is `audioplayer`, it's the name-prefix used in the Events~~
 
-#### player.playing
+##### player.playing
 `true` or `false`
 
-#### player.currentTrack
+##### player.ended
+`true` or `false`
+
+##### player.network
+`'progress'`, `'stalled'`, `'suspend'`, `undefined` (at initialization).  
+This property is a sum-up of the network state, the value changes when the respective events gets fired.
+
+##### player.currentTrack
+> **NOTE**: this is _1-based_ exactly as `length` property of an Array.
+
 Tracks the position of the playing track, it **might** change during playing the same track due to pushing elements into `playlistArray`
 
-#### player.tracks
-Number of tracks in the playlist, zero-based (0....playlist.length)
+##### player.tracks
+> **NOTE**: this is _0-based_ exactly as you refer to the elements of an Array.
 
-#### `<audio>` properties forward
-Some properties are just forwared to this `player-control` but are unchanged against [HTMLMediaElement spec][mediaelement]  
-`player.volume`  
-`player.muted`  
-`player.duration`  
+Number of tracks in the playlist.
+
+#### Properties from HTMLMediaElement
+Some properties are just forwarded to the scope, but are unchanged [HTMLMediaElement spec][mediaelement]  
+
 `player.currentTime`  
-`player.position` _same_ as `player.currentTime`  
+`player.duration`  
+`player.muted`  
+`player.playbackRate`  
+`player.volume`  
+
+Timeranges:  
 `player.buffered`  
 `player.played`  
 `player.seekable`  
 
-#### formatted properties
+#### Additional Properties
 The following properties refer to some [HTMLMediaElement spec][mediaelement] properties, but are formatted for handiness.  
 `player.formatDuration`  hh:mm:ss version of `player.duration`  
 `player.formatTime` hh:mm:ss version of `player.duration`  
@@ -172,38 +215,41 @@ You can add/remove tracks on-fly from/to the playlist.
 If the current track gets removed, the player goes on **pause()**. (And starts loading the first track of the new playlist)  
 Try and get the hold of this in the [examples][examples]
 
-If you wonder all the logic, just [check out the source](https://github.com/mrgamer/angular-audio-player/blob/master/src/directive.js#L280), it has comments!
+If you wonder all the logic, just [check out the source](https://github.com/mrgamer/angular-media-player/blob/master/src/directive.js#L280), it has comments!
 
 ### Credits
 A lot of guidelines to realize a simple re-usable project like this have come mainly from:
 
-* [angular-leaflet-directive][leafletdir] work of [tombatossals][leafletauth], i think is a good example of a standalone project. (other than being useful :) )
-* [angular-socket-io][socketbf] I think most of AngularJS developers know [Brian Ford][brianf], I'm out of count how many times i found his posts or works an enlightenment! 
-* [ng-media](https://github.com/caitp/ng-media) Trying to merge `mediaPlayer` lib and `ng-media` togheter, I've learned a lot. In the end, that didn't happen because those projects were born for _very_ different usages.
+* [angular-leaflet-directive][leafletdir]: work of [tombatossals][leafletauth], i think is a good example of a standalone project. (other than being useful :) )
+* [angular-socket-io][socketbf]: I think most of AngularJS developers know [Brian Ford][brianf], I'm out of count how many times i found his posts or works an enlightenment! 
+* [ng-media][ngmedia]: thanks to [caitp][caitp], I've been trying to merge `mediaPlayer` lib and `ng-media` togheter, I've learned a lot. In the end, that didn't happen because those projects were born for _very_ different usages.
 
 [leafletdir]: https://github.com/tombatossals/angular-leaflet-directive
 [leafletauth]: https://github.com/tombatossals
 [socketbf]: https://github.com/btford/angular-socket-io
 [brianf]: https://github.com/btford
-[self]: http://github.com/mrgamer/angular-audio-player
+[ngmedia]: https://github.com/caitp/ng-media
+[caitp]: https://github.com/caitp
+[self]: http://github.com/mrgamer/angular-media-player
+[issues]: https://github.com/mrgamer/angular-media-player/issues/new
+[angularscopes]: http://docs.angularjs.org/guide/scope
+[angularattributes]: http://docs.angularjs.org/guide/directive#matching-directives
 [examples]: http://aap.col3.me
 [sourcedraft]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source
 [mediaelement]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
 
 
+
 [html5audiocompatibility]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#Browser_compatibility
 [cssmediaquery]: http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/#media0
 
-### Contributing
+# Contributing
 Contributing is **always** welcome, both via opening Issues, or compiling a Pull Request.
-
-# Important
-While you're filing a _Pull Request_ be sure to edit files under the `src/` folder
 
 You can clone the repository and start working:
 ```bash
-git clone git@github.com:mrgamer/angular-audio-player.git
-cd angular-audio-player
+git clone git@github.com:mrgamer/angular-media-player.git
+cd angular-media-player
 ?!?!?
 profit!
 ```
@@ -224,8 +270,12 @@ To create a new release:
 ```bash
 # !update package.json with a new version!
 npm install
+# test before commit
+bower install
+npm test
 grunt build
-git tag x.x.x
+git commit -m "release X.Y.Z"
+git tag X.Y.Z
 git push && git push --tags
 ```
 

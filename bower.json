@@ -1,18 +1,21 @@
 {
-  "name": "angular-audio-player",
-  "version": "0.2.0",
-  "main": "dist/angular-audio-player.min.js",
+  "name": "angular-media-player",
+  "version": "0.5.0",
+  "main": "dist/angular-media-player.min.js",
   "keywords": [
     "angular",
     "angular.js",
     "angularjs",
     "audio",
-    "playlist",
-    "player"
+    "video",
+    "media",
+    "player",
+    "playlist"
   ],
   "ignore": [
     "node_modules",
-    "docs"
+    "docs",
+    "test"
   ],
   "devDependencies": {
     "angular": "~1.2.0",
