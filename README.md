@@ -1,4 +1,4 @@
-angular-media-player [![Build Status](https://travis-ci.org/mrgamer/angular-audio-player.svg?branch=next)](https://travis-ci.org/mrgamer/angular-audio-player)
+angular-media-player [![Build Status](https://travis-ci.org/mrgamer/angular-media-player.svg?branch=next)](https://travis-ci.org/mrgamer/angular-media-player)
 ====================
 AngularJS Directive that wraps `<audio>` or `<video`> tag exposing methods and properties to manipulate your player
 
