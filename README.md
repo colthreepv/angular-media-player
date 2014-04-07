@@ -289,9 +289,8 @@ git push && git push --tags
 # Release History
 
   * 0.5.0 - complete refactor, tests added, `<video>` tag support.
-  * 0.2.2 - backport to fix incompatibility with IE9+
-  * `0.2.2` - Backport from the `next` branch to support IE9-10
-  * `0.2.0` :
+  * 0.2.2 - backport from the `next` branch to support IE9-10
+  * 0.2.0 :
     * `angular.module` changed from `'angular-audio-player'` to `'audioPlayer'` - seemed more ngCompliant to me
     * property `'playingTrack'` renamed to `'currentTrack'` - again, on first directive tapeout names weren't the most important thing
   * 0.1.2 - first release, with basic functionalities
