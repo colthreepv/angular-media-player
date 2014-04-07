@@ -7,41 +7,43 @@
  * preloads 40~ seconds of ogg files. (512Kb?)
  */
 describe('browser tests: playback', function () {
-  function preloadAudio(url, duration) {
-    var audioIsReady = RSVP.defer();
-    var newAudio = document.createElement('audio');
-    newAudio.preload = 'auto';
-    var newSource = document.createElement('source');
-    newSource.src = url;
-    newSource.type = 'audio/ogg';
-    newAudio.addEventListener('timeupdate', function () {
-      if (newAudio.buffered.end(0) > duration) { audioIsReady.resolve(); }
-    });
-    newAudio.appendChild(newSource);
-    document.body.appendChild(newAudio);
-
-    return audioIsReady.promise;
+  // 2 functions, useful to debug events
+  function consolesomething(listener_name) {
+    return function (evt) {
+      console.log(listener_name, 'called');
+    };
   }
+  function debugMedia(element) {
+    [
+      'abort',
+      'canplay',
+      'canplaythrough',
+      'durationchange',
+      'emptied',
+      'ended',
+      'error',
+      'loadeddata',
+      'loadedmetadata',
+      'loadstart',
+      'mozaudioavailable',
+      'pause',
+      'play',
+      'playing',
+      'progress',
+      'ratechange',
+      'seeked',
+      'seeking',
+      'stalled',
+      'suspend',
+      'timeupdate',
+      'volumechange',
+      'waiting'
+    ].forEach(function (listener_name) {
+      element.addEventListener(listener_name, consolesomething(listener_name));
+    });
+  }
+  // in case of need use debugMedia(DOMElement)
 
-  // create a lot of audio tags to preload the source files
-  // before(function (callback) {
-  //   var promisesArray = [];
-  //   [
-  //     { src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', duration: 17 },
-  //     { src: 'http://upload.wikimedia.org/wikipedia/en/c/cb/Stairway_to_Heaven_3_sections.ogg', duration: 30 },
-  //     { src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Beatles_cometogether.ogg', duration: 24 }
-  //   ].forEach(function (audioFile) {
-  //     promisesArray.push(preloadAudio(audioFile.src, audioFile.duration));
-  //   });
-  //   RSVP.all(promisesArray).then(callback.bind(null, null));
-  // });
-  // // remove audio tags after the test is done
-  // after(function () {
-  //   var audioTags = document.querySelectorAll('body > audio');
-  //   Array.prototype.forEach.call(audioTags, function (audioTag) {
-  //     audioTag.remove();
-  //   });
-  // });
   beforeEach(module('mediaPlayer'));
   afterEach(function () {
     var audioTags = document.querySelectorAll('audio');
@@ -56,10 +58,12 @@ describe('browser tests: playback', function () {
       angular.element(document.body).append(element);
       expect($rootScope.testplayer).to.be.an('object');
       $rootScope.testplayer.load({ src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' });
-      setTimeout(function () {
-        expect($rootScope.testplayer.duration).to.be.above(1);
-        done();
-      }, 50);
+      $rootScope.testplayer.one('loadstart', function () {
+        setTimeout(function () {
+          expect($rootScope.testplayer.duration).to.be.above(1);
+          done();
+        }, 10);
+      });
     });
   });
   it('should start playing when calling play()', function (done) {
@@ -68,7 +72,11 @@ describe('browser tests: playback', function () {
       angular.element(document.body).append(element);
       expect($rootScope.testplayer).to.be.an('object');
       $rootScope.testplayer.load({ src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' });
-      setTimeout(function () { $rootScope.testplayer.play(); }, 10);
+      $rootScope.testplayer.one('loadstart', function () {
+        setTimeout(function () {
+          $rootScope.testplayer.play();
+        }, 10);
+      });
       $rootScope.testplayer.one('playing', function () {
         setTimeout(function () {
           expect($rootScope.testplayer.duration).to.be.above(1);
@@ -166,9 +174,11 @@ describe('browser tests: playback', function () {
       var element = $compile('<audio media-player="testplayer" playlist="testplaylist"></audio>')($rootScope);
       angular.element(document.body).append(element);
       expect($rootScope.testplayer).to.be.an('object');
-      setTimeout(function () {
-        $rootScope.testplayer.play(1);
-      }, 10);
+      $rootScope.testplayer.one('canplaythrough', function () {
+        setTimeout(function () {
+          $rootScope.testplayer.play(1);
+        }, 10);
+      });
       $rootScope.testplayer.one('playing', function () {
         setTimeout(function () {
           expect($rootScope.testplayer.currentTrack).to.be.equal(2);

@@ -49,11 +49,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         this.$domEl.load();
         this.ended = undefined;
         if (autoplayNext) {
-          var self = this;
-          self.$element.on('canplaythrough', function (evt) {
-            self.play();
-            self.$element.off('canplaythrough');
-          });
+          this.$element.one('canplay', this.play.bind(this));
         }
       },
       /**

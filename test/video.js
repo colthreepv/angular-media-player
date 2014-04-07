@@ -8,6 +8,12 @@
  */
 describe('browser tests: video support', function () {
   beforeEach(module('mediaPlayer'));
+  afterEach(function () {
+    var videoTags = document.querySelectorAll('video');
+    Array.prototype.forEach.call(videoTags, function (videoTag) {
+      videoTag.remove();
+    });
+  });
 
   it('should playback as supposed', function (done) {
     this.timeout(10000);
