@@ -145,6 +145,9 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
       on: function (type, fn) {
         return this.$element.on(type, fn);
       },
+      off: function (type, fn) {
+        return this.$element.off(type, fn);
+      },
       one: function (type, fn) {
         return this.$element.one(type, fn);
       },
@@ -233,7 +236,9 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
             if (!scope.currentTrack) { scope.currentTrack++; } // This is triggered *ONLY* the first time a <source> gets loaded.
             scope.duration = al.duration;
             scope.formatDuration = scope.$formatTime(scope.duration);
-            scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
+            if (al.buffered.length) {
+              scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
+            }
           });
         },
         progress: function () {
