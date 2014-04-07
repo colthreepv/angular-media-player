@@ -6,7 +6,7 @@
  * Moreover an active internet connection is needed, and better be a fast one, since it
  * preloads 40~ seconds of ogg files. (512Kb?)
  */
-describe('browser tests: functionality', function () {
+describe('browser tests: playback', function () {
   function preloadAudio(url, duration) {
     var audioIsReady = new RSVP.defer();
     var newAudio = document.createElement('audio');

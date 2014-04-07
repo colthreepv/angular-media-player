@@ -16,7 +16,7 @@ module.exports = function (config) {
       // tests
       'libs/rsvp/rsvp.js',
       'test/unit.js',
-      'test/asynchronous.js'
+      'test/playback.js'
     ],
     // list of files to exclude
     exclude: [],

@@ -14,9 +14,11 @@
 angular.module('audioPlayer', ['audioPlayer.helpers'])
 .constant('playerDefaults', {
   // general properties
-  playing: false,
-  ended: undefined,
   currentTrack: 0,
+  ended: undefined,
+  network: undefined,
+  playing: false,
+  seeking: false,
   tracks: 0,
 
   // formatted properties
@@ -128,6 +130,12 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
           });
         }
       },
+      setPlaybackRate: function (value) {
+        this.$audioEl.playbackRate = value;
+      },
+      setVolume: function (value) {
+        this.$audioEl.volume = value;
+      },
       $addAudioList: function (audioList) {
         var self = this;
         if (angular.isArray(audioList)) {
@@ -220,13 +228,41 @@ angular.module('audioPlayer', ['audioPlayer.helpers'])
           if (au.$audioEl.buffered.length) {
             au.$apply(function (scope) {
               scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
+              scope.network = 'progress';
             });
           }
         },
         volumechange: function () { // Sent when the audio volume changes (both when the volume is set and when the muted attribute is changed).
           au.$apply(function (scope) {
+            // scope.volume = Math.floor(al.volume * 100);
             scope.volume = al.volume;
             scope.muted = al.muted;
+          });
+        },
+        seeked: function () {
+          au.$apply(function (scope) {
+            scope.seeking = false;
+          });
+        },
+        seeking: function () {
+          au.$apply(function (scope) {
+            scope.seeking = true;
+          });
+        },
+        ratechange: function () {
+          au.$apply(function (scope) {
+            // scope.playbackRate = Math.floor(al.playbackRate * 100);
+            scope.playbackRate = al.playbackRate;
+          });
+        },
+        stalled: function () {
+          au.$apply(function (scope) {
+            scope.network = 'stalled';
+          });
+        },
+        suspend: function () {
+          au.$apply(function (scope) {
+            scope.network = 'suspend';
           });
         }
       };
