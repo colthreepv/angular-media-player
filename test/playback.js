@@ -58,7 +58,7 @@ describe('browser tests: playback', function () {
       angular.element(document.body).append(element);
       expect($rootScope.testplayer).to.be.an('object');
       $rootScope.testplayer.load({ src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' });
-      $rootScope.testplayer.one('loadstart', function () {
+      $rootScope.testplayer.one('durationchange', function () {
         setTimeout(function () {
           expect($rootScope.testplayer.duration).to.be.above(1);
           done();
