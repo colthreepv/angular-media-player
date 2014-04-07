@@ -1,5 +1,6 @@
 node_modules/
 libs/
+www/
 
 # docs ignore
 docs/*.md.tpl.html

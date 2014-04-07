@@ -1,0 +1,14 @@
+{% extends '../layout' %}
+{% block javascript %}
+  <script type="text/javascript">{% include './example.js' %}</script>
+{% endblock %}
+
+{% block controller %}
+<div class="col-xs-12 col-sm-9" ng-controller="ExampleController">
+{% endblock %}
+
+{% block content %}
+{% raw %}
+  ANGULAR CODE HERE
+{% endraw %}
+{% endblock %}

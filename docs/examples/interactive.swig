@@ -1,3 +1,15 @@
+{% extends '../layout' %}
+{% block javascript %}
+  <script type="text/javascript" src="/libs/angular-dragdrop.js"></script>
+  <script type="text/javascript">{% include './interactive.js' %}</script>
+{% endblock %}
+
+{% block controller %}
+<div class="col-xs-12 col-sm-9" ng-controller="InteractiveController">
+{% endblock %}
+
+{% block content %}
+{% raw %}
 <div class="jumbotron">
   <h1>Interactive demo</h1>
   <p>
@@ -89,5 +101,5 @@
     };
   </code>
 </pre>
-
-<div ng-include="'examples/interactive.md.tpl.html'"></div>
+{% endraw %}
+{% endblock %}

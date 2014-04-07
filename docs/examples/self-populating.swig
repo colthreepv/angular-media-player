@@ -1,3 +1,14 @@
+{% extends '../layout' %}
+{% block javascript %}
+  <script type="text/javascript">{% include './self-populating.js' %}</script>
+{% endblock %}
+
+{% block controller %}
+<div class="col-xs-12 col-sm-9" ng-controller="PopulateController">
+{% endblock %}
+
+{% block content %}
+{% raw %}
 <div class="jumbotron">
   <h1>Self-populating playlist</h1>
   <p>
@@ -31,5 +42,28 @@
 <pre>
   <code>audioPlaylist = {{ audioPlaylist | json }}</code>
 </pre>
+{% endraw %}
 
-<div ng-include="'examples/populate-playlist.md.tpl.html'"></div>
+<h3>Purpose</h3>
+<p>This is to give some sort of compatibility for audio tags already present in webpages where you can include this directive.</p>
+
+<h4>HTML of the audio tag</h4>
+{% highlight 'html' %}
+<audio data-player-control="audioPlayer" data-playlist="audioPlaylist" audio-player>
+  <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
+</audio>
+{% endhighlight %}
+
+<h4>Resulting <code>$scope.playlist</code></h4>
+{% highlight 'javascript' %}
+$scope.audioPlaylist = [
+  [
+    {
+      "src":"http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg",
+      "type":"audio/ogg",
+      "media":""
+    }
+  ]
+];
+{% endhighlight %}
+{% endblock %}
