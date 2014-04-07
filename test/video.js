@@ -10,7 +10,7 @@ describe('browser tests: video support', function () {
   beforeEach(module('mediaPlayer'));
 
   it('should playback as supposed', function (done) {
-    this.timeout(5000);
+    this.timeout(10000);
     inject(function ($compile, $rootScope) {
       var element = $compile('<video media-player="testplayer" autoplay="true"></video>')($rootScope);
       angular.element(document.body).append(element);
