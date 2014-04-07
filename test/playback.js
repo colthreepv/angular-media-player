@@ -24,25 +24,31 @@ describe('browser tests: playback', function () {
   }
 
   // create a lot of audio tags to preload the source files
-  before(function (callback) {
-    var promisesArray = [];
-    [
-      { src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', duration: 17 },
-      { src: 'http://upload.wikimedia.org/wikipedia/en/c/cb/Stairway_to_Heaven_3_sections.ogg', duration: 30 },
-      { src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Beatles_cometogether.ogg', duration: 24 }
-    ].forEach(function (audioFile) {
-      promisesArray.push(preloadAudio(audioFile.src, audioFile.duration));
-    });
-    RSVP.all(promisesArray).then(callback.bind(null, null));
-  });
-  // remove audio tags after the test is done
-  after(function () {
-    var audioTags = document.querySelectorAll('body > audio');
+  // before(function (callback) {
+  //   var promisesArray = [];
+  //   [
+  //     { src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', duration: 17 },
+  //     { src: 'http://upload.wikimedia.org/wikipedia/en/c/cb/Stairway_to_Heaven_3_sections.ogg', duration: 30 },
+  //     { src: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Beatles_cometogether.ogg', duration: 24 }
+  //   ].forEach(function (audioFile) {
+  //     promisesArray.push(preloadAudio(audioFile.src, audioFile.duration));
+  //   });
+  //   RSVP.all(promisesArray).then(callback.bind(null, null));
+  // });
+  // // remove audio tags after the test is done
+  // after(function () {
+  //   var audioTags = document.querySelectorAll('body > audio');
+  //   Array.prototype.forEach.call(audioTags, function (audioTag) {
+  //     audioTag.remove();
+  //   });
+  // });
+  beforeEach(module('mediaPlayer'));
+  afterEach(function () {
+    var audioTags = document.querySelectorAll('audio');
     Array.prototype.forEach.call(audioTags, function (audioTag) {
       audioTag.remove();
     });
   });
-  beforeEach(module('mediaPlayer'));
 
   it('should load a single file when calling load()', function (done) {
     inject(function ($compile, $rootScope) {
@@ -63,7 +69,7 @@ describe('browser tests: playback', function () {
       expect($rootScope.testplayer).to.be.an('object');
       $rootScope.testplayer.load({ src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' });
       setTimeout(function () { $rootScope.testplayer.play(); }, 10);
-      $rootScope.testplayer.$domEl.addEventListener('playing', function () {
+      $rootScope.testplayer.one('playing', function () {
         setTimeout(function () {
           expect($rootScope.testplayer.duration).to.be.above(1);
           expect($rootScope.testplayer.playing).to.equal(true);
@@ -78,10 +84,10 @@ describe('browser tests: playback', function () {
       angular.element(document.body).append(element);
       expect($rootScope.testplayer).to.be.an('object');
       $rootScope.testplayer.load({ src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' }, true);
-      $rootScope.testplayer.$domEl.addEventListener('playing', function () {
+      $rootScope.testplayer.one('playing', function () {
         setTimeout(function () { $rootScope.testplayer.stop(); }, 10);
       });
-      $rootScope.testplayer.$domEl.addEventListener('abort', function () {
+      $rootScope.testplayer.one('abort', function () {
         setTimeout(function () {
           expect($rootScope.testplayer.playing).to.equal(false);
           done();
@@ -95,10 +101,10 @@ describe('browser tests: playback', function () {
       angular.element(document.body).append(element);
       expect($rootScope.testplayer).to.be.an('object');
       $rootScope.testplayer.load({ src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' }, true);
-      $rootScope.testplayer.$domEl.addEventListener('playing', function () {
+      $rootScope.testplayer.one('playing', function () {
         setTimeout(function () { $rootScope.testplayer.pause(); }, 10);
       });
-      $rootScope.testplayer.$domEl.addEventListener('pause', function () {
+      $rootScope.testplayer.one('pause', function () {
         setTimeout(function () {
           expect($rootScope.testplayer.playing).to.equal(false);
           done();
@@ -142,7 +148,7 @@ describe('browser tests: playback', function () {
       angular.element(document.body).append(element);
       expect($rootScope.testplayer).to.be.an('object');
       // currentTrack should gets updated after a loadedmetadata
-      $rootScope.testplayer.$domEl.addEventListener('loadedmetadata', function () {
+      $rootScope.testplayer.one('loadedmetadata', function () {
         setTimeout(function () {
           expect($rootScope.testplayer.currentTrack).to.be.above(0);
           done();
@@ -163,7 +169,7 @@ describe('browser tests: playback', function () {
       setTimeout(function () {
         $rootScope.testplayer.play(1);
       }, 10);
-      $rootScope.testplayer.$domEl.addEventListener('playing', function () {
+      $rootScope.testplayer.one('playing', function () {
         setTimeout(function () {
           expect($rootScope.testplayer.currentTrack).to.be.equal(2);
           done();
@@ -172,6 +178,7 @@ describe('browser tests: playback', function () {
     });
   });
   it('should autoplay the next file when calling next(), during playback', function (done) {
+    this.timeout(5000);
     inject(function ($compile, $rootScope, $timeout) {
       $rootScope.testplaylist = [
         { src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' },
@@ -182,11 +189,11 @@ describe('browser tests: playback', function () {
       angular.element(document.body).append(element);
       expect($rootScope.testplayer).to.be.an('object');
       var songsPlayed = 0;
-      $rootScope.testplayer.$domEl.addEventListener('timeupdate', function () {
+      $rootScope.testplayer.one('canplaythrough', function () {
         setTimeout(function () { $rootScope.testplayer.play(); }, 10);
       });
       // should play 2 times, first song, then second song!
-      $rootScope.testplayer.$domEl.addEventListener('playing', function () {
+      $rootScope.testplayer.on('playing', function () {
         songsPlayed++;
         setTimeout(function () {
           if (songsPlayed === 1) {

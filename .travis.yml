@@ -3,7 +3,7 @@ node_js:
   - "0.10"
 
 addons:
-  firefox: "23.0"
+  firefox: "24.4.0esr"
 
 before_install:
   - "npm install -g bower"
