@@ -288,6 +288,11 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           au.$apply(function (scope) {
             scope.network = 'suspend';
           });
+        },
+        readystatechange: function () {
+          au.$apply(function (scope) {
+            scope.readyState = al.readyState;
+          });
         }
       };
 
