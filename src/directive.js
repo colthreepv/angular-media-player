@@ -139,9 +139,16 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
             doubleval += parseInt(valuesArr.pop(), 10);
             if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 60; }
             if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 3600; }
+            value = doubleval; // use calculated seek time
           } catch (e) {}
         }
-        return this.$domEl.fastSeek(value);
+        // use fast seek if it is available
+        if(this.$domEl.fastSeek) {
+        	return this.$domEl.fastSeek(value);
+        } else { // otherwise use current time setter to update value
+        	this.$domEl.currentTime = value;
+        	return this.$domEl.currentTime;	
+        }
       },
       /**
        * binds a specific event directly to the element
