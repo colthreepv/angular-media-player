@@ -1,4 +1,4 @@
-/*! angular-media-player v0.5.0 | date: 07-04-2014 */
+/*! angular-media-player v0.5.0 | date: 15-04-2014 */
 /**
  * MDN references for hackers:
  * ===========================
@@ -288,6 +288,11 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         suspend: function () {
           au.$apply(function (scope) {
             scope.network = 'suspend';
+          });
+        },
+        readystatechange: function () {
+          au.$apply(function (scope) {
+            scope.readyState = al.readyState;
           });
         }
       };
