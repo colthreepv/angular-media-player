@@ -15,9 +15,6 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
-      options: {
-        banner: '/*! <%=pkg.name %> v<%=pkg.version %> | date: <%=grunt.template.today("dd-mm-yyyy") %> */\n'
-      },
       dist: {
         src: 'dist/angular-media-player.js',
         dest: 'dist/angular-media-player.min.js'
@@ -25,9 +22,6 @@ module.exports = function (grunt) {
     },
     concat: {
       library: {
-        options: {
-          banner: '/*! <%=pkg.name %> v<%=pkg.version %> | date: <%=grunt.template.today("dd-mm-yyyy") %> */\n'
-        },
         src: ['src/directive.js', 'src/helpers.js'],
         dest: 'dist/angular-media-player.js'
       },
