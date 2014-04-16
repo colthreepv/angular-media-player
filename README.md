@@ -55,16 +55,38 @@ In your AngularJS application include in dependency injection `mediaPlayer`
 
 ```javascript
 angular.module('myApp', ['mediaPlayer'])
+.controller('MyController', function ($scope) .......)
 ```
 
 Then in the html:
 ```html
-<audio media-player="audio1" data-playlist="playlist1">
-  <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
-</audio>
-<span ng-show="audio1.playing">Player status: Playing</span>
-<span ng-show="!audio1.playing">Player status: Paused</span>
+<div ng-controller="MyController">
+  <audio media-player="audio1" data-playlist="playlist1">
+    <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
+  </audio>
+  <span ng-show="audio1.playing">Player status: Playing</span>
+  <span ng-show="!audio1.playing">Player status: Paused</span>
+</div>
 ```
+
+What happens here: a variable called `audio1` gets created on the scope bound to the controller that holds the `<audio>` tag.
+That might be one of your specific controller, or, if you didn't define anyone, it will be `$rootScope`.
+
+You can access those methods like this:
+```javascript
+angular.module('myApp').controller('MyController', function ($scope) {
+
+  // access properties
+  console.log($scope.audio1.network);
+  console.log($scope.audio1.ended);
+
+  $scope.mySpecialPlayButton = function () {
+    $scope.customText = 'I started angular-media-player with a custom defined action!';
+    $scope.audio1.playPause();
+  };
+})
+```
+You can use the methods in the controller AND directly in the HTML (as shown in the snippet before), since they are exposed in the $scope.
 
 ## Directive
 `media-player` is a directive working as an _attribute_, it **must** be used either on an `<audio>`, or `<video>` tag.
