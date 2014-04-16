@@ -1,4 +1,3 @@
-/*! angular-media-player v0.5.0 | date: 07-04-2014 */
 /**
  * MDN references for hackers:
  * ===========================
@@ -33,14 +32,15 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
 
     var playerMethods = {
       /**
-       * @usage load([mediaElement], [autoplayNext]);
+       * @usage load([mediaElement], [autoplay]);
        *
        * @param  {mediaElement Obj} mediaElement a single mediaElement, may contain multiple <source>(s)
-       * @param  {boolean} autoplayNext: flag to autostart loaded element
+       * @param  {boolean} autoplay: flag to autostart loaded element
        */
-      load: function (mediaElement, autoplayNext) {
+      load: function (mediaElement, autoplay) {
+        // method overloading
         if (typeof mediaElement === 'boolean') {
-          autoplayNext = mediaElement;
+          autoplay = mediaElement;
           mediaElement = null;
         } else if (typeof mediaElement === 'object') {
           this.$clearSourceList();
@@ -48,26 +48,37 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         }
         this.$domEl.load();
         this.ended = undefined;
-        if (autoplayNext) {
+        if (autoplay) {
           this.$element.one('canplay', this.play.bind(this));
         }
       },
       /**
        * resets the player (clear the <source>s) and reloads the playlist
        *
-       * @usage reset([autoplayNext]);
-       * @param  {boolean} autoplayNext: flag to autoplay once resetted
+       * @usage reset([autoplay]);
+       * @param {boolean} autoplay: flag to autoplay once resetted
        */
-      reset: function (autoplayNext) {
+      reset: function (autoplay) {
         angular.extend(this, playerDefaults);
         this.$clearSourceList();
-        this.load(this.$playlist, autoplayNext);
+        this.load(this.$playlist, autoplay);
       },
       /**
-       * @usage play([index])
-       * @param  {integer} index playlist index (0...n), to start playing from
+       * @usage play([index], [selectivePlay])
+       * @param {integer} index: playlist index (0...n), to start playing from
+       * @param {boolean} selectivePlay: only correct value is `true`, in which case will only play the specified,
+       *                                 or current, track. The default is to continue playing the next one.
        */
-      play: function (index) {
+      play: function (index, selectivePlay) {
+        // method overloading
+        if (typeof index === 'boolean') {
+          selectivePlay = index;
+          index = undefined;
+        }
+        if (selectivePlay) {
+          this.$selective = true;
+        }
+
         if (this.$playlist.length > index) {
           this.currentTrack = index + 1;
           return this.load(this.$playlist[index], true);
@@ -82,7 +93,16 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           this.$domEl.play();
         }
       },
-      playPause: function (index) {
+      playPause: function (index, selectivePlay) {
+        // method overloading
+        if (typeof index === 'boolean') {
+          selectivePlay = index;
+          index = undefined;
+        }
+        if (selectivePlay) {
+          this.$autoplay = true;
+        }
+
         if (typeof index === 'number' && index + 1 !== this.currentTrack) {
           this.play(index);
         } else if (this.playing) {
@@ -135,14 +155,16 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
       seek: function (value) {
         var doubleval = 0, valuesArr;
         if (typeof value === 'string') {
-          try {
-            valuesArr = value.split(':');
-            doubleval += parseInt(valuesArr.pop(), 10);
-            if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 60; }
-            if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 3600; }
-          } catch (e) {}
+          valuesArr = value.split(':');
+          doubleval += parseInt(valuesArr.pop(), 10);
+          if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 60; }
+          if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 3600; }
+          if (!isNaN(doubleval)) {
+            return this.$domEl.currentTime = doubleval;
+          }
+        } else {
+          return this.$domEl.currentTime = value;
         }
-        return this.$domEl.fastSeek(value);
       },
       /**
        * binds a specific event directly to the element
@@ -221,10 +243,12 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           });
         },
         pause: function () {
-          au.$apply(function (scope) { scope.playing = false; });
+          au.$apply(function (scope) {
+            scope.playing = false;
+          });
         },
         ended: function () {
-          if (au.currentTrack < au.tracks) {
+          if (!au.$selective && au.currentTrack < au.tracks) {
             au.next(true);
           } else {
             au.$apply(function (scope) {

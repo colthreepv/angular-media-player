@@ -2,7 +2,7 @@
   "author": "mrgamer",
   "name": "angular-media-player",
   "description": "AngularJS Directive that wraps <audio> or <video> tag exposing methods and properties to manipulate your player",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "homepage": "https://github.com/mrgamer/angular-media-player",
   "repository": {
     "type": "git",

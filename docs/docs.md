@@ -123,22 +123,26 @@ _For whoever wondering what `media` is_: it's just a [css media query][cssmediaq
 
 ### Exposed Methods
 
-##### player.load([mediaElement, autoplayNext])
+##### player.load([mediaElement, autoplay])
 Parameter `mediaElement` type `object`, structure as specified above.  
-Parameter `autoplayNext` type `boolean`  
+Parameter `autoplay` type `boolean`  
 Internal function called from the below methods, can still be accessed directly if want to, if no parameter is provided just calls the `<audio>` _load_ method (means it starts buffering).
 
-##### player.play([index])
+##### player.play([index], [selectivePlay])
 > **NOTE**: this is _0-based_ exactly as you refer to the elements of an Array.
 
 Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
 You can force to play a specific song using the `index` param.
 
-##### player.playPause([index])
+Parameter `selectivePlay` type `boolean`, when this is `true` will be only played the specified track
+
+##### player.playPause([index], [selectivePlay])
 > **NOTE**: this is _0-based_ exactly as you refer to the elements of an Array.
 
 Parameter `index` type `number`, referring to the playlist index (0...playlist.length-1)  
 If you `playPause` the same index twice it will alternate start and stop.
+
+Parameter `selectivePlay` type `boolean`, when this is `true` will be only played the specified track
 
 ##### player.pause()
 Pauses the player.
@@ -317,6 +321,6 @@ git push && git push --tags
   * 0.5.0 - complete refactor, tests added, `<video>` tag support.
   * 0.2.2 - backport from the `next` branch to support IE9-10
   * 0.2.0 :
-    * `angular.module` changed from `'angular-media-player'` to `'audioPlayer'` - seemed more ngCompliant to me
+    * `angular.module` changed from `'angular-audio-player'` to `'audioPlayer'` - seemed more ngCompliant to me
     * property `'playingTrack'` renamed to `'currentTrack'` - again, on first directive tapeout names weren't the most important thing
   * 0.1.2 - first release, with basic functionalities

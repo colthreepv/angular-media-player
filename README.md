@@ -315,9 +315,9 @@ git push && git push --tags
 # Release History
 
   * 0.5.1
-    * added [selective play]() functionality on `play` and `playPause`
-    * [seek]() now works correctly and is tested
-    * more tests
+    * added [selective play](#playerplayindex-selectiveplay) functionality on `play` and `playPause`
+    * [seek](#playerseekvalue) now works correctly and is tested
+    * 2 more tests
   * 0.5.0 - complete refactor, tests added, `<video>` tag support.
   * 0.2.2 - backport from the `next` branch to support IE9-10
   * 0.2.0 :

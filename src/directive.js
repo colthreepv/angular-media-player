@@ -76,7 +76,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           index = undefined;
         }
         if (selectivePlay) {
-          au.$selective = true;
+          this.$selective = true;
         }
 
         if (this.$playlist.length > index) {
@@ -100,7 +100,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           index = undefined;
         }
         if (selectivePlay) {
-          au.$autoplay = true;
+          this.$autoplay = true;
         }
 
         if (typeof index === 'number' && index + 1 !== this.currentTrack) {
