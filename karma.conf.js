@@ -16,6 +16,7 @@ module.exports = function (config) {
       // tests
       'test/unit.js',
       'test/playback.js',
+      'test/methods.js',
       'test/video.js'
     ],
     // list of files to exclude

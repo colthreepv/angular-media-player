@@ -171,7 +171,7 @@ This method is a _setter_ for the `playbackRate` property.
 
 ##### player.seek(value)
 Parameter `value` can be type `number` or `string`  
-This method is a _setter_ using `fastSeek` [browser method][mediaelement].  
+This method _sets_ `currentTime` on the element.  
 `value` can be between `0.0` and `max duration`, or it can be expressed in `HH:mm:ss` string format.
 
 ### Exposed Properties
@@ -310,6 +310,10 @@ git push && git push --tags
 
 # Release History
 
+  * 0.5.1
+    * added [selective play]() functionality on `play` and `playPause`
+    * [seek]() now works correctly and is tested
+    * more tests
   * 0.5.0 - complete refactor, tests added, `<video>` tag support.
   * 0.2.2 - backport from the `next` branch to support IE9-10
   * 0.2.0 :

@@ -134,20 +134,15 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
       seek: function (value) {
         var doubleval = 0, valuesArr;
         if (typeof value === 'string') {
-          try {
-            valuesArr = value.split(':');
-            doubleval += parseInt(valuesArr.pop(), 10);
-            if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 60; }
-            if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 3600; }
-            value = doubleval; // use calculated seek time
-          } catch (e) {}
-        }
-        // use fast seek if it is available
-        if(this.$domEl.fastSeek) {
-        	return this.$domEl.fastSeek(value);
-        } else { // otherwise use current time setter to update value
-        	this.$domEl.currentTime = value;
-        	return this.$domEl.currentTime;	
+          valuesArr = value.split(':');
+          doubleval += parseInt(valuesArr.pop(), 10);
+          if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 60; }
+          if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 3600; }
+          if (!isNaN(doubleval)) {
+            return this.$domEl.currentTime = doubleval;
+          }
+        } else {
+          return this.$domEl.currentTime = value;
         }
       },
       /**
