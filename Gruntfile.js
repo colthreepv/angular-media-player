@@ -64,7 +64,7 @@ module.exports = function (grunt) {
       }
     },
     md2html: {
-      docsnew: {
+      docs: {
         files: [
           { cwd: 'docs/', src: ['docs.md'], dest: 'docs/', ext: '.md.tpl.html', expand: true }
         ],
@@ -78,6 +78,7 @@ module.exports = function (grunt) {
       }
     },
     clean: {
+      'docs-readme': ['docs/docs.md'],
       'docs-md': ['docs/*.md.tpl.html', 'docs/examples/*.md.tpl.html'],
       'www': ['www/*'],
       'html': ['www/*.html', 'www/examples/*.html']
@@ -104,6 +105,10 @@ module.exports = function (grunt) {
       }
     },
     copy: {
+      readme: {
+        src: 'README.md',
+        dest: 'docs/docs.md'
+      },
       css: {
         src: 'docs/style.css',
         dest: 'www/style.css'
@@ -125,7 +130,7 @@ module.exports = function (grunt) {
   // - start connect static fileserver
   // - put yourself on watch for changes
   grunt.registerTask('docs', [
-    'clean', 'md2html:docsnew', 'copy', 'concat:devlib', 'swig', 'connect:docs', 'watch'
+    'clean', 'copy:readme', 'md2html:docs', 'copy', 'concat:devlib', 'swig', 'connect:docs', 'watch'
   ]);
   grunt.registerTask('default', ['docs']);
 

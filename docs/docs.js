@@ -1,4 +1,4 @@
-angular.module('docs', ['ngRoute', 'templates-docs', 'audioPlayer', 'ngDragDrop'])
+angular.module('docs', ['ngRoute', 'templates-docs', 'mediaPlayer', 'ngDragDrop'])
 
 // Definition of all examples as an hash
 .constant('exampleHash', {

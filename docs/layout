@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>audioPlayer: {{ title }}</title>
+    <title>mediaPlayer: {{ title }}</title>
 
     <!-- BootstrapCDN -->
     <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/darkly/bootstrap.min.css" rel="stylesheet">
@@ -16,14 +16,14 @@
     <!-- google analytics -->
     <script type="text/javascript">{% include './google-analytics.js' %}</script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
-    <script type="text/javascript" src="/libs/angular-audio-player.js"></script>
+    <script type="text/javascript" src="/libs/angular-media-player.js"></script>
     {% block javascript %}{% endblock %}
   </head>
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="{{ home }}">angular-audio-player</a>
+          <a class="navbar-brand" href="{{ home }}">angular-media-player</a>
           <p class="navbar-text navbar-arrow"></p>
           <p class="navbar-text navbar-active">{{ title }}</p>
         </div>

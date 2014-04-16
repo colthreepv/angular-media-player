@@ -17,26 +17,26 @@
   </p>
 </div>
 <div class="audio-control">
-  <audio player-control="audioPlayer" playlist="audioPlaylist" audio-player>
+  <audio player-control="mediaPlayer" playlist="audioPlaylist" media-player>
     <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
   </audio>
-  <div class="btn" ng-click="audioPlayer.play()">
+  <div class="btn" ng-click="mediaPlayer.play()">
     <span>Simple Play</span>
     <i class="fa fa-play"></i>
   </div>
-  <div class="btn" ng-click="audioPlayer.playPause()">
-    <i class="fa" ng-class="{ 'fa-pause': audioPlayer.playing, 'fa-play': !audioPlayer.playing }"></i>
+  <div class="btn" ng-click="mediaPlayer.playPause()">
+    <i class="fa" ng-class="{ 'fa-pause': mediaPlayer.playing, 'fa-play': !mediaPlayer.playing }"></i>
   </div>
-  <div class="btn" ng-click="audioPlayer.next()">
+  <div class="btn" ng-click="mediaPlayer.next()">
     <span>Next</span>
     <i class="fa fa-step-forward"></i>
   </div>
-  <div class="btn" ng-click="audioPlayer.prev()">
+  <div class="btn" ng-click="mediaPlayer.prev()">
     <i class="fa fa-step-backward"></i>
     <span>Prev</span>
   </div>
   <div class="btn btn-noclick">
-    <span>currentTrack: <span class="badge">{{ audioPlayer.currentTrack }}</span></span>
+    <span>currentTrack: <span class="badge">{{ mediaPlayer.currentTrack }}</span></span>
   </div>
 </div>
 <pre>
@@ -49,7 +49,7 @@
 
 <h4>HTML of the audio tag</h4>
 {% highlight 'html' %}
-<audio data-player-control="audioPlayer" data-playlist="audioPlaylist" audio-player>
+<audio data-player-control="mediaPlayer" data-playlist="audioPlaylist" media-player>
   <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
 </audio>
 {% endhighlight %}

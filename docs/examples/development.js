@@ -1,4 +1,4 @@
-angular.module('docs', ['audioPlayer'])
+angular.module('docs', ['mediaPlayer'])
 .controller('DevelopmentController', function ($scope, $log) {
   $scope.browser = navigator.userAgent;
   $scope.audioPlaylist = [
