@@ -17,6 +17,9 @@
     <script type="text/javascript">{% include './google-analytics.js' %}</script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
     <script type="text/javascript" src="/libs/angular-media-player.js"></script>
+    <script type="text/javascript">
+    {% include 'angular-swig.js' %}
+    </script>
     {% block javascript %}{% endblock %}
   </head>
   <body>
