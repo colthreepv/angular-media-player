@@ -1,6 +1,8 @@
 angular-media-player [![Build Status](https://travis-ci.org/mrgamer/angular-media-player.svg?branch=master)](https://travis-ci.org/mrgamer/angular-media-player)
 ====================
-AngularJS Directive that wraps `<audio>` or `<video`> tag exposing methods and properties to manipulate your player
+AngularJS Directive that wraps `<audio>` or `<video`> tag exposing methods and properties to manipulate your player  
+
+Examples on gh-pages: http://mrgamer.github.io/angular-media-player/, they are not complete, i will add them back as i develop the documentation
 
 ## Abstract / Idea
 I've come across a lot of `<audio>` players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.  
