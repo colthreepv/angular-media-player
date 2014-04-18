@@ -10,8 +10,8 @@
       "url": "/examples/progressive-playlist.html"
     },
     {
-      "name": "Self-Populating Playlist",
-      "url": "/examples/self-populating.html"
+      "name": "Backwards Compatibility",
+      "url": "/examples/backwards-compatible.html"
     },
     {
       "name": "Swap Audio during play",

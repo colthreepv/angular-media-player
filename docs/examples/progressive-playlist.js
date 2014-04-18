@@ -1,4 +1,4 @@
-angular.module('docs')
+angular.module('docs', ['mediaPlayer'])
 .controller('ProgressiveController', function ($scope, $timeout) {
   $scope.audioPlaylist = [];
   $scope.audioPlaylist.push({
