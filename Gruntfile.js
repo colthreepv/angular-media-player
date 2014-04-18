@@ -1,5 +1,11 @@
 var hljs = require('highlight.js');
 
+var markedOpts = {
+  highlight: function (code, lang) {
+    return hljs.highlightAuto(code).value;
+  }
+};
+
 module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -33,6 +39,7 @@ module.exports = function (grunt) {
     watch: {
       docs: {
         files: [
+          'docs/layout',
           'docs/*.swig',
           'docs/*.js',
           'docs/*.json',
@@ -63,20 +70,6 @@ module.exports = function (grunt) {
         }
       }
     },
-    md2html: {
-      docs: {
-        files: [
-          { cwd: 'docs/', src: ['docs.md'], dest: 'docs/', ext: '.md.tpl.html', expand: true }
-        ],
-        options: {
-          markedOptions: {
-            highlight: function (code, lang) {
-              return hljs.highlightAuto(code).value;
-            }
-          }
-        }
-      }
-    },
     clean: {
       'docs-readme': ['docs/docs.md'],
       'docs-md': ['docs/*.md.tpl.html', 'docs/examples/*.md.tpl.html'],
@@ -94,7 +87,8 @@ module.exports = function (grunt) {
         generateRobotstxt: true,
         siteUrl: 'http://mrgamer.github.io/angular-media-player/',
         tags: {
-          highlight: require('swig-highlight')
+          highlight: require('swig-highlight'),
+          markdown: require('swig-marked').configure(markedOpts).tag
         },
         sitemap_priorities: {
           'index.html': '0.8',
