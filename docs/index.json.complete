@@ -14,6 +14,18 @@
       "url": "/examples/backwards-compatible.html"
     },
     {
+      "name": "Swap Audio during play",
+      "url": "/examples/swap-audio.html"
+    },
+    {
+      "name": "Interactive Demo",
+      "url": "/examples/interactive.html"
+    },
+    {
+      "name": "Using ng-repeat",
+      "url": "/examples/repeat-audio.html"
+    },
+    {
       "name": "Test Page",
       "url": "/examples/development.html"
     }

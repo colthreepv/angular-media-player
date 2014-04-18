@@ -15,7 +15,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-md2html');
   grunt.loadNpmTasks('grunt-swig');
 
   grunt.initConfig({
@@ -130,7 +129,7 @@ module.exports = function (grunt) {
   // - start connect static fileserver
   // - put yourself on watch for changes
   grunt.registerTask('docs', [
-    'clean', 'copy:readme', 'md2html:docs', 'copy', 'concat:devlib', 'swig', 'connect:docs', 'watch'
+    'clean', 'copy:readme', 'copy', 'concat:devlib', 'swig', 'connect:docs', 'watch'
   ]);
   grunt.registerTask('default', ['docs']);
 
