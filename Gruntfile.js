@@ -48,7 +48,7 @@ module.exports = function (grunt) {
           'docs/examples/*.json',
           'docs/examples/*.md'
         ],
-        tasks: ['clean:html', 'swig']
+        tasks: ['clean:html', 'swig:development', 'copy:examples', 'clean:examples']
       },
       library: {
         files: ['src/*'],
@@ -73,6 +73,7 @@ module.exports = function (grunt) {
       'docs-readme': ['docs/docs.md'],
       'docs-md': ['docs/*.md.tpl.html', 'docs/examples/*.md.tpl.html'],
       'www': ['www/*'],
+      'examples': 'www/examples',
       'html': ['www/*.html', 'www/examples/*.html']
     },
     swig: {
@@ -93,8 +94,27 @@ module.exports = function (grunt) {
           'index.html': '0.8',
         },
         // local variables
+        home: '/index.html'
+      },
+      github: {
+        // init: {
+        //   autoescape: true
+        // },
+        src: ['docs/*.swig', 'docs/examples/*.swig'],
+        dest: 'www',
+        generateSitemap: true,
+        generateRobotstxt: true,
+        siteUrl: 'http://mrgamer.github.io/angular-media-player/',
+        tags: {
+          highlight: require('swig-highlight'),
+          markdown: require('swig-marked').configure(markedOpts).tag
+        },
+        sitemap_priorities: {
+          'index.html': '0.8',
+        },
+        // local variables
         home: '/index.html',
-        production: false
+        urlPrefix: '/angular-media-player'
       }
     },
     copy: {
@@ -115,6 +135,12 @@ module.exports = function (grunt) {
         src: '*.css',
         dest: 'www/libs/github-fork-ribbon-css/',
         expand: true
+      },
+      examples: {
+        cwd: 'www/examples/',
+        src: '*',
+        dest: 'www/',
+        expand: true
       }
     }
   });
@@ -129,7 +155,7 @@ module.exports = function (grunt) {
   // - start connect static fileserver
   // - put yourself on watch for changes
   grunt.registerTask('docs', [
-    'clean', 'copy:readme', 'copy', 'concat:devlib', 'swig', 'connect:docs', 'watch'
+    'clean', 'copy:readme', 'copy', 'concat:devlib', 'swig:development', 'copy:examples', 'clean:examples', 'connect:docs', 'watch'
   ]);
   grunt.registerTask('default', ['docs']);
 

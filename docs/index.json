@@ -3,19 +3,19 @@
   "pagelist": [
     {
       "name": "Getting Started",
-      "url": "/index.html"
+      "url": "index.html"
     },
     {
       "name": "Robust Playlist",
-      "url": "/examples/robust-playlist.html"
+      "url": "robust-playlist.html"
     },
     {
       "name": "Backwards Compatibility",
-      "url": "/examples/backwards-compatible.html"
+      "url": "backwards-compatible.html"
     },
     {
       "name": "Test Page",
-      "url": "/examples/development.html"
+      "url": "development.html"
     }
   ]
 }
