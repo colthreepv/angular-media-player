@@ -10,11 +10,18 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
     <!-- highlight.js -->
     <link rel="stylesheet" href="//yandex.st/highlightjs/8.0/styles/github.min.css">
+    <!-- css fork ribbon -->
+    <link rel="stylesheet" href="/libs/github-fork-ribbon-css/gh-fork-ribbon.css">
+    <!--[if lt IE 9]>
+        <link rel="stylesheet" href="/libs/github-fork-ribbon-css/gh-fork-ribbon.ie.css">
+    <![endif]-->
     <!-- overridden css -->
     <link href="/style.css" rel="stylesheet">
 
     <!-- google analytics -->
-    <script type="text/javascript">{% include './google-analytics.js' %}</script>
+    <script type="text/javascript">
+    {% include './google-analytics.js' %}
+    </script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
     <script type="text/javascript" src="/libs/angular-media-player.js"></script>
     <script type="text/javascript">
@@ -23,33 +30,47 @@
     {% block javascript %}{% endblock %}
   </head>
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="footerwrap">
+      <div class="github-fork-ribbon-wrapper right hidden-xs">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/mrgamer/angular-media-player">Fork me on GitHub</a>
+        </div>
+      </div>
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand hidden-xs" href="{{ home }}">angular-media-player</a>
+            <a class="navbar-brand visible-xs" href="{{ home }}"><i class="fa fa-home"></i></a>
+            <p class="navbar-text navbar-arrow"></p>
+            <p class="navbar-text navbar-active">{{ title }}</p>
+          </div>
+        </div>
+      </div>
       <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="{{ home }}">angular-media-player</a>
-          <p class="navbar-text navbar-arrow"></p>
-          <p class="navbar-text navbar-active">{{ title }}</p>
+        {% block controller %}
+        <div class="col-xs-12 col-sm-9">
+        {% endblock %}
+        {% block content %}
+        {% endblock %}
+        </div>
+        <div class="col-xs-12 col-sm-3" role="navigation">
+          <p class="text-success">Examples List</p>
+          <div class="list-group">
+            {% for page in pagelist %}
+            {% if title === page.name %}
+            <a class="list-group-item active" href="{{ page.url }}">{{ page.name }}</a>
+            {% else %}
+            <a class="list-group-item" href="{{ page.url }}">{{ page.name }}</a>
+            {% endif %}
+            {% endfor %}
+          </div>
         </div>
       </div>
+      <div class="push"></div>
     </div>
-    <div class="container">
-      {% block controller %}
-      <div class="col-xs-12 col-sm-9">
-      {% endblock %}
-      {% block content %}
-      {% endblock %}
-      </div>
-      <div class="col-xs-12 col-sm-3" role="navigation">
-        <p class="text-primary">Examples List</p>
-        <div class="list-group">
-          {% for page in pagelist %}
-          {% if title === page.name %}
-          <a class="list-group-item active" href="{{ page.url }}">{{ page.name }}</a>
-          {% else %}
-          <a class="list-group-item" href="{{ page.url }}">{{ page.name }}</a>
-          {% endif %}
-          {% endfor %}
-        </div>
+    <div class="footer">
+      <div class="container">
+        angular-media-player is copyright ©2014 <a href="http://col3.me">Valerio Coltre</a>, licensed for use under the permissive <a href="http://choosealicense.com/">MIT Open Source License</a>.
       </div>
     </div>
   </body>

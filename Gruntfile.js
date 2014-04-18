@@ -116,6 +116,12 @@ module.exports = function (grunt) {
       dragdrop: {
         src: 'libs/angular-dragdrop/draganddrop.js',
         dest: 'www/libs/angular-dragdrop.js'
+      },
+      cssribbon: {
+        cwd: 'libs/github-fork-ribbon-css/',
+        src: '*.css',
+        dest: 'www/libs/github-fork-ribbon-css/',
+        expand: true
       }
     }
   });

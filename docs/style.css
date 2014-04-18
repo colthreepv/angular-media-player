@@ -7,7 +7,7 @@
 }
 
 body {
-  padding-top: 50px;
+  padding-top: 71px;
 }
 
 body > .container {
@@ -15,6 +15,7 @@ body > .container {
 }
 
 .navbar-text.navbar-arrow {
+  display: inline-block;
   padding: 0 5px;
 }
 .navbar-text.navbar-arrow:before {
@@ -23,6 +24,7 @@ body > .container {
 }
 
 .navbar-text.navbar-active {
+  display: inline-block;
   color: #fff;
   background-color: #00bc8c;
   padding: 15px;
@@ -70,4 +72,27 @@ table .on-drag-hover > td {
 .hljs {
   white-space: pre;
   overflow: auto;
+}
+
+/**
+ * Sticky Footer by Ryan Fait
+ * http://ryanfait.com/
+ */
+html, body {
+  height: 100%;
+}
+.footerwrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -31px; /* the bottom margin is the negative value of the footer's height */
+}
+.push {
+  height: 31px; /* '.push' must be the same height as 'footer' */
+}
+.footer {
+  background-color: dimgrey;
+  padding-top: 4px;
+  padding-bottom: 6px;
+  box-shadow: 0 0 100px 30px black;
 }
