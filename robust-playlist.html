@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+  <html ng-app="docs">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>mediaPlayer: Robust Playlist</title>
+
+    <!-- BootstrapCDN -->
+    <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/darkly/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//yandex.st/highlightjs/8.0/styles/github.min.css">
+    <!-- css fork ribbon -->
+    <link rel="stylesheet" href="/angular-media-player/libs/github-fork-ribbon-css/gh-fork-ribbon.css">
+    <!--[if lt IE 9]>
+        <link rel="stylesheet" href="/angular-media-player/libs/github-fork-ribbon-css/gh-fork-ribbon.ie.css">
+    <![endif]-->
+    <!-- overridden css -->
+    <link href="/angular-media-player/style.css" rel="stylesheet">
+
+    <!-- google analytics -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-42785441-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+    </script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
+    <script type="text/javascript" src="/angular-media-player/libs/angular-media-player.js"></script>
+    <script type="text/javascript">
+    angular.module('docs', ['mediaPlayer'])
+.config(function ($interpolateProvider) {
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
+});
+
+    </script>
+    
+  <script type="text/javascript">angular.module('docs')
+.controller('ProgressiveController', function ($scope, $timeout) {
+  $scope.audioPlaylist = [];
+  $scope.audioPlaylist.push({
+    src: 'http://upload.wikimedia.org/wikipedia/en/7/79/Korn_-_Predictable_%28demo%29.ogg',
+    type: 'audio/ogg'
+  });
+  $timeout(function () {
+    $scope.audioPlaylist.unshift({
+      src: 'http://www.metadecks.org/software/sweep/audio/demos/vocal2.ogg',
+      type: 'audio/ogg'
+    });
+  }, 5500);
+  $timeout(function () {
+    $scope.audioPlaylist.push({
+      src: 'http://demos.w3avenue.com/html5-unleashed-tips-tricks-and-techniques/demo-audio.ogg',
+      type: 'audio/ogg'
+    });
+  }, 9500);
+});
+</script>
+
+  </head>
+  <body>
+    <div class="footerwrap">
+      <div class="github-fork-ribbon-wrapper right hidden-xs">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/mrgamer/angular-media-player">Fork me on GitHub</a>
+        </div>
+      </div>
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand hidden-xs" href="/angular-media-player/index.html">angular-media-player</a>
+            <a class="navbar-brand visible-xs" href="/angular-media-player/index.html"><i class="fa fa-home"></i></a>
+            <p class="navbar-text navbar-arrow"></p>
+            <p class="navbar-text navbar-active">Robust Playlist</p>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        
+<div class="col-xs-12 col-sm-9" ng-controller="ProgressiveController">
+
+        
+<div class="jumbotron">
+  <h1>Robust Playlist</h1>
+  <p>
+    Simulates playlist population from time to time.
+  </p>
+</div>
+<h3 id="what-happens">What happens</h3>
+<p>Every 5seconds a new <code>mediaElement</code> gets added into the playlist.<br>Generally those gets added through events <em>(ex: user clicks and adds a track)</em></p>
+<p>You can notice the <code>currentTrack</code> property changing when a track gets added in front of the playlist.<br>It goes from <code>currentTrack: 1</code> to <code>currentTrack: 2</code> without interrupting playback, thus making the information always consistent.</p>
+
+<audio media-player="mediaPlayer" playlist="audioPlaylist"></audio>
+
+<div class="audio-control">
+  <div class="btn" ng-click="mediaPlayer.play()">
+    <span>Simple Play</span>
+    <i class="fa fa-play"></i>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.playPause()">
+    <i class="fa" ng-class="{ 'fa-pause': mediaPlayer.playing, 'fa-play': !mediaPlayer.playing }"></i>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.next()">
+    <span>Next</span>
+    <i class="fa fa-step-forward"></i>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.prev()">
+    <i class="fa fa-step-backward"></i>
+    <span>Prev</span>
+  </div>
+  <div class="btn btn-noclick">
+    <span>currentTrack: <span class="badge">[[ mediaPlayer.currentTrack ]]</span></span>
+  </div>
+  <div class="btn btn-noclick">
+    <span><i class="fa fa-clock-o"></i>: <span class="badge">[[ mediaPlayer.formatTime ]]</span></span>
+  </div>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: mediaPlayer.currentTime*100/mediaPlayer.duration + '%' }"></div>
+    <div class="time" ng-show="mediaPlayer.formatTime">
+      <span>[[ mediaPlayer.formatTime ]]</span><b>/</b><span>[[ mediaPlayer.formatDuration ]]</span>
+    </div>
+  </div>
+</div>
+
+
+<pre><code>
+  mediaPlayer.currentTrack: [[ mediaPlayer.currentTrack ]]
+  mediaPlayer.playing: [[ mediaPlayer.playing ]]
+</code></pre>
+
+<p>Keep track of changes to <code>$scope.audioPlaylist</code> in realtime</p>
+<pre><code>
+  audioPlaylist: [[ audioPlaylist | json ]]
+</code></pre>
+
+<h1>Code</h1>
+<small>...you can inspect aswell!</small>
+<code class="hljs javascript">angular.module(<span class="hljs-string">'docs'</span>)
+.controller(<span class="hljs-string">'ProgressiveController'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">($scope, $timeout)</span> {</span>
+  $scope.audioPlaylist = [];
+  $scope.audioPlaylist.push({
+    src: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/7/79/Korn_-_Predictable_%28demo%29.ogg'</span>,
+    type: <span class="hljs-string">'audio/ogg'</span>
+  });
+  $timeout(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+    $scope.audioPlaylist.unshift({
+      src: <span class="hljs-string">'http://www.metadecks.org/software/sweep/audio/demos/vocal2.ogg'</span>,
+      type: <span class="hljs-string">'audio/ogg'</span>
+    });
+  }, <span class="hljs-number">5500</span>);
+  $timeout(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+    $scope.audioPlaylist.push({
+      src: <span class="hljs-string">'http://demos.w3avenue.com/html5-unleashed-tips-tricks-and-techniques/demo-audio.ogg'</span>,
+      type: <span class="hljs-string">'audio/ogg'</span>
+    });
+  }, <span class="hljs-number">9500</span>);
+});
+</code>
+
+        </div>
+        <div class="col-xs-12 col-sm-3" role="navigation">
+          <p class="text-success">Examples List</p>
+          <div class="list-group">
+            
+            
+            <a class="list-group-item" href="index.html">Getting Started</a>
+            
+            
+            
+            <a class="list-group-item active" href="robust-playlist.html">Robust Playlist</a>
+            
+            
+            
+            <a class="list-group-item" href="backwards-compatible.html">Backwards Compatibility</a>
+            
+            
+            
+            <a class="list-group-item" href="development.html">Test Page</a>
+            
+            
+          </div>
+        </div>
+      </div>
+      <div class="push"></div>
+    </div>
+    <div class="footer">
+      <div class="container">
+        angular-media-player is copyright ©2014 <a href="http://col3.me">Valerio Coltre</a>, licensed for use under the permissive <a href="http://choosealicense.com/">MIT Open Source License</a>.
+      </div>
+    </div>
+  </body>
+</html>

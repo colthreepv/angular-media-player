@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+  <html ng-app="docs">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>mediaPlayer: Backwards Compatibility</title>
+
+    <!-- BootstrapCDN -->
+    <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/darkly/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//yandex.st/highlightjs/8.0/styles/github.min.css">
+    <!-- css fork ribbon -->
+    <link rel="stylesheet" href="/angular-media-player/libs/github-fork-ribbon-css/gh-fork-ribbon.css">
+    <!--[if lt IE 9]>
+        <link rel="stylesheet" href="/angular-media-player/libs/github-fork-ribbon-css/gh-fork-ribbon.ie.css">
+    <![endif]-->
+    <!-- overridden css -->
+    <link href="/angular-media-player/style.css" rel="stylesheet">
+
+    <!-- google analytics -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-42785441-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+    </script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
+    <script type="text/javascript" src="/angular-media-player/libs/angular-media-player.js"></script>
+    <script type="text/javascript">
+    angular.module('docs', ['mediaPlayer'])
+.config(function ($interpolateProvider) {
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
+});
+
+    </script>
+    
+  </head>
+  <body>
+    <div class="footerwrap">
+      <div class="github-fork-ribbon-wrapper right hidden-xs">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/mrgamer/angular-media-player">Fork me on GitHub</a>
+        </div>
+      </div>
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand hidden-xs" href="/angular-media-player/index.html">angular-media-player</a>
+            <a class="navbar-brand visible-xs" href="/angular-media-player/index.html"><i class="fa fa-home"></i></a>
+            <p class="navbar-text navbar-arrow"></p>
+            <p class="navbar-text navbar-active">Backwards Compatibility</p>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        
+        <div class="col-xs-12 col-sm-9">
+        
+        
+<div class="jumbotron">
+  <h1>Backwards Compatible</h1>
+  <p>
+    playlist object gets created and populated with the tracks found in the <code>&lt;audio&gt;</code> tag.
+  </p>
+</div>
+<h3 id="purpose">Purpose</h3>
+<p>This is to give some sort of compatibility for audio tags already present in webpages where you can include this directive.</p>
+
+<audio player-control="mediaPlayer" playlist="audioPlaylist" media-player>
+  <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" type="audio/ogg">
+</audio>
+
+<div class="audio-control">
+  <div class="btn" ng-click="mediaPlayer.play()">
+    <span>Simple Play</span>
+    <i class="fa fa-play"></i>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.playPause()">
+    <i class="fa" ng-class="{ 'fa-pause': mediaPlayer.playing, 'fa-play': !mediaPlayer.playing }"></i>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.next()">
+    <span>Next</span>
+    <i class="fa fa-step-forward"></i>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.prev()">
+    <i class="fa fa-step-backward"></i>
+    <span>Prev</span>
+  </div>
+  <div class="btn btn-noclick">
+    <span>currentTrack: <span class="badge">[[ mediaPlayer.currentTrack ]]</span></span>
+  </div>
+  <div class="btn btn-noclick">
+    <span><i class="fa fa-clock-o"></i>: <span class="badge">[[ mediaPlayer.formatTime ]]</span></span>
+  </div>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: mediaPlayer.currentTime*100/mediaPlayer.duration + '%' }"></div>
+    <div class="time" ng-show="mediaPlayer.formatTime">
+      <span>[[ mediaPlayer.formatTime ]]</span><b>/</b><span>[[ mediaPlayer.formatDuration ]]</span>
+    </div>
+  </div>
+</div>
+
+<h4>Resulting <code>$scope.audioPlaylist</code> in the controller</h4>
+<pre>
+  <code>audioPlaylist = [[ audioPlaylist | json ]]</code>
+</pre>
+
+<h4>HTML of the audio tag</h4>
+<code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-title">audio</span> <span class="hljs-attribute">data-player-control</span>=<span class="hljs-value">"mediaPlayer"</span> <span class="hljs-attribute">data-playlist</span>=<span class="hljs-value">"audioPlaylist"</span> <span class="hljs-attribute">media-player</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">source</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg"</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"audio/ogg"</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">audio</span>&gt;</span></code>
+
+        </div>
+        <div class="col-xs-12 col-sm-3" role="navigation">
+          <p class="text-success">Examples List</p>
+          <div class="list-group">
+            
+            
+            <a class="list-group-item" href="index.html">Getting Started</a>
+            
+            
+            
+            <a class="list-group-item" href="robust-playlist.html">Robust Playlist</a>
+            
+            
+            
+            <a class="list-group-item active" href="backwards-compatible.html">Backwards Compatibility</a>
+            
+            
+            
+            <a class="list-group-item" href="development.html">Test Page</a>
+            
+            
+          </div>
+        </div>
+      </div>
+      <div class="push"></div>
+    </div>
+    <div class="footer">
+      <div class="container">
+        angular-media-player is copyright ©2014 <a href="http://col3.me">Valerio Coltre</a>, licensed for use under the permissive <a href="http://choosealicense.com/">MIT Open Source License</a>.
+      </div>
+    </div>
+  </body>
+</html>

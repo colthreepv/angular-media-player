@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>http://mrgamer.github.io/angular-media-player//index.html</loc>
+		<lastmod>2014-04-18T17:58:30.422Z</lastmod>
+		
+		<changefreq>weekly</changefreq>
+		
+	</url>
+	<url>
+		<loc>http://mrgamer.github.io/angular-media-player//swig-macros.html</loc>
+		<lastmod>2014-04-18T17:58:30.422Z</lastmod>
+		
+		<changefreq>weekly</changefreq>
+		
+	</url>
+	<url>
+		<loc>http://mrgamer.github.io/angular-media-player/examples/backwards-compatible.html</loc>
+		<lastmod>2014-04-18T17:58:30.422Z</lastmod>
+		
+		<changefreq>weekly</changefreq>
+		
+	</url>
+	<url>
+		<loc>http://mrgamer.github.io/angular-media-player/examples/development.html</loc>
+		<lastmod>2014-04-18T17:58:30.422Z</lastmod>
+		
+		<changefreq>weekly</changefreq>
+		
+	</url>
+	<url>
+		<loc>http://mrgamer.github.io/angular-media-player/examples/interactive.html</loc>
+		<lastmod>2014-04-18T17:58:30.422Z</lastmod>
+		
+		<changefreq>weekly</changefreq>
+		
+	</url>
+	<url>
+		<loc>http://mrgamer.github.io/angular-media-player/examples/robust-playlist.html</loc>
+		<lastmod>2014-04-18T17:58:30.422Z</lastmod>
+		
+		<changefreq>weekly</changefreq>
+		
+	</url>
+</urlset>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+  <html ng-app="docs">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>mediaPlayer: Interactive Demo</title>
+
+    <!-- BootstrapCDN -->
+    <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/darkly/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//yandex.st/highlightjs/8.0/styles/github.min.css">
+    <!-- css fork ribbon -->
+    <link rel="stylesheet" href="/angular-media-player/libs/github-fork-ribbon-css/gh-fork-ribbon.css">
+    <!--[if lt IE 9]>
+        <link rel="stylesheet" href="/angular-media-player/libs/github-fork-ribbon-css/gh-fork-ribbon.ie.css">
+    <![endif]-->
+    <!-- overridden css -->
+    <link href="/angular-media-player/style.css" rel="stylesheet">
+
+    <!-- google analytics -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-42785441-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+    </script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
+    <script type="text/javascript" src="/angular-media-player/libs/angular-media-player.js"></script>
+    <script type="text/javascript">
+    angular.module('docs', ['mediaPlayer'])
+.config(function ($interpolateProvider) {
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
+});
+
+    </script>
+    
+  <script type="text/javascript" src="/libs/angular-dragdrop.js"></script>
+  <script type="text/javascript">angular.module('docs', ['mediaPlayer', 'ngDragDrop'])
+// Taken from http://en.wikipedia.org/wiki/List_of_songs_considered_the_best
+// Thanks again, wikipedia.
+.constant('top100SongsEver', [
+  { url: 'http://upload.wikimedia.org/wikipedia/en/5/5e/U2_One.ogg', displayName: 'U2 - One' },
+  { url: 'http://upload.wikimedia.org/wikipedia/en/6/6c/NirvanaSmellsLikeTeenSpirit.ogg', displayName: 'Nirvana - Smells Like Teen Spirit' },
+  { url: 'http://upload.wikimedia.org/wikipedia/en/b/be/My_Name_Is.ogg', displayName: 'Eminem - My Name is' },
+  { url: 'http://upload.wikimedia.org/wikipedia/en/c/c4/Radiohead_-_Creep_%28sample%29.ogg', displayName: 'Radiohead - Creep' },
+  { url: 'http://upload.wikimedia.org/wikipedia/en/6/64/OasisLiveForever.ogg', displayName: 'Oasis - Live Forever' },
+  { url: 'http://upload.wikimedia.org/wikipedia/en/6/65/Eagles_-_Hotel_California.ogg', displayName: 'Eagles - Hotel California' },
+  { url: 'http://upload.wikimedia.org/wikipedia/en/c/cb/Stairway_to_Heaven_3_sections.ogg', displayName: 'Led Zeppelin - Stairway to Heaven' },
+  { url: 'http://upload.wikimedia.org/wikipedia/en/c/cb/Pink_floyd_another_brick_in_the_wall_part_2.ogg', displayName: 'Pink Floyd - Another Brick in the Wall' },
+  { url: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Beatles_cometogether.ogg', displayName: 'Beatles - Come Together' },
+  { url: 'http://upload.wikimedia.org/wikipedia/en/d/db/Layla_sample_1.ogg', displayName: 'Derek and the Dominos - Layla' }
+])
+.controller('InteractiveController', function ($scope, top100SongsEver, $log) {
+  $scope.audioPlaylist = [];
+  $scope.prefabPlaylist = top100SongsEver.map(function (song, index, array) {
+    var parseTitle = song.displayName.match(/(.*?)\s?-\s?(.*)?$/);
+    return { src: song.url, type: 'audio/ogg', artist: parseTitle[1], title: parseTitle[2] };
+  });
+
+  $scope.addSong = function (audioElement) {
+    $scope.audioPlaylist.push(angular.copy(audioElement));
+  };
+
+  $scope.removeSong = function (index) {
+    $scope.audioPlaylist.splice(index, 1);
+  };
+
+  $scope.dropSong = function (audioElement, index) {
+    $scope.audioPlaylist.splice(index, 0, angular.copy(audioElement));
+  };
+});
+</script>
+
+  </head>
+  <body>
+    <div class="footerwrap">
+      <div class="github-fork-ribbon-wrapper right hidden-xs">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/mrgamer/angular-media-player">Fork me on GitHub</a>
+        </div>
+      </div>
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand hidden-xs" href="/angular-media-player/index.html">angular-media-player</a>
+            <a class="navbar-brand visible-xs" href="/angular-media-player/index.html"><i class="fa fa-home"></i></a>
+            <p class="navbar-text navbar-arrow"></p>
+            <p class="navbar-text navbar-active">Interactive Demo</p>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        
+<div class="col-xs-12 col-sm-9" ng-controller="InteractiveController">
+
+        
+
+<div class="jumbotron">
+  <h1>Interactive demo</h1>
+  <p>
+    Interact with the directive through this demo page.
+  </p>
+</div>
+<div class="audio-control">
+  <audio player-control="mediaPlayer" playlist="audioPlaylist" media-player></audio>
+  <div class="btn" ng-click="mediaPlayer.play()">
+    <span>Simple Play</span>
+    <i class="fa fa-play"></i>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.playPause()">
+    <i class="fa" ng-class="{ 'fa-pause': mediaPlayer.playing, 'fa-play': !mediaPlayer.playing }"></i>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.next()">
+    <span>Next</span>
+    <i class="fa fa-step-forward"></i>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.prev()">
+    <i class="fa fa-step-backward"></i>
+    <span>Prev</span>
+  </div>
+  <div class="btn btn-noclick">
+    <span>currentTrack: <span class="badge">{{ mediaPlayer.currentTrack }}</span></span>
+  </div>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: mediaPlayer.currentTime*100/mediaPlayer.duration + '%' }">
+      <span class="sr-only">{{ mediaPlayer.currentTime*100/mediaPlayer.duration }}% Complete</span>
+    </div>
+    <div class="time" ng-show="mediaPlayer.formatTime">
+      <span>{{ mediaPlayer.formatTime }}</span><b>/</b><span>{{ mediaPlayer.formatDuration }}</span>
+    </div>
+  </div>
+</div>
+
+<h3><i>Interactive</i> playlist</h3>
+<p>Keep track of this demo playlist in real-time</p>
+<p class="text-warning">You can drag songs, to re-order them!</p>
+<table class="table table-hover table-rounded table-cursor">
+  <thead>
+    <th>#</th>
+    <th>Src</th>
+    <th>Type</th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="song in audioPlaylist" ng-click="mediaPlayer.playPause($index)" ng-class="{ active: mediaPlayer.playing && mediaPlayer.currentTrack-1 === $index }"
+        ui-draggable="true" drag="song" on-drop-success="removeSong($index)" ui-on-drop="dropSong($data, $index)">
+      <td>{{ $index+1 }}</td>
+      <td><span ng-show="song.src.length > 50">...</span>{{ song.src | limitTo:-50 }}</td>
+      <td>{{ song.type }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3>Add audio track</h3>
+<p>Just click any of those sample songs to get added to your <i>interactive</i> playlist</p>
+<table class="table table-hover table-rounded table-cursor">
+  <thead>
+    <th>#</th>
+    <th>Artist</th>
+    <th>Title</th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="song in prefabPlaylist" ng-click="addSong(song)">
+      <td>{{ $index+1 }}</td>
+      <td>{{ song.artist }}</td>
+      <td>{{ song.title }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3>Audio properties tracked in realtime</h3>
+<pre>
+  <code>
+    mediaPlayer = {
+      playing: {{ mediaPlayer.playing }}
+      currentTrack: {{ mediaPlayer.currentTrack }}
+      tracks: {{ mediaPlayer.tracks }}
+      volume: {{ mediaPlayer.volume }}
+      formatDuration: {{ mediaPlayer.formatDuration }}
+      duration: {{ mediaPlayer.duration }}
+      currentTime: {{ mediaPlayer.currentTime }}
+      formatTime: {{ mediaPlayer.formatTime }}
+      position: {{ mediaPlayer.position }}
+      loadPercent: {{ mediaPlayer.loadPercent }}
+    };
+  </code>
+</pre>
+
+
+        </div>
+        <div class="col-xs-12 col-sm-3" role="navigation">
+          <p class="text-success">Examples List</p>
+          <div class="list-group">
+            
+            
+            <a class="list-group-item" href="index.html">Getting Started</a>
+            
+            
+            
+            <a class="list-group-item" href="robust-playlist.html">Robust Playlist</a>
+            
+            
+            
+            <a class="list-group-item" href="backwards-compatible.html">Backwards Compatibility</a>
+            
+            
+            
+            <a class="list-group-item" href="development.html">Test Page</a>
+            
+            
+          </div>
+        </div>
+      </div>
+      <div class="push"></div>
+    </div>
+    <div class="footer">
+      <div class="container">
+        angular-media-player is copyright ©2014 <a href="http://col3.me">Valerio Coltre</a>, licensed for use under the permissive <a href="http://choosealicense.com/">MIT Open Source License</a>.
+      </div>
+    </div>
+  </body>
+</html>

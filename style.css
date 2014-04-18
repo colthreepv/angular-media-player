@@ -1,0 +1,98 @@
+/**
+ * Custom CSS
+ */
+
+.audio-control {
+  margin-bottom: 10px;
+}
+
+body {
+  padding-top: 71px;
+}
+
+body > .container {
+  padding-top: 10px;
+}
+
+.navbar-text.navbar-arrow {
+  display: inline-block;
+  padding: 0 5px;
+}
+.navbar-text.navbar-arrow:before {
+  font-family: FontAwesome;
+  content: "\f054";
+}
+
+.navbar-text.navbar-active {
+  display: inline-block;
+  color: #fff;
+  background-color: #00bc8c;
+  padding: 15px;
+  margin: 4px 0 0 0;
+  cursor: pointer;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+}
+
+.table-rounded {
+  border: 2px solid white;
+  border-radius: 5px;
+  border-collapse: separate;
+  box-shadow: 2px 2px 4px rgb(80, 80, 80);
+}
+
+.table-cursor tr {
+  cursor: pointer;
+}
+
+.btn-noclick {
+  cursor: default;
+}
+
+.progress {
+  margin: 6px 0 12px 0;
+  height: 20px;
+}
+
+.progress .time {
+  position: absolute;
+  left: 50%;
+  color: #0ce3ac;
+  font-weight: 800;
+}
+
+table .on-drag-hover {
+  outline: white 5px solid;
+}
+table .on-drag-hover > td {
+  padding-top: 40px !important;
+}
+
+/* fix to .hljs */
+.hljs {
+  white-space: pre;
+  overflow: auto;
+}
+
+/**
+ * Sticky Footer by Ryan Fait
+ * http://ryanfait.com/
+ */
+html, body {
+  height: 100%;
+}
+.footerwrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -31px; /* the bottom margin is the negative value of the footer's height */
+}
+.push {
+  height: 40px; /* '.push' must be the same height as 'footer' */
+}
+.footer {
+  background-color: dimgrey;
+  padding-top: 4px;
+  padding-bottom: 6px;
+  box-shadow: 0 0 100px 30px black;
+}
