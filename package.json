@@ -31,7 +31,7 @@
     "grunt-contrib-connect": "*",
     "grunt-contrib-clean": "*",
     "highlight.js": "^8.0.0",
-    "grunt-swig": "git://github.com/mrgamer/grunt-swig#custom-tags",
+    "grunt-swig": "git://github.com/mrgamer/grunt-swig",
     "swig-highlight": "^0.2.0",
     "karma": "^0.12.2",
     "karma-firefox-launcher": "^0.1.3",

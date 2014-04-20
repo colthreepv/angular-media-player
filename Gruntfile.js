@@ -78,11 +78,11 @@ module.exports = function (grunt) {
     },
     swig: {
       development: {
-        // init: {
-        //   autoescape: true
-        // },
-        src: ['docs/*.swig', 'docs/examples/*.swig'],
-        dest: 'www/',
+        files: [
+          { cwd: 'docs/', src: '*.swig', dest: 'www/', expand: true },
+          { cwd: 'docs/examples/', src: '*.swig', dest: 'www/', expand: true }
+        ],
+        siteDest: 'www/',
         generateSitemap: true,
         generateRobotstxt: true,
         siteUrl: 'http://mrgamer.github.io/angular-media-player/',
@@ -97,11 +97,11 @@ module.exports = function (grunt) {
         home: '/index.html'
       },
       github: {
-        // init: {
-        //   autoescape: true
-        // },
-        src: ['docs/*.swig', 'docs/examples/*.swig'],
-        dest: 'www',
+        files: [
+          { cwd: 'docs/', src: '*.swig', dest: 'www/', expand: true },
+          { cwd: 'docs/examples/', src: '*.swig', dest: 'www/', expand: true }
+        ],
+        siteDest: 'www/',
         generateSitemap: true,
         generateRobotstxt: true,
         siteUrl: 'http://mrgamer.github.io/angular-media-player/',
