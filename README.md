@@ -24,6 +24,10 @@ Using github hosting:
 <script src="//mrgamer.github.io/angular-media-player/dist/angular-media-player.min.js" type="text/javascript"></script>
 ```
 
+## Test coverage
+At the moment IE passes only 8 tests of 20 because most of them require an actual `<audio>` tag to work with `.ogg` files.
+![test-coverage](http://i.imgur.com/mkFdC4q.gif)
+
 ## Breaking changes with `0.5.x`
 
   * `angular.module` changed **AGAIN** from `'audioPlayer'` to `'mediaPlayer'` as the library supports `<video>` tag aswell
