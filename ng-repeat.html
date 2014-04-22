@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-  
-<html ng-app="docs-interactive">
-
+  <html ng-app="docs">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>mediaPlayer: Interactive Demo</title>
+    <title>mediaPlayer: Using ng-repeat</title>
 
     <!-- BootstrapCDN -->
     <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/darkly/bootstrap.min.css" rel="stylesheet">
@@ -55,8 +53,7 @@ _gaq.push(['_trackPageview']);
 
     </script>
     
-  <script type="text/javascript" src="/libs/angular-dragdrop.js"></script>
-  <script type="text/javascript">angular.module('docs-interactive', ['docs', 'ngDragDrop'])
+  <script type="text/javascript">angular.module('docs')
 // Taken from http://en.wikipedia.org/wiki/List_of_songs_considered_the_best
 // Thanks again, wikipedia.
 .constant('top100SongsEver', [
@@ -71,24 +68,11 @@ _gaq.push(['_trackPageview']);
   { url: 'http://upload.wikimedia.org/wikipedia/en/d/d0/Beatles_cometogether.ogg', displayName: 'Beatles - Come Together' },
   { url: 'http://upload.wikimedia.org/wikipedia/en/d/db/Layla_sample_1.ogg', displayName: 'Derek and the Dominos - Layla' }
 ])
-.controller('InteractiveController', function ($scope, top100SongsEver, $log) {
-  $scope.audioPlaylist = [];
-  $scope.prefabPlaylist = top100SongsEver.map(function (song, index, array) {
+.controller('RepeatController', function ($scope, top100SongsEver) {
+  $scope.audioPlaylist = top100SongsEver.map(function (song, index, array) {
     var parseTitle = song.displayName.match(/(.*?)\s?-\s?(.*)?$/);
     return { src: song.url, type: 'audio/ogg', artist: parseTitle[1], title: parseTitle[2] };
   });
-
-  $scope.addSong = function (audioElement) {
-    $scope.audioPlaylist.push(angular.copy(audioElement));
-  };
-
-  $scope.removeSong = function (index) {
-    $scope.audioPlaylist.splice(index, 1);
-  };
-
-  $scope.dropSong = function (audioElement, index) {
-    $scope.audioPlaylist.splice(index, 0, angular.copy(audioElement));
-  };
 });
 </script>
 
@@ -106,21 +90,24 @@ _gaq.push(['_trackPageview']);
             <a class="navbar-brand hidden-xs" href="/angular-media-player/index.html">angular-media-player</a>
             <a class="navbar-brand visible-xs" href="/angular-media-player/index.html"><i class="fa fa-home"></i></a>
             <p class="navbar-text navbar-arrow"></p>
-            <p class="navbar-text navbar-active">Interactive Demo</p>
+            <p class="navbar-text navbar-active">Using ng-repeat</p>
           </div>
         </div>
       </div>
       <div class="container">
         
-<div class="col-xs-12 col-sm-9" ng-controller="InteractiveController">
+<div class="col-xs-12 col-sm-9" ng-controller="RepeatController">
 
         
 <div class="jumbotron">
-  <h1>Interactive demo</h1>
+  <h1>ng-repeat on a playlist</h1>
   <p>
-    Interact with the directive through this demo page.
+    Iterating over the playlist object shouldn't be any different than any other <i>array</i>.
   </p>
 </div>
+<h3 id="interact">Interact</h3>
+<p>Click on the tracks below to play them, in this example only one <code>&lt;audio&gt;</code> tag gets used, the <code>ng-repeat</code> is used on the playlist, not on the <code>&lt;audio&gt;</code> tag.</p>
+
 <audio media-player="mediaPlayer" playlist="audioPlaylist"></audio>
 
 <div class="player-control">
@@ -163,28 +150,6 @@ _gaq.push(['_trackPageview']);
 </div>
 
 
-<h3><i>Interactive</i> playlist</h3>
-<p>Keep track of this demo playlist in real-time</p>
-<p class="text-warning">You can drag songs in this table, to re-order them!</p>
-<table class="table table-hover table-rounded table-cursor">
-  <thead>
-    <th>#</th>
-    <th>Src</th>
-    <th>Type</th>
-  </thead>
-  <tbody>
-    <tr ng-repeat="song in audioPlaylist" ng-click="mediaPlayer.playPause($index)" ng-class="{ active: mediaPlayer.playing && mediaPlayer.currentTrack-1 === $index }"
-        ui-draggable="true" drag="song" on-drop-success="removeSong($index)" ui-on-drop="dropSong($data, $index)">
-      <td>[[ $index+1 ]]</td>
-      <td><span ng-show="song.src.length > 50">...</span>[[ song.src | limitTo:-50 ]]</td>
-      <td>[[ song.type ]]</td>
-    </tr>
-  </tbody>
-</table>
-
-
-<h3>Add audio track</h3>
-<p>Just click any of those sample songs to get added to your <i>interactive</i> playlist</p>
 <table class="table table-hover table-rounded table-cursor">
   <thead>
     <th>#</th>
@@ -192,14 +157,13 @@ _gaq.push(['_trackPageview']);
     <th>Title</th>
   </thead>
   <tbody>
-    <tr ng-repeat="song in prefabPlaylist" ng-click="addSong(song)">
+    <tr ng-repeat="song in audioPlaylist" ng-click="mediaPlayer.playPause($index)" ng-class="{ active: mediaPlayer.playing && mediaPlayer.currentTrack-1 === $index }">
       <td>[[ $index+1 ]]</td>
       <td>[[ song.artist ]]</td>
       <td>[[ song.title ]]</td>
     </tr>
   </tbody>
 </table>
-
 
 <h3>player status in realtime</h3>
 
@@ -219,6 +183,50 @@ _gaq.push(['_trackPageview']);
   </code>
 </pre>
 
+
+<h1>Code</h1>
+<small>...you can inspect aswell!</small>
+<code class="hljs javascript">angular.module(<span class="hljs-string">'docs'</span>)
+<span class="hljs-comment">// Taken from http://en.wikipedia.org/wiki/List_of_songs_considered_the_best</span>
+<span class="hljs-comment">// Thanks again, wikipedia.</span>
+.constant(<span class="hljs-string">'top100SongsEver'</span>, [
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/5/5e/U2_One.ogg'</span>, displayName: <span class="hljs-string">'U2 - One'</span> },
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/6/6c/NirvanaSmellsLikeTeenSpirit.ogg'</span>, displayName: <span class="hljs-string">'Nirvana - Smells Like Teen Spirit'</span> },
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/b/be/My_Name_Is.ogg'</span>, displayName: <span class="hljs-string">'Eminem - My Name is'</span> },
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/c/c4/Radiohead_-_Creep_%28sample%29.ogg'</span>, displayName: <span class="hljs-string">'Radiohead - Creep'</span> },
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/6/64/OasisLiveForever.ogg'</span>, displayName: <span class="hljs-string">'Oasis - Live Forever'</span> },
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/6/65/Eagles_-_Hotel_California.ogg'</span>, displayName: <span class="hljs-string">'Eagles - Hotel California'</span> },
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/c/cb/Stairway_to_Heaven_3_sections.ogg'</span>, displayName: <span class="hljs-string">'Led Zeppelin - Stairway to Heaven'</span> },
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/c/cb/Pink_floyd_another_brick_in_the_wall_part_2.ogg'</span>, displayName: <span class="hljs-string">'Pink Floyd - Another Brick in the Wall'</span> },
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/d/d0/Beatles_cometogether.ogg'</span>, displayName: <span class="hljs-string">'Beatles - Come Together'</span> },
+  { url: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/d/db/Layla_sample_1.ogg'</span>, displayName: <span class="hljs-string">'Derek and the Dominos - Layla'</span> }
+])
+.controller(<span class="hljs-string">'RepeatController'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">($scope, top100SongsEver)</span> {</span>
+  $scope.audioPlaylist = top100SongsEver.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(song, index, array)</span> {</span>
+    <span class="hljs-keyword">var</span> parseTitle = song.displayName.match(<span class="hljs-regexp">/(.*?)\s?-\s?(.*)?$/</span>);
+    <span class="hljs-keyword">return</span> { src: song.url, type: <span class="hljs-string">'audio/ogg'</span>, artist: parseTitle[<span class="hljs-number">1</span>], title: parseTitle[<span class="hljs-number">2</span>] };
+  });
+});
+</code>
+
+<br>
+<p>Template for this page</p>
+<code class="hljs html">
+<span class="hljs-tag">&lt;<span class="hljs-title">table</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"table table-hover table-rounded table-cursor"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">th</span>&gt;</span>#<span class="hljs-tag">&lt;/<span class="hljs-title">th</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">th</span>&gt;</span>Artist<span class="hljs-tag">&lt;/<span class="hljs-title">th</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">th</span>&gt;</span>Title<span class="hljs-tag">&lt;/<span class="hljs-title">th</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-title">thead</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">tbody</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">tr</span> <span class="hljs-attribute">ng-repeat</span>=<span class="hljs-value">"song in audioPlaylist"</span> <span class="hljs-attribute">ng-click</span>=<span class="hljs-value">"mediaPlayer.playPause($index)"</span> <span class="hljs-attribute">ng-class</span>=<span class="hljs-value">"{ active: mediaPlayer.playing &amp;&amp; mediaPlayer.currentTrack-1 === $index }"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>{{ $index+1 }}<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>{{ song.artist }}<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>{{ song.title }}<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">tr</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-title">tbody</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">table</span>&gt;</span>
+</code>
 
         </div>
         <div class="col-xs-12 col-sm-3" role="navigation">
@@ -242,11 +250,11 @@ _gaq.push(['_trackPageview']);
             
             
             
-            <a class="list-group-item active" href="interactive.html">Interactive Demo</a>
+            <a class="list-group-item" href="interactive.html">Interactive Demo</a>
             
             
             
-            <a class="list-group-item" href="ng-repeat.html">Using ng-repeat</a>
+            <a class="list-group-item active" href="ng-repeat.html">Using ng-repeat</a>
             
             
             

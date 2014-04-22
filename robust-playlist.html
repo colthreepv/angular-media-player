@@ -38,6 +38,17 @@ _gaq.push(['_trackPageview']);
 .config(function ($interpolateProvider) {
   $interpolateProvider.startSymbol('[[');
   $interpolateProvider.endSymbol(']]');
+})
+.run(function ($rootScope) {
+  // helper function to seek to a percentage
+  $rootScope.seekPercentage = function ($event) {
+    var percentage = ($event.offsetX / $event.target.offsetWidth);
+    if (percentage <= 1) {
+      return percentage;
+    } else {
+      return 0;
+    }
+  };
 });
 
     </script>
@@ -51,7 +62,7 @@ _gaq.push(['_trackPageview']);
   });
   $timeout(function () {
     $scope.audioPlaylist.unshift({
-      src: 'http://www.metadecks.org/software/sweep/audio/demos/vocal2.ogg',
+      src: 'http://upload.wikimedia.org/wikipedia/en/0/0c/Wiz_Khalifa_-_Black_and_Yellow.ogg',
       type: 'audio/ogg'
     });
   }, 5500);
@@ -99,7 +110,7 @@ _gaq.push(['_trackPageview']);
 
 <audio media-player="mediaPlayer" playlist="audioPlaylist"></audio>
 
-<div class="audio-control">
+<div class="player-control">
   <div class="btn" ng-click="mediaPlayer.play()">
     <span>Simple Play</span>
     <i class="fa fa-play"></i>
@@ -121,7 +132,16 @@ _gaq.push(['_trackPageview']);
   <div class="btn btn-noclick">
     <span><i class="fa fa-clock-o"></i>: <span class="badge">[[ mediaPlayer.formatTime ]]</span></span>
   </div>
-  <div class="progress">
+  <div class="btn btn-noclick">
+    <span>volume: <span class="badge">[[ mediaPlayer.volume * 100 | number:0 ]]%</span></span>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.setVolume(mediaPlayer.volume - 0.1)">
+    <span><i class="fa fa-volume-down"></i></span>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.setVolume(mediaPlayer.volume + 0.1)">
+    <span><i class="fa fa-volume-up"></i></span>
+  </div>
+  <div class="progress" ng-click="mediaPlayer.seek(mediaPlayer.duration * seekPercentage($event))">
     <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: mediaPlayer.currentTime*100/mediaPlayer.duration + '%' }"></div>
     <div class="time" ng-show="mediaPlayer.formatTime">
       <span>[[ mediaPlayer.formatTime ]]</span><b>/</b><span>[[ mediaPlayer.formatDuration ]]</span>
@@ -130,10 +150,24 @@ _gaq.push(['_trackPageview']);
 </div>
 
 
-<pre><code>
-  mediaPlayer.currentTrack: [[ mediaPlayer.currentTrack ]]
-  mediaPlayer.playing: [[ mediaPlayer.playing ]]
-</code></pre>
+<h3>player status in realtime</h3>
+
+<pre>
+  <code>
+    mediaPlayer = {
+      playing: [[ mediaPlayer.playing ]]
+      currentTrack: [[ mediaPlayer.currentTrack ]]
+      tracks: [[ mediaPlayer.tracks ]]
+      volume: [[ mediaPlayer.volume ]]
+      formatDuration: [[ mediaPlayer.formatDuration ]]
+      duration: [[ mediaPlayer.duration ]]
+      currentTime: [[ mediaPlayer.currentTime ]]
+      formatTime: [[ mediaPlayer.formatTime ]]
+      loadPercent: [[ mediaPlayer.loadPercent ]]
+    };
+  </code>
+</pre>
+
 
 <p>Keep track of changes to <code>$scope.audioPlaylist</code> in realtime</p>
 <pre><code>
@@ -151,7 +185,7 @@ _gaq.push(['_trackPageview']);
   });
   $timeout(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
     $scope.audioPlaylist.unshift({
-      src: <span class="hljs-string">'http://www.metadecks.org/software/sweep/audio/demos/vocal2.ogg'</span>,
+      src: <span class="hljs-string">'http://upload.wikimedia.org/wikipedia/en/0/0c/Wiz_Khalifa_-_Black_and_Yellow.ogg'</span>,
       type: <span class="hljs-string">'audio/ogg'</span>
     });
   }, <span class="hljs-number">5500</span>);
@@ -178,7 +212,23 @@ _gaq.push(['_trackPageview']);
             
             
             
+            <a class="list-group-item" href="robust-playlist-2.html">Robust Playlist #2</a>
+            
+            
+            
             <a class="list-group-item" href="backwards-compatible.html">Backwards Compatibility</a>
+            
+            
+            
+            <a class="list-group-item" href="interactive.html">Interactive Demo</a>
+            
+            
+            
+            <a class="list-group-item" href="ng-repeat.html">Using ng-repeat</a>
+            
+            
+            
+            <a class="list-group-item" href="video-support.html">Video support</a>
             
             
             

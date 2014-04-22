@@ -52,7 +52,6 @@ angular.module("ngDragDrop",[])
         '$rootScope',
         function ($parse, $rootScope) {
             return function (scope, element, attr) {
-                var dragging = 0; //Ref. http://stackoverflow.com/a/10906204
                 var dropChannel = "defaultchannel";
                 var dragChannel = "";
                 var dragEnterClass = attr.dragEnterClass || "on-drag-enter";
@@ -71,15 +70,7 @@ angular.module("ngDragDrop",[])
                     return false;
                 }
 
-                function onDragLeave(e) {
-                  dragging--;
-                  if (dragging == 0) {
-                    element.removeClass(dragHoverClass);
-                  }
-                }
-
                 function onDragEnter(e) {
-                    dragging++;
                     $rootScope.$broadcast("ANGULAR_HOVER", dropChannel);
                     element.addClass(dragHoverClass);
                 }
@@ -107,7 +98,6 @@ angular.module("ngDragDrop",[])
 
                         element.bind("dragover", onDragOver);
                         element.bind("dragenter", onDragEnter);
-                        element.bind("dragleave", onDragLeave);
 
                         element.bind("drop", onDrop);
                         element.addClass(dragEnterClass);
@@ -123,7 +113,6 @@ angular.module("ngDragDrop",[])
 
                         element.unbind("dragover", onDragOver);
                         element.unbind("dragenter", onDragEnter);
-                        element.unbind("dragleave", onDragLeave);
 
                         element.unbind("drop", onDrop);
                         element.removeClass(dragHoverClass);

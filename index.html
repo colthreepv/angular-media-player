@@ -38,6 +38,17 @@ _gaq.push(['_trackPageview']);
 .config(function ($interpolateProvider) {
   $interpolateProvider.startSymbol('[[');
   $interpolateProvider.endSymbol(']]');
+})
+.run(function ($rootScope) {
+  // helper function to seek to a percentage
+  $rootScope.seekPercentage = function ($event) {
+    var percentage = ($event.offsetX / $event.target.offsetWidth);
+    if (percentage <= 1) {
+      return percentage;
+    } else {
+      return 0;
+    }
+  };
 });
 
     </script>
@@ -66,7 +77,8 @@ _gaq.push(['_trackPageview']);
         
         
 <h1 id="angular-media-player-build-status-https-travis-ci-org-mrgamer-angular-media-player-svg-branch-master-https-travis-ci-org-mrgamer-angular-media-player-">angular-media-player <a href="https://travis-ci.org/mrgamer/angular-media-player"><img src="https://travis-ci.org/mrgamer/angular-media-player.svg?branch=master" alt="Build Status"></a></h1>
-<p>AngularJS Directive that wraps <code>&lt;audio&gt;</code> or <code>&lt;video</code>&gt; tag exposing methods and properties to manipulate your player</p>
+<p>AngularJS Directive that wraps <code>&lt;audio&gt;</code> or <code>&lt;video</code>&gt; tag exposing methods and properties to manipulate your player  </p>
+<p><em>updated</em> examples on github pages: <a href="http://mrgamer.github.io/angular-media-player/">http://mrgamer.github.io/angular-media-player/</a></p>
 <h2 id="abstract-idea">Abstract / Idea</h2>
 <p>I&#39;ve come across a lot of <code>&lt;audio&gt;</code> players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.<br>What i really was looking for was a simple audio wrapper <strong>without</strong> the need to support browser which don&#39;t have audio tag support!<br>Means support for this project is the same as: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#Browser_compatibility">HTML5 audio draft</a>, jQuery is not necessary, and DOM manipulation is done only with jqLite (IE9+)<br><a href="http://github.com/mrgamer/angular-media-player">angular-media-player</a> is html/css <strong>agnostic</strong>, meaning you can use it with your browser controls and default style, or bind the methods and properties in your own View</p>
 <h2 id="how-to-use-it-in-your-project">How-to use it in your project</h2>
@@ -79,6 +91,10 @@ _gaq.push(['_trackPageview']);
 <span class="hljs-comment">&lt;!-- minified --&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"//mrgamer.github.io/angular-media-player/dist/angular-media-player.min.js"</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
 </code></pre>
+<h2 id="test-coverage">Test coverage</h2>
+<p>At the moment IE passes only 8 tests of 20, most of them require an <code>&lt;audio&gt;</code> tag to work with <code>.ogg</code> files.
+<img src="http://i.imgur.com/mkFdC4q.gif" alt="test-coverage"></p>
+<p>IE supports <strong>only</strong> <code>.mp3</code> files, works as expected if you use them.</p>
 <h2 id="breaking-changes-with-0-5-x-">Breaking changes with <code>0.5.x</code></h2>
 <ul>
 <li><code>angular.module</code> changed <strong>AGAIN</strong> from <code>&#39;audioPlayer&#39;</code> to <code>&#39;mediaPlayer&#39;</code> as the library supports <code>&lt;video&gt;</code> tag aswell</li>
@@ -155,7 +171,7 @@ That might be one of your specific controller, or, if you didn&#39;t define anyo
   { src: <span class="hljs-string">'http://some.where.com'</span>, <span class="hljs-built_in">type</span>: <span class="hljs-string">'audio/mp3'</span> },
 ]
 </code></pre>
-<p><em>For whoever wondering what <code>media</code> is</em>: it&#39;s just a <a href="http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/#media0">css media query</a>, so the browser can pick which <code>&lt;source&gt;</code> tag to load.</p>
+<p><em>For whoever wondering what <code>media</code> is</em>: it&#39;s just a <a href="http://www.w3.org/TR/2009/CR-css3-mediaqueries-20090915/#media0">css media query</a>, so the browser can pick which <code>&lt;source&gt;</code> tag to load.<br>It&#39;s recent news that <code>media</code> it&#39;s (probably) getting <a href="https://groups.google.com/a/chromium.org/forum/#!msg/blink-dev/5sWUMC_d8Tg/ZZ0Z7rfeCqUJ">deprecated anyway</a></p>
 <h3 id="exposed-methods">Exposed Methods</h3>
 <h5 id="player-load-mediaelement-autoplay-">player.load([mediaElement, autoplay])</h5>
 <p>Parameter <code>mediaElement</code> type <code>object</code>, structure as specified above.<br>Parameter <code>autoplay</code> type <code>boolean</code><br>Internal function called from the below methods, can still be accessed directly if want to, if no parameter is provided just calls the <code>&lt;audio&gt;</code> <em>load</em> method (means it starts buffering).</p>
@@ -269,6 +285,8 @@ git <span class="hljs-keyword">push</span> &amp;&amp; git <span class="hljs-keyw
 </code></pre>
 <h1 id="release-history">Release History</h1>
 <ul>
+<li>0.5.3 - test coverage run on IE aswell (8/20), just not the playback ones (because tests are written to use .ogg files). bugfix from 0.5.2</li>
+<li>0.5.2 - fixed bug regarding how i used <code>angular.forEach</code>, sorry. (closes <a href="https://github.com/mrgamer/angular-media-player/issues/26">#26</a>)</li>
 <li>0.5.1<ul>
 <li>added <a href="#playerplayindex-selectiveplay">selective play</a> functionality on <code>play</code> and <code>playPause</code></li>
 <li><a href="#playerseekvalue">seek</a> now works correctly and is tested</li>
@@ -300,7 +318,23 @@ git <span class="hljs-keyword">push</span> &amp;&amp; git <span class="hljs-keyw
             
             
             
+            <a class="list-group-item" href="robust-playlist-2.html">Robust Playlist #2</a>
+            
+            
+            
             <a class="list-group-item" href="backwards-compatible.html">Backwards Compatibility</a>
+            
+            
+            
+            <a class="list-group-item" href="interactive.html">Interactive Demo</a>
+            
+            
+            
+            <a class="list-group-item" href="ng-repeat.html">Using ng-repeat</a>
+            
+            
+            
+            <a class="list-group-item" href="video-support.html">Video support</a>
             
             
             

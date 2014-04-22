@@ -20,6 +20,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
   playing: false,
   seeking: false,
   tracks: 0,
+  volume: 1,
 
   // formatted properties
   formatDuration: '00:00',
@@ -186,14 +187,20 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         if (angular.isArray(sourceList)) {
           angular.forEach(sourceList, function (singleElement, index) {
             var sourceElem = document.createElement('SOURCE');
-            angular.forEach(singleElement, function (value, key) {
-              sourceElem.setAttribute(key, value);
+            ['src', 'type', 'media'].forEach(function (key) { // use only a subset of the properties
+              if (singleElement[key] !== undefined) { // firefox is picky if you set undefined attributes
+                sourceElem.setAttribute(key, singleElement[key]);
+              }
             });
             self.$element.append(sourceElem);
           });
         } else if (angular.isObject(sourceList)) {
           var sourceElem = document.createElement('SOURCE');
-          angular.forEach(sourceList, function (value, key) { sourceElem.setAttribute(key, value); });
+          ['src', 'type', 'media'].forEach(function (key) {
+            if (sourceList[key] !== undefined) {
+              sourceElem.setAttribute(key, sourceList[key]);
+            }
+          });
           self.$element.append(sourceElem);
         }
       },
@@ -269,14 +276,14 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
             scope.duration = al.duration;
             scope.formatDuration = scope.$formatTime(scope.duration);
             if (al.buffered.length) {
-              scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
+              scope.loadPercent = Math.round((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100);
             }
           });
         },
         progress: function () {
           if (au.$domEl.buffered.length) {
             au.$apply(function (scope) {
-              scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
+              scope.loadPercent = Math.round((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100);
               scope.network = 'progress';
             });
           }

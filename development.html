@@ -38,6 +38,17 @@ _gaq.push(['_trackPageview']);
 .config(function ($interpolateProvider) {
   $interpolateProvider.startSymbol('[[');
   $interpolateProvider.endSymbol(']]');
+})
+.run(function ($rootScope) {
+  // helper function to seek to a percentage
+  $rootScope.seekPercentage = function ($event) {
+    var percentage = ($event.offsetX / $event.target.offsetWidth);
+    if (percentage <= 1) {
+      return percentage;
+    } else {
+      return 0;
+    }
+  };
 });
 
     </script>
@@ -85,7 +96,7 @@ _gaq.push(['_trackPageview']);
 </div>
 <audio media-player="mediaPlayer" playlist="mediaPlaylist"></audio>
 
-<div class="audio-control">
+<div class="player-control">
   <div class="btn" ng-click="mediaPlayer.play()">
     <span>Simple Play</span>
     <i class="fa fa-play"></i>
@@ -107,7 +118,16 @@ _gaq.push(['_trackPageview']);
   <div class="btn btn-noclick">
     <span><i class="fa fa-clock-o"></i>: <span class="badge">[[ mediaPlayer.formatTime ]]</span></span>
   </div>
-  <div class="progress">
+  <div class="btn btn-noclick">
+    <span>volume: <span class="badge">[[ mediaPlayer.volume * 100 | number:0 ]]%</span></span>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.setVolume(mediaPlayer.volume - 0.1)">
+    <span><i class="fa fa-volume-down"></i></span>
+  </div>
+  <div class="btn" ng-click="mediaPlayer.setVolume(mediaPlayer.volume + 0.1)">
+    <span><i class="fa fa-volume-up"></i></span>
+  </div>
+  <div class="progress" ng-click="mediaPlayer.seek(mediaPlayer.duration * seekPercentage($event))">
     <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: mediaPlayer.currentTime*100/mediaPlayer.duration + '%' }"></div>
     <div class="time" ng-show="mediaPlayer.formatTime">
       <span>[[ mediaPlayer.formatTime ]]</span><b>/</b><span>[[ mediaPlayer.formatDuration ]]</span>
@@ -126,10 +146,24 @@ _gaq.push(['_trackPageview']);
 </code></pre>
 
 
-<pre><code>
-  mediaPlayer.playing: [[ mediaPlayer.playing ]]
-  mediaPlayer.ended: [[ mediaPlayer.ended ]]
-</code></pre>
+<h3>player status in realtime</h3>
+
+<pre>
+  <code>
+    mediaPlayer = {
+      playing: [[ mediaPlayer.playing ]]
+      currentTrack: [[ mediaPlayer.currentTrack ]]
+      tracks: [[ mediaPlayer.tracks ]]
+      volume: [[ mediaPlayer.volume ]]
+      formatDuration: [[ mediaPlayer.formatDuration ]]
+      duration: [[ mediaPlayer.duration ]]
+      currentTime: [[ mediaPlayer.currentTime ]]
+      formatTime: [[ mediaPlayer.formatTime ]]
+      loadPercent: [[ mediaPlayer.loadPercent ]]
+    };
+  </code>
+</pre>
+
 <pre><code>
   browser: [[ browser ]]
 </code></pre>
@@ -148,7 +182,23 @@ _gaq.push(['_trackPageview']);
             
             
             
+            <a class="list-group-item" href="robust-playlist-2.html">Robust Playlist #2</a>
+            
+            
+            
             <a class="list-group-item" href="backwards-compatible.html">Backwards Compatibility</a>
+            
+            
+            
+            <a class="list-group-item" href="interactive.html">Interactive Demo</a>
+            
+            
+            
+            <a class="list-group-item" href="ng-repeat.html">Using ng-repeat</a>
+            
+            
+            
+            <a class="list-group-item" href="video-support.html">Video support</a>
             
             
             
