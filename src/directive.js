@@ -275,14 +275,14 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
             scope.duration = al.duration;
             scope.formatDuration = scope.$formatTime(scope.duration);
             if (al.buffered.length) {
-              scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
+              scope.loadPercent = Math.round((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100);
             }
           });
         },
         progress: function () {
           if (au.$domEl.buffered.length) {
             au.$apply(function (scope) {
-              scope.loadPercent = parseInt((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100, 10);
+              scope.loadPercent = Math.round((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100);
               scope.network = 'progress';
             });
           }
