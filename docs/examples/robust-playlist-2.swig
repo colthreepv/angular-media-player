@@ -1,30 +1,34 @@
 {% extends '../layout' %}
 {% import '../player.macro' as macro %}
 {% block javascript %}
-  <script type="text/javascript">{% include './robust-playlist.js' %}</script>
+  <script type="text/javascript">{% include './robust-playlist-2.js' %}</script>
 {% endblock %}
 
 {% block controller %}
-<div class="col-xs-12 col-sm-9" ng-controller="ProgressiveController">
+<div class="col-xs-12 col-sm-9" ng-controller="SwapController">
 {% endblock %}
 
 {% block content %}
 <div class="jumbotron">
-  <h1>Robust Playlist</h1>
+  <h1>Robust Playlist #2</h1>
   <p>
-    Simulates playlist population from time to time.
+    Editing the playing track while it's playing, simply makes it pause, and load the new track(s) on fly.
   </p>
 </div>
 {% markdown %}
-### What happens
-Every 5seconds a new ```mediaElement``` gets added into the playlist.  
-Generally those gets added through events _(ex: user clicks and adds a track)_
-
-You can notice the `currentTrack` property changing when a track gets added in front of the playlist.  
-It goes from `currentTrack: 1` to `currentTrack: 2` without interrupting playback, thus making the information always consistent.
+### Interact
+To test out this functionality, play the pre-loaded track, and then push the swap button.  
+You can track changes in the playlist below.
 {% endmarkdown %}
 <audio media-player="mediaPlayer" playlist="audioPlaylist"></audio>
 {{ macro.player('mediaPlayer') }}
+
+<div class="player-control">
+  <div class="btn btn-info" ng-click="swapSong()">
+    <i class="fa fa-retweet"></i>
+    <span>Swap Track</span>
+  </div>
+</div>
 
 <h3>player status in realtime</h3>
 {{ macro.playerDebug('mediaPlayer') }}
@@ -37,6 +41,6 @@ It goes from `currentTrack: 1` to `currentTrack: 2` without interrupting playbac
 <h1>Code</h1>
 <small>...you can inspect aswell!</small>
 {% highlight 'javascript' %}
-{% include './robust-playlist.js' %}
+{% include './robust-playlist-2.js' %}
 {%endhighlight %}
 {% endblock %}

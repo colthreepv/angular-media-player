@@ -20,6 +20,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
   playing: false,
   seeking: false,
   tracks: 0,
+  volume: 1,
 
   // formatted properties
   formatDuration: '00:00',

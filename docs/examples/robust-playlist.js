@@ -7,7 +7,7 @@ angular.module('docs')
   });
   $timeout(function () {
     $scope.audioPlaylist.unshift({
-      src: 'http://www.metadecks.org/software/sweep/audio/demos/vocal2.ogg',
+      src: 'http://upload.wikimedia.org/wikipedia/en/0/0c/Wiz_Khalifa_-_Black_and_Yellow.ogg',
       type: 'audio/ogg'
     });
   }, 5500);

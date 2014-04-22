@@ -1,5 +1,5 @@
-{% macro buttons(playerName) %}
-<div class="audio-control">
+{% macro player(playerName) %}
+<div class="player-control">
   <div class="btn" ng-click="{{ playerName }}.play()">
     <span>Simple Play</span>
     <i class="fa fa-play"></i>
@@ -21,11 +21,38 @@
   <div class="btn btn-noclick">
     <span><i class="fa fa-clock-o"></i>: <span class="badge">[[ {{ playerName }}.formatTime ]]</span></span>
   </div>
-  <div class="progress">
+  <div class="btn btn-noclick">
+    <span>volume: <span class="badge">[[ {{ playerName }}.volume * 100 | number:0 ]]%</span></span>
+  </div>
+  <div class="btn" ng-click="{{ playerName }}.setVolume({{ playerName }}.volume + 0.1)">
+    <span><i class="fa fa-volume-up"></i></span>
+  </div>
+  <div class="btn" ng-click="{{ playerName }}.setVolume({{ playerName }}.volume - 0.1)">
+    <span><i class="fa fa-volume-down"></i></span>
+  </div>
+  <div class="progress" ng-click="{{ playerName }}.seek({{ playerName }}.duration * seekPercentage($event))">
     <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: {{ playerName }}.currentTime*100/{{ playerName }}.duration + '%' }"></div>
     <div class="time" ng-show="{{ playerName }}.formatTime">
       <span>[[ {{ playerName }}.formatTime ]]</span><b>/</b><span>[[ {{ playerName }}.formatDuration ]]</span>
     </div>
   </div>
 </div>
+{% endmacro %}
+
+{% macro playerDebug(playerName) %}
+<pre>
+  <code>
+    {{ playerName }} = {
+      playing: [[ {{ playerName }}.playing ]]
+      currentTrack: [[ {{ playerName }}.currentTrack ]]
+      tracks: [[ {{ playerName }}.tracks ]]
+      volume: [[ {{ playerName }}.volume ]]
+      formatDuration: [[ {{ playerName }}.formatDuration ]]
+      duration: [[ {{ playerName }}.duration ]]
+      currentTime: [[ {{ playerName }}.currentTime ]]
+      formatTime: [[ {{ playerName }}.formatTime ]]
+      loadPercent: [[ {{ playerName }}.loadPercent ]]
+    };
+  </code>
+</pre>
 {% endmacro %}

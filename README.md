@@ -2,7 +2,7 @@ angular-media-player [![Build Status](https://travis-ci.org/mrgamer/angular-medi
 ====================
 AngularJS Directive that wraps `<audio>` or `<video`> tag exposing methods and properties to manipulate your player  
 
-Examples on gh-pages: http://mrgamer.github.io/angular-media-player/, they are not complete, i will add them back as i develop the documentation
+*updated* examples on github pages: http://mrgamer.github.io/angular-media-player/
 
 ## Abstract / Idea
 I've come across a lot of `<audio>` players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.  
@@ -25,8 +25,10 @@ Using github hosting:
 ```
 
 ## Test coverage
-At the moment IE passes only 8 tests of 20 because most of them require an actual `<audio>` tag to work with `.ogg` files.
+At the moment IE passes only 8 tests of 20, most of them require an `<audio>` tag to work with `.ogg` files.
 ![test-coverage](http://i.imgur.com/mkFdC4q.gif)
+
+IE supports **only** `.mp3` files, works as expected if you use them.
 
 ## Breaking changes with `0.5.x`
 

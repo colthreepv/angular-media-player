@@ -1,5 +1,5 @@
 {% extends '../layout' %}
-{% import '../swig-macros.swig' as macro %}
+{% import '../player.macro' as macro %}
 {% block javascript %}
   <script type="text/javascript">{% include './development.js' %}</script>
 {% endblock %}
@@ -16,7 +16,7 @@
   </p>
 </div>
 <audio media-player="mediaPlayer" playlist="mediaPlaylist"></audio>
-{{ macro.buttons('mediaPlayer') }}
+{{ macro.player('mediaPlayer') }}
 
 {% markdown %}
 ### how-to
@@ -33,10 +33,8 @@ angularpl.push({ src: '<srchere>', type: '<typehere>'});
 ```
 {% endmarkdown %}
 
-<pre><code>
-  mediaPlayer.playing: [[ mediaPlayer.playing ]]
-  mediaPlayer.ended: [[ mediaPlayer.ended ]]
-</code></pre>
+<h3>player status in realtime</h3>
+{{ macro.playerDebug('mediaPlayer') }}
 <pre><code>
   browser: [[ browser ]]
 </code></pre>

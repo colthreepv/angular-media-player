@@ -38,7 +38,9 @@ module.exports = function (grunt) {
     watch: {
       docs: {
         files: [
+          'README.md',
           'docs/layout',
+          'docs/player.macro',
           'docs/*.swig',
           'docs/*.js',
           'docs/*.json',

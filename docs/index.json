@@ -10,8 +10,24 @@
       "url": "robust-playlist.html"
     },
     {
+      "name": "Robust Playlist #2",
+      "url": "robust-playlist-2.html"
+    },
+    {
       "name": "Backwards Compatibility",
       "url": "backwards-compatible.html"
+    },
+    {
+      "name": "Interactive Demo",
+      "url": "interactive.html"
+    },
+    {
+      "name": "Using ng-repeat",
+      "url": "ng-repeat.html"
+    },
+    {
+      "name": "Video support",
+      "url": "video-support.html"
     },
     {
       "name": "Test Page",
