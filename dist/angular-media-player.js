@@ -186,14 +186,16 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         if (angular.isArray(sourceList)) {
           angular.forEach(sourceList, function (singleElement, index) {
             var sourceElem = document.createElement('SOURCE');
-            angular.forEach(singleElement, function (value, key) {
-              sourceElem.setAttribute(key, value);
+            ['src', 'type', 'media'].forEach(function (key) { // use only a subset of the properties
+              sourceElem.setAttribute(key, singleElement[key]);
             });
             self.$element.append(sourceElem);
           });
         } else if (angular.isObject(sourceList)) {
           var sourceElem = document.createElement('SOURCE');
-          angular.forEach(sourceList, function (value, key) { sourceElem.setAttribute(key, value); });
+          ['src', 'type', 'media'].forEach(function (key) {
+            sourceElem.setAttribute(key, sourceList[key]);
+          });
           self.$element.append(sourceElem);
         }
       },

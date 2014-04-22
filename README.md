@@ -121,7 +121,8 @@ An `sourceElement` itself could be an Array of sourceObjects, or a single source
 ]
 ```
 
-_For whoever wondering what `media` is_: it's just a [css media query][cssmediaquery], so the browser can pick which `<source>` tag to load.
+_For whoever wondering what `media` is_: it's just a [css media query][cssmediaquery], so the browser can pick which `<source>` tag to load.  
+It's recent news that `media` it's (probably) getting [deprecated anyway](https://groups.google.com/a/chromium.org/forum/#!msg/blink-dev/5sWUMC_d8Tg/ZZ0Z7rfeCqUJ)
 
 ### Exposed Methods
 
@@ -316,6 +317,7 @@ git push && git push --tags
 
 # Release History
 
+  * 0.5.2 - fixed bug regarding how i used `angular.forEach`, sorry. (closes [#26](https://github.com/mrgamer/angular-media-player/issues/26))
   * 0.5.1
     * added [selective play](#playerplayindex-selectiveplay) functionality on `play` and `playPause`
     * [seek](#playerseekvalue) now works correctly and is tested
