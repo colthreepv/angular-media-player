@@ -24,11 +24,11 @@
   <div class="btn btn-noclick">
     <span>volume: <span class="badge">[[ {{ playerName }}.volume * 100 | number:0 ]]%</span></span>
   </div>
-  <div class="btn" ng-click="{{ playerName }}.setVolume({{ playerName }}.volume + 0.1)">
-    <span><i class="fa fa-volume-up"></i></span>
-  </div>
   <div class="btn" ng-click="{{ playerName }}.setVolume({{ playerName }}.volume - 0.1)">
     <span><i class="fa fa-volume-down"></i></span>
+  </div>
+  <div class="btn" ng-click="{{ playerName }}.setVolume({{ playerName }}.volume + 0.1)">
+    <span><i class="fa fa-volume-up"></i></span>
   </div>
   <div class="progress" ng-click="{{ playerName }}.seek({{ playerName }}.duration * seekPercentage($event))">
     <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: {{ playerName }}.currentTime*100/{{ playerName }}.duration + '%' }"></div>
