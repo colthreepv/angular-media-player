@@ -49,7 +49,7 @@ describe('browser tests: methods', function () {
   afterEach(function () {
     var audioTags = document.querySelectorAll('audio');
     Array.prototype.forEach.call(audioTags, function (audioTag) {
-      audioTag.remove();
+      angular.element(audioTag).remove();
     });
   });
 

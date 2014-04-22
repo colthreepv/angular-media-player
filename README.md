@@ -317,6 +317,7 @@ git push && git push --tags
 
 # Release History
 
+  * 0.5.3 - test coverage run on IE aswell (8/20), just not the playback ones (because tests are written to use .ogg files). bugfix from 0.5.2
   * 0.5.2 - fixed bug regarding how i used `angular.forEach`, sorry. (closes [#26](https://github.com/mrgamer/angular-media-player/issues/26))
   * 0.5.1
     * added [selective play](#playerplayindex-selectiveplay) functionality on `play` and `playPause`

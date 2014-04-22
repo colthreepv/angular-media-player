@@ -11,7 +11,7 @@ describe('browser tests: video support', function () {
   afterEach(function () {
     var videoTags = document.querySelectorAll('video');
     Array.prototype.forEach.call(videoTags, function (videoTag) {
-      videoTag.remove();
+      angular.element(videoTag).remove();
     });
   });
 
