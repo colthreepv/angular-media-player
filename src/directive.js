@@ -12,7 +12,7 @@
  * http://html5doctor.com/html5-audio-the-state-of-play/
  */
 angular.module('mediaPlayer', ['mediaPlayer.helpers'])
-.constant('playerDefaults', {
+.constant('mp.playerDefaults', {
   // general properties
   currentTrack: 0,
   ended: undefined,
@@ -28,7 +28,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
   loadPercent: 0
 })
 
-.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'throttle', 'playerDefaults',
+.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'mp.throttle', 'mp.playerDefaults',
   function ($rootScope, $interpolate, $timeout, throttle, playerDefaults) {
 
     var playerMethods = {
