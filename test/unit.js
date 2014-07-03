@@ -75,7 +75,7 @@ describe('unit tests: interaction between scopes', function () {
     $rootScope.testplaylist = [];
     var element = $compile('<audio media-player="testplayer" playlist="testplaylist"> \
       <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.ogg" media="audio/ogg"> \
-      <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.mp3" media="audio/mp3"> \
+      <source src="http://upload.wikimedia.org/wikipedia/en/d/d0/Rick_Astley_-_Never_Gonna_Give_You_Up.mp3" media="audio/mpeg"> \
       </audio>')($rootScope);
     expect($rootScope.testplaylist).to.have.length(1);
     expect($rootScope.testplaylist[0]).to.have.length(2);

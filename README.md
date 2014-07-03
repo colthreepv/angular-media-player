@@ -123,7 +123,7 @@ An `sourceElement` itself could be an Array of sourceObjects, or a single source
   { src: 'http://some.where.com', type: 'audio/ogg' },
   { src: 'http://some.where.com/lowquality', type: 'audio/ogg' },
   { src: 'http://some.where.com/crapquality', type: 'audio/ogg' },
-  { src: 'http://some.where.com', type: 'audio/mp3' },
+  { src: 'http://some.where.com', type: 'audio/mpeg' },
 ]
 ```
 
