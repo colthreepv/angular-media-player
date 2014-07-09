@@ -5,7 +5,7 @@
 <html ng-app="docs-interactive">
 {% endblock %}
 {% block javascript %}
-  <script type="text/javascript" src="/libs/angular-dragdrop.js"></script>
+  <script type="text/javascript" src="libs/angular-dragdrop.js"></script>
   <script type="text/javascript">{% include './interactive.js' %}</script>
 {% endblock %}
 
