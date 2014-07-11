@@ -101,7 +101,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           index = undefined;
         }
         if (selectivePlay) {
-          this.$autoplay = true;
+          this.$selective = true;
         }
 
         if (typeof index === 'number' && index + 1 !== this.currentTrack) {
