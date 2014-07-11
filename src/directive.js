@@ -464,9 +464,6 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         } else {
           scope.$watch(playlistName, playlistWatch(player), true); // playlist empty, only watch
         }
-
-        // player scope destructor
-        scope.$on('$destroy', player.$destroy);
       }
     };
 
