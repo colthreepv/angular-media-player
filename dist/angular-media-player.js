@@ -101,7 +101,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           index = undefined;
         }
         if (selectivePlay) {
-          this.$autoplay = true;
+          this.$selective = true;
         }
 
         if (typeof index === 'number' && index + 1 !== this.currentTrack) {
@@ -464,9 +464,6 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         } else {
           scope.$watch(playlistName, playlistWatch(player), true); // playlist empty, only watch
         }
-
-        // player scope destructor
-        scope.$on('$destroy', player.$destroy);
       }
     };
 

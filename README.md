@@ -323,6 +323,7 @@ git push && git push --tags
 
 # Release History
 
+  * 0.5.6 - fixed several bugs reported by the community (thanks contributors!!!): [#44](https://github.com/mrgamer/angular-media-player/issues/44), [#29](https://github.com/mrgamer/angular-media-player/issues/29), [#27](https://github.com/mrgamer/angular-media-player/issues/27)
   * 0.5.3 - test coverage run on IE aswell (8/20), just not the playback ones (because tests are written to use .ogg files). bugfix from 0.5.2
   * 0.5.2 - fixed bug regarding how i used `angular.forEach`, sorry. (closes [#26](https://github.com/mrgamer/angular-media-player/issues/26))
   * 0.5.1
