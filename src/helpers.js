@@ -1,5 +1,5 @@
 angular.module('mediaPlayer.helpers', [])
-.factory('throttle', ['$timeout', function ($timeout) {
+.factory('mp.throttle', ['$timeout', function ($timeout) {
   return function (delay, no_trailing, callback, debounce_mode) {
     var timeout_id,
     last_exec = 0;
