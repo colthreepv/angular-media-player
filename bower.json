@@ -1,7 +1,7 @@
 {
   "name": "angular-media-player",
   "version": "0.5.6",
-  "main": "dist/angular-media-player.min.js",
+  "main": "dist/angular-media-player.js",
   "keywords": [
     "angular",
     "angular.js",
