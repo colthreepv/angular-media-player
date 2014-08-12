@@ -264,7 +264,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
             });
           }
         },
-        timeupdate: throttle(1000, false, function () {
+        timeupdate: throttle(250, false, function () {
           au.$apply(function (scope) {
             scope.currentTime = al.currentTime;
             scope.formatTime = scope.$formatTime(scope.currentTime);
