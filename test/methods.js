@@ -92,4 +92,77 @@ describe('browser tests: methods', function () {
       });
     });
   });
+
+  it('should check that throttling works', function (done) {
+    module(function($provide) {
+      $provide.value('mp.throttleSettings', {
+        enabled: true,
+        time: 1000
+      });
+    });
+    inject(function ($compile, $rootScope) {
+      var element = $compile('<audio media-player="testplayer"></audio>')($rootScope);
+      angular.element(document.body).append(element);
+      expect($rootScope.testplayer).to.be.an('object');
+      $rootScope.testplayer.load({ src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' }, true);
+
+      // wait for first timeupdate event
+      $rootScope.testplayer.one('timeupdate', function () {
+        // then wait 10msec (time for angular scope to $apply)
+        setTimeout(function () {
+          var firstTime = $rootScope.testplayer.currentTime;
+
+          // then wait for the second timeupdate event
+          $rootScope.testplayer.one('timeupdate', function () {
+            // wait 10msec (time for angular scope to $apply)
+            setTimeout(function () {
+              // finally check that firstTime has not been updated, since:
+              // timeupdates should be called WAY more often than once per second
+              // but we have setup throttling to 1second, so firstTime and "secondTime"
+              // should be equal!
+              expect($rootScope.testplayer.currentTime).to.equal(firstTime);
+              done();
+            }, 10);
+          });
+        }, 10);
+      });
+    });
+  });
+
+  it('should be possible to disable throttling', function (done) {
+    module(function($provide) {
+      $provide.value('mp.throttleSettings', {
+        enabled: false,
+        time: 1000
+      });
+    });
+    inject(function ($compile, $rootScope) {
+      var element = $compile('<audio media-player="testplayer"></audio>')($rootScope);
+      angular.element(document.body).append(element);
+      expect($rootScope.testplayer).to.be.an('object');
+      $rootScope.testplayer.load({ src: 'http://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg', type: 'audio/ogg' }, true);
+
+      // wait for first timeupdate event
+      $rootScope.testplayer.one('timeupdate', function () {
+        // then wait 10msec (time for angular scope to $apply)
+        setTimeout(function () {
+          var firstTime = $rootScope.testplayer.currentTime;
+
+          // then wait for the second timeupdate event
+          $rootScope.testplayer.one('timeupdate', function () {
+            // wait 10msec (time for angular scope to $apply)
+            setTimeout(function () {
+              // finally check that firstTime has not been updated, since:
+              // timeupdates should be called WAY more often than once per second
+              // but we have setup throttling to 1second, so firstTime and "secondTime"
+              // should be equal!
+              expect($rootScope.testplayer.currentTime).to.be.not.equal(firstTime);
+              done();
+            }, 10);
+          });
+        }, 10);
+      });
+    });
+  });
+
 });

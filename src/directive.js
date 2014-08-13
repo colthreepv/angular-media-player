@@ -12,6 +12,10 @@
  * http://html5doctor.com/html5-audio-the-state-of-play/
  */
 angular.module('mediaPlayer', ['mediaPlayer.helpers'])
+.value('mp.throttleSettings', {
+    enabled: true,
+    time: 1000
+})
 .constant('playerDefaults', {
   // general properties
   currentTrack: 0,
@@ -28,8 +32,8 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
   loadPercent: 0
 })
 
-.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'throttle', 'playerDefaults',
-  function ($rootScope, $interpolate, $timeout, throttle, playerDefaults) {
+.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'throttle', 'playerDefaults', 'mp.throttleSettings',
+  function ($rootScope, $interpolate, $timeout, throttle, playerDefaults, tr) {
 
     var playerMethods = {
       /**
@@ -264,12 +268,12 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
             });
           }
         },
-        timeupdate: throttle(1000, false, function () {
+        timeupdate: function () {
           au.$apply(function (scope) {
             scope.currentTime = al.currentTime;
             scope.formatTime = scope.$formatTime(scope.currentTime);
           });
-        }),
+        },
         loadedmetadata: function () {
           au.$apply(function (scope) {
             if (!scope.currentTrack) { scope.currentTrack++; } // This is triggered *ONLY* the first time a <source> gets loaded.
@@ -322,6 +326,10 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           });
         }
       };
+
+      if (tr.enabled) {
+        listeners.timeupdate = throttle(tr.time, false, listeners.timeupdate);
+      }
 
       angular.forEach(listeners, function (f, listener) {
         element.on(listener, f);
