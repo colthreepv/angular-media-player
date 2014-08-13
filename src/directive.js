@@ -16,7 +16,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
     enabled: true,
     time: 1000
 })
-.constant('playerDefaults', {
+.constant('mp.playerDefaults', {
   // general properties
   currentTrack: 0,
   ended: undefined,
@@ -32,7 +32,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
   loadPercent: 0
 })
 
-.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'throttle', 'playerDefaults', 'mp.throttleSettings',
+.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'throttle', 'mp.playerDefaults', 'mp.throttleSettings',
   function ($rootScope, $interpolate, $timeout, throttle, playerDefaults, tr) {
 
     var playerMethods = {
@@ -105,7 +105,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
           index = undefined;
         }
         if (selectivePlay) {
-          this.$autoplay = true;
+          this.$selective = true;
         }
 
         if (typeof index === 'number' && index + 1 !== this.currentTrack) {
@@ -472,9 +472,6 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         } else {
           scope.$watch(playlistName, playlistWatch(player), true); // playlist empty, only watch
         }
-
-        // player scope destructor
-        scope.$on('$destroy', player.$destroy);
       }
     };
 
