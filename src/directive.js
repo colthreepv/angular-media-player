@@ -32,7 +32,7 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
   loadPercent: 0
 })
 
-.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'throttle', 'mp.playerDefaults', 'mp.throttleSettings',
+.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'mp.throttle', 'mp.playerDefaults', 'mp.throttleSettings',
   function ($rootScope, $interpolate, $timeout, throttle, playerDefaults, tr) {
 
     var playerMethods = {

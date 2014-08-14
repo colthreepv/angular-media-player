@@ -37,6 +37,22 @@ IE supports **only** `.mp3` files, works as expected if you use them.
 
 If you find something is missing from this list please take a couple of minutes to open an [Issue][issues]
 
+## Specific branch
+
+This branch is designed for special throttle options.  
+The default is that `timeupdate` event gets throttled to trigger not more than once per second.  
+
+Default:
+```javascript
+angular.module('yourModule')
+.value('mp.throttleSettings', {
+  enabled: true,
+  time: 1000
+});
+```
+
+It can be disabled or enabled with a configurable timeout.  
+
 ### What's new
 
   * I've already written it but... `<video>` tag support!
