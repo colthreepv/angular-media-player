@@ -37,22 +37,6 @@ IE supports **only** `.mp3` files, works as expected if you use them.
 
 If you find something is missing from this list please take a couple of minutes to open an [Issue][issues]
 
-## Specific branch
-
-This branch is designed for special throttle options.  
-The default is that `timeupdate` event gets throttled to trigger not more than once per second.  
-
-Default:
-```javascript
-angular.module('yourModule')
-.value('mp.throttleSettings', {
-  enabled: true,
-  time: 1000
-});
-```
-
-It can be disabled or enabled with a configurable timeout.  
-
 ### What's new
 
   * I've already written it but... `<video>` tag support!
@@ -242,6 +226,22 @@ Timeranges:
 `player.played`  
 `player.seekable`  
 
+##### Note about currentTime updating system
+
+Version `0.5.8` has a configurable throttle options.  
+The default is that `timeupdate` event gets throttled to trigger not more than once per second (so currentTime aswell, since it reflects `timeupdate` value).  
+
+Default value, already inside the library, if you want to change it, copy/paste and change values for your (__ENTIRE__) application:
+```javascript
+angular.module('yourModule')
+.value('mp.throttleSettings', {
+  enabled: true,
+  time: 1000
+});
+```
+
+It can be disabled or enabled with a configurable timeout.  
+
 #### Additional Properties
 The following properties refer to some [HTMLMediaElement spec][mediaelement] properties, but are formatted for handiness.  
 `player.formatDuration`  hh:mm:ss version of `player.duration`  
@@ -339,6 +339,7 @@ git push && git push --tags
 
 # Release History
 
+  * 0.5.8 - implemented a config system for throttling the `timeupdate` events, this functionality is on debate in the issues: [#50](https://github.com/mrgamer/angular-media-player/issues/50)
   * 0.5.6 - fixed several bugs reported by the community (thanks contributors!!!): [#44](https://github.com/mrgamer/angular-media-player/issues/44), [#29](https://github.com/mrgamer/angular-media-player/issues/29), [#27](https://github.com/mrgamer/angular-media-player/issues/27)
   * 0.5.3 - test coverage run on IE aswell (8/20), just not the playback ones (because tests are written to use .ogg files). bugfix from 0.5.2
   * 0.5.2 - fixed bug regarding how i used `angular.forEach`, sorry. (closes [#26](https://github.com/mrgamer/angular-media-player/issues/26))
