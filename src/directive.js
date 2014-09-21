@@ -32,8 +32,8 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
   loadPercent: 0
 })
 
-.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'mp.throttle', 'mp.playerDefaults', 'mp.throttleSettings',
-  function ($rootScope, $interpolate, $timeout, throttle, playerDefaults, tr) {
+.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', '$parse', 'mp.throttle', 'mp.playerDefaults', 'mp.throttleSettings',
+  function ($rootScope, $interpolate, $timeout, $parse, throttle, playerDefaults, tr) {
 
     var playerMethods = {
       /**
@@ -438,7 +438,11 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         } else {
           playlist = scope[playlistName];
         }
-        if (mediaName !== undefined) { scope[mediaName] = player; }
+        if (mediaName !== undefined) { 
+            var getter = $parse(mediaName);
+            var setter = getter.assign;
+            setter(scope, player);
+        }
 
         if (element[0].tagName !== 'AUDIO' && element[0].tagName !== 'VIDEO') {
           return new Error('player directive works only when attached to an <audio>/<video> type tag');
