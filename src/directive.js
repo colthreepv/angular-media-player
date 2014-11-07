@@ -71,8 +71,8 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
       /**
        * @usage play([index], [selectivePlay])
        * @param {integer} index: playlist index (0...n), to start playing from
-       * @param {boolean} selectivePlay: only correct value is `true`, in which case will only play the specified,
-       *                                 or current, track. The default is to continue playing the next one.
+       * @param {boolean} selectivePlay: `true` will only play the specified or current track, 'false' will reset the flag to default
+       *                                 The default is to continue playing the next one.
        */
       play: function (index, selectivePlay) {
         // method overloading
@@ -82,6 +82,8 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         }
         if (selectivePlay) {
           this.$selective = true;
+        } else if (selectivePlay == false) {
+          this.$selective = false;
         }
 
         if (this.$playlist.length > index) {
@@ -106,6 +108,8 @@ angular.module('mediaPlayer', ['mediaPlayer.helpers'])
         }
         if (selectivePlay) {
           this.$selective = true;
+        } else if (selectivePlay == false) {
+          this.$selective = false;
         }
 
         if (typeof index === 'number' && index + 1 !== this.currentTrack) {
