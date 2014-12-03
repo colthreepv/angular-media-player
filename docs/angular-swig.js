@@ -6,7 +6,7 @@ angular.module('docs', ['mediaPlayer'])
 .run(function ($rootScope) {
   // helper function to seek to a percentage
   $rootScope.seekPercentage = function ($event) {
-    var percentage = ($event.offsetX / $event.target.offsetWidth);
+    var percentage = ($event.offsetX / $event.currentTarget.offsetWidth);
     if (percentage <= 1) {
       return percentage;
     } else {
