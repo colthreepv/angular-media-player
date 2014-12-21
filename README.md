@@ -4,7 +4,16 @@ AngularJS Directive that wraps `<audio>` or `<video`> tag exposing methods and p
 
 *updated* examples on github pages: http://mrgamer.github.io/angular-media-player/
 
-## Abstract / Idea
+## Contributors Needed
+This library has reached way more users than expected when I first developed it;  
+I am very happy of that, but this means it has higher contribution and testing requirements that I was expecting!
+
+I'm looking for developers that uses this library daily, I will provide support and help with coding or explanations,
+my contribution is not ended, just needs a bit of help from the actual users.
+
+Feel free to leave a comment [here](https://github.com/mrgamer/angular-media-player/issues/72) 
+
+## Project Idea
 I've come across a lot of `<audio>` players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.  
 What i really was looking for was a simple audio wrapper **without** the need to support browser which don't have audio tag support!  
 Means support for this project is the same as: [HTML5 audio draft][html5audiocompatibility], jQuery is not necessary, and DOM manipulation is done only with jqLite (IE9+)  
