@@ -2,16 +2,15 @@ angular-media-player [![Build Status](https://travis-ci.org/mrgamer/angular-medi
 ====================
 AngularJS Directive that wraps `<audio>` or `<video`> tag exposing methods and properties to manipulate your player  
 
-*updated* examples on github pages: http://mrgamer.github.io/angular-media-player/
+examples on github pages: http://mrgamer.github.io/angular-media-player/
 
-## Contributors Needed
+## DEPRECATED: development stalled
 This library has reached way more users than expected when I first developed it;  
-I am very happy of that, but this means it has higher contribution and testing requirements that I was expecting!
+I am very happy of that, but this means it has higher contribution and testing requirements that I was expecting!  
 
-I'm looking for developers that uses this library daily, I will provide support and help with coding or explanations,
-my contribution is not ended, just needs a bit of help from the actual users.
-
-Feel free to leave a comment [here](https://github.com/mrgamer/angular-media-player/issues/72) 
+From what I could see there's another valid (and quite customizable) project in the angular world: [videogular](https://github.com/2fdevs/videogular)  
+I don't think it covers **ALL** the use cases but that is not the point, most of them are covered, and documentation is extensive.  
+There's an example of using it as [audio player with playlist](http://www.videogular.com/examples/creating-an-audio-player/), and the project is definitely future-proof.
 
 ## Project Idea
 I've come across a lot of `<audio>` players on the web, many using Flash, many being easy-to-use, almost none of them being compatible with AngularJS.  
