@@ -1,8 +1,8 @@
-angular-media-player [![Build Status](https://travis-ci.org/mrgamer/angular-media-player.svg?branch=master)](https://travis-ci.org/mrgamer/angular-media-player)
+angular-media-player [![Build Status](https://travis-ci.org/colthreepv/angular-media-player.svg?branch=master)](https://travis-ci.org/colthreepv/angular-media-player)
 ====================
 AngularJS Directive that wraps `<audio>` or `<video`> tag exposing methods and properties to manipulate your player  
 
-examples on github pages: http://mrgamer.github.io/angular-media-player/
+examples on github pages: http://colthreepv.github.io/angular-media-player/
 
 ## DEPRECATED: development stalled
 This library has reached way more users than expected when I first developed it;  
@@ -27,9 +27,9 @@ $ bower install angular-media-player
 Using github hosting:
 ```html
 <!-- non-minified for debugging -->
-<script src="//mrgamer.github.io/angular-media-player/dist/angular-media-player.js" type="text/javascript"></script>
+<script src="//colthreepv.github.io/angular-media-player/dist/angular-media-player.js" type="text/javascript"></script>
 <!-- minified -->
-<script src="//mrgamer.github.io/angular-media-player/dist/angular-media-player.min.js" type="text/javascript"></script>
+<script src="//colthreepv.github.io/angular-media-player/dist/angular-media-player.min.js" type="text/javascript"></script>
 ```
 
 ## Test coverage
@@ -282,7 +282,7 @@ You can add/remove tracks on-fly from/to the playlist.
 If the current track gets removed, the player goes on **pause()**. (And starts loading the first track of the new playlist)  
 Try and get the hold of this in the [examples][examples]
 
-If you wonder all the logic, just [check out the source](https://github.com/mrgamer/angular-media-player/blob/master/src/directive.js#L280), it has comments!
+If you wonder all the logic, just [check out the source](https://github.com/colthreepv/angular-media-player/blob/master/src/directive.js#L280), it has comments!
 
 ### Credits
 A lot of guidelines to realize a simple re-usable project like this have come mainly from:
@@ -297,8 +297,8 @@ A lot of guidelines to realize a simple re-usable project like this have come ma
 [brianf]: https://github.com/btford
 [ngmedia]: https://github.com/caitp/ng-media
 [caitp]: https://github.com/caitp
-[self]: http://github.com/mrgamer/angular-media-player
-[issues]: https://github.com/mrgamer/angular-media-player/issues/new
+[self]: http://github.com/colthreepv/angular-media-player
+[issues]: https://github.com/colthreepv/angular-media-player/issues/new
 [angularscopes]: http://docs.angularjs.org/guide/scope
 [angularattributes]: http://docs.angularjs.org/guide/directive#matching-directives
 [examples]: http://aap.col3.me
@@ -315,7 +315,7 @@ Contributing is **always** welcome, both via opening Issues, or compiling a Pull
 
 You can clone the repository and start working:
 ```bash
-git clone git@github.com:mrgamer/angular-media-player.git
+git clone git@github.com:colthreepv/angular-media-player.git
 cd angular-media-player
 ?!?!?
 profit!
@@ -347,10 +347,10 @@ git push && git push --tags
 
 # Release History
 
-  * 0.5.8 - implemented a config system for throttling the `timeupdate` events, this functionality is on debate in the issues: [#50](https://github.com/mrgamer/angular-media-player/issues/50)
-  * 0.5.6 - fixed several bugs reported by the community (thanks contributors!!!): [#44](https://github.com/mrgamer/angular-media-player/issues/44), [#29](https://github.com/mrgamer/angular-media-player/issues/29), [#27](https://github.com/mrgamer/angular-media-player/issues/27)
+  * 0.5.8 - implemented a config system for throttling the `timeupdate` events, this functionality is on debate in the issues: [#50](https://github.com/colthreepv/angular-media-player/issues/50)
+  * 0.5.6 - fixed several bugs reported by the community (thanks contributors!!!): [#44](https://github.com/colthreepv/angular-media-player/issues/44), [#29](https://github.com/colthreepv/angular-media-player/issues/29), [#27](https://github.com/colthreepv/angular-media-player/issues/27)
   * 0.5.3 - test coverage run on IE aswell (8/20), just not the playback ones (because tests are written to use .ogg files). bugfix from 0.5.2
-  * 0.5.2 - fixed bug regarding how i used `angular.forEach`, sorry. (closes [#26](https://github.com/mrgamer/angular-media-player/issues/26))
+  * 0.5.2 - fixed bug regarding how i used `angular.forEach`, sorry. (closes [#26](https://github.com/colthreepv/angular-media-player/issues/26))
   * 0.5.1
     * added [selective play](#playerplayindex-selectiveplay) functionality on `play` and `playPause`
     * [seek](#playerseekvalue) now works correctly and is tested
